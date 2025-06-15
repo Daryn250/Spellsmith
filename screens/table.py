@@ -3,15 +3,15 @@ import sys
 from utility.animated_sprite import AnimatedTile
 from utility.screenswitcher import ScreenSwitcher
 from utility.screenwrapper import VirtualScreen
-from utility.cursor import Cursor
-from utility.item import defaultItem
+from utility.cursorManager import CursorManager
+from utility.cursor import BaseCursor
 from utility.ItemManager import ItemManager
 from utility.item_flags import DraggableFlag # allow items to be dragged
+from utility.item_flags import ScreenChangeFlag # changing screens on mouseclick
 
 
 VIRTUAL_SIZE = (480, 270)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
-cursor = Cursor(vscreen, "assets/cursor")
 tile_size = 32
 FPS = 60
 
@@ -26,6 +26,8 @@ def table(screen):
     screenWidth, screenHeight = VIRTUAL_SIZE
 
     item_manager = ItemManager()
+    cursor_manager = CursorManager(virtual_surface)
+    
 
     # load sprites:
     background = AnimatedTile("assets/table/background/table", frame_duration=150)
@@ -41,6 +43,8 @@ def table(screen):
     # run table
     while True:
         dt = clock.tick(FPS)
+        virtual_mouse = vscreen.get_virtual_mouse(screen.get_size())
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -49,18 +53,20 @@ def table(screen):
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left mouse click
-                    cursor.click()
+                    cursor_manager.click()
                     # Check for input on buttons here:
             DraggableFlag.handle_event(event, item_manager.items, vscreen.get_virtual_mouse(screen.get_size())) # rio de janero handle draggable items
+            ScreenChangeFlag.handle_event(event, item_manager.items, vscreen.get_virtual_mouse(screen.get_size()), screen, switcher) # rio de janero 2 handle screen change boogaloo
+
                     
 
         # draw tiles
         #update
         background.update(dt)
         background_lights.update(dt)
-        cursor.update(dt)
+        cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
-            item.update(dt)
+            item.update(virtual_surface, dt)
 
         
 
@@ -78,10 +84,10 @@ def table(screen):
             item.draw(virtual_surface)
 
         background_lights.draw(virtual_surface, (0, 0), scale_to=VIRTUAL_SIZE, blend=pygame.BLEND_ADD)
-
+        
         
 
-        cursor.draw(virtual_surface)
+        cursor_manager.draw(virtual_surface, virtual_mouse)
 
         vscreen.draw_to_screen(screen)
         switcher.update_and_draw(screen)

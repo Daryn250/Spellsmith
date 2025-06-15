@@ -3,6 +3,7 @@ import json
 import os
 import pygame
 from utility.item import defaultItem  # Assuming your class is named `DefaultItem`
+from utility.screenManager import *
 
 class ItemManager:
     def __init__(self):
@@ -19,15 +20,24 @@ class ItemManager:
     def save_items(self, file_path):
         save_data = []
         for item in self.items:
-            if getattr(item, "flags", []) and "save" in item.flags:
-                save_data.append({
-                    "uuid": item.uuid,
-                    "image": item.img_path,
-                    "pos": item.pos,
-                    "flags": item.flags,
-                    "animated": item.animated,
-                    "frameDuration": getattr(item, "frameDuration", 100) # if animated
-                })
+            next_screen_name = None
+            if item.next_screen:
+                # store the name of the function and not the actual function bc json
+                for name, func in get_all_screen_functions().items():
+                    if func == item.next_screen:
+                        next_screen_name = name
+                        break
+
+            save_data.append({
+                "uuid": item.uuid,
+                "image": item.img_path,
+                "pos": item.pos,
+                "type": item.type,
+                "flags": item.flags,
+                "animated": item.animated,
+                "frameDuration": item.frameDuration,
+                "next_screen": next_screen_name,
+            })
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w") as f:
@@ -47,12 +57,25 @@ class ItemManager:
 
         # Now load saved items
         for data in loaded_data:
+
+            # screenchanger functions
+            next_screen_name = data.get("next_screen")
+            next_screen_func = None
+
+            if next_screen_name:
+                try:
+                    next_screen_func = get_screen_function(next_screen_name)
+                except Exception as e:
+                    print(f"Warning: Failed to load screen function '{next_screen_name}': {e}")
+
             item = defaultItem(
+                uuidSave=data["uuid"],
                 img_path=data["image"],
                 pos=data["pos"],
+                type=data["type"],
                 flags=data.get("flags", []),
                 animated=data.get("animated", False),
                 frameDuration=data.get("frameDuration", 100),
-                uuidSave=data["uuid"]
+                next_screen=next_screen_func
             )
             self.items.append(item)

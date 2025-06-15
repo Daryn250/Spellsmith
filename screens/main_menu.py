@@ -3,7 +3,8 @@ import sys
 from utility.animated_sprite import AnimatedTile
 from utility.screenwrapper import VirtualScreen
 from utility.button import Button
-from utility.cursor import Cursor
+from utility.cursorManager import CursorManager
+from utility.cursor import HammerCursor
 from utility.screenswitcher import ScreenSwitcher
 
 # screens
@@ -11,7 +12,7 @@ from screens.table import table
 
 VIRTUAL_SIZE = (480, 270)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
-cursor = Cursor(vscreen, "assets/cursor")
+
 tile_size = 32
 FPS = 60
 
@@ -22,6 +23,10 @@ def main_screen(screen):
     clock = pygame.time.Clock()
 
     virtual_surface = vscreen.get_surface()
+
+    cursorManager = CursorManager(virtual_surface)
+    cursorManager.set_cursor(HammerCursor(virtual_surface, "assets/cursor/hammerCursor"))
+
     screenWidth, screenHeight = VIRTUAL_SIZE
     # Load tiles and sprite
     bg_tile = AnimatedTile("assets/ocean", frame_duration=150)
@@ -31,6 +36,7 @@ def main_screen(screen):
 
     while True:
         dt = clock.tick(FPS)
+        virtual_mouse = vscreen.get_virtual_mouse(screen.get_size())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,7 +46,7 @@ def main_screen(screen):
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left mouse click
-                    cursor.click()
+                    cursorManager.click()
                     # Check for input on buttons:
                     if PLAYBUTTON.checkForInput(vscreen.get_virtual_mouse(screen.get_size())):
                         switcher.start(lambda: table(screen))
@@ -53,7 +59,7 @@ def main_screen(screen):
         # Update animation
         bg_tile.update(dt)
         boat_sprite.update(dt)
-        cursor.update(dt)
+        cursorManager.update(dt, virtual_mouse)
 
         # Draw to virtual surface
         virtual_surface.fill((0, 0, 0))  # Clear
@@ -82,7 +88,7 @@ def main_screen(screen):
         SETTINGSBUTTON = Button(None, (menu_bar.center[0],screenHeight//2), "settings", pygame.font.Font(None, 32), "White", "gray")
         QUITBUTTON = Button(None, (menu_bar.center[0],screenHeight-(screenHeight*.1)), "quit", pygame.font.Font(None, 32), "White", "indianred1")
         
-        virtual_mouse = vscreen.get_virtual_mouse(screen.get_size())
+        
 
         PLAYBUTTON.changeColor(virtual_mouse)
         PLAYBUTTON.update(vscreen.surface)
@@ -93,12 +99,7 @@ def main_screen(screen):
         QUITBUTTON.changeColor(virtual_mouse)
         QUITBUTTON.update(vscreen.surface)
 
-        virtual_mouse = vscreen.get_virtual_mouse(screen.get_size())
-
-        cursor.draw(virtual_surface)
-        # Offset if needed (optional: use top-left instead of center)
-
-        # Scale to fit screen
+        cursorManager.draw(virtual_surface, virtual_mouse)
         
 
         vscreen.draw_to_screen(screen)

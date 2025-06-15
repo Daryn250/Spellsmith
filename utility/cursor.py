@@ -2,7 +2,7 @@ import pygame
 import os
 from utility.particle import Particle
 
-class Cursor:
+class BaseCursor:
     def __init__(self, virtual_screen, cursor_root=None):
         self.virtual_screen = virtual_screen
         self.cursor_root = cursor_root
@@ -44,8 +44,8 @@ class Cursor:
             self._initialized = True
 
     def load_animations(self, folder):
-        idle_path = os.path.join(folder, "default")
-        click_path = os.path.join(folder, "click_anim")
+        idle_path = os.path.join(folder, "lazy")
+        click_path = os.path.join(folder, "click")
         self.idle_frames = self._load_frames(idle_path)
         self.click_frames = self._load_frames(click_path)
         self.current_frames = self.idle_frames or [self._create_fallback_frame()]
@@ -72,25 +72,7 @@ class Cursor:
         pygame.draw.line(surf, (255, 0, 0), (15, 0), (0, 15), 2)
         return surf
 
-    def get_cursor_tip_position(self):
-        """Returns bottom-left corner of the hammer in virtual coordinates. for particles."""
-        if not self._initialized:
-            return 0, 0  # fallback
-
-        window_size = pygame.display.get_surface().get_size()
-        mouse_x, mouse_y = self.virtual_screen.get_virtual_mouse(window_size)
-
-        
-        # Use current frame to get cursor size
-        frame = self.click_frames[self.current_frame_index] if self.clicking else self.idle_frames[self.current_frame_index]
-        width, height = frame.get_width(), frame.get_height()
-
-        hammer_x = mouse_x - width // 2
-        hammer_y = mouse_y + height // 2  # bottom edge
-
-        return hammer_x, hammer_y
-
-    def update(self, dt):
+    def update(self, dt, mouse):
         self._try_initialize()
         if not self._initialized:
             return
@@ -117,21 +99,8 @@ class Cursor:
                     if not self.animation_done:
                         self.animation_done = True
 
-                        # get the hammer position
-                        hammer_x, hammer_y = self.get_cursor_tip_position() # bottom left
-                        # try to get color
-                        try:
-                            color = self.virtual_screen.surface.get_at((hammer_x, hammer_y))[:3]
-                        except:
-                            color = (255, 255, 255)  # fallback color
+                        self.click_effect(mouse)
 
-                        for _ in range(4):  # Spawn 10 particles
-                            self.particles.append(Particle((hammer_x, hammer_y), color, lifetime=30))
-
-                        if hasattr(self.virtual_screen, "start_shake"):
-                            self.virtual_screen.start_shake(duration=10, magnitude=6)
-
-                        # play sounds here for click
                     if not self.mouse_held:
                         self.clicking = False
                         self.animation_done = False
@@ -158,13 +127,17 @@ class Cursor:
         self.current_frame_index = 0
         self.animation_timer = 0
 
-    def draw(self, surface):
+    def click_effect(self, mouse):
+        # play default sound maybe?
+        pass
+
+    def draw(self, surface, mouse):
         self._try_initialize()
 
         if not self._initialized:
             return
 
-        mouse_pos = self.virtual_screen.get_virtual_mouse(pygame.display.get_window_size())
+        mouse_pos = mouse
 
         # Determine which animation frames to use
         frames = self.click_frames if self.clicking and self.click_frames else self.idle_frames
@@ -185,5 +158,66 @@ class Cursor:
             mouse_pos[0] - current.get_width() // 2,
             mouse_pos[1] - current.get_height() // 2
         ))
+
+class HammerCursor(BaseCursor):
+    def get_hammer_tip_position(self, mouse):
+        """Returns bottom-left corner of the hammer in virtual coordinates. for particles."""
+        if not self._initialized:
+            return 0, 0  # fallback
+
+        window_size = pygame.display.get_surface().get_size()
+        mouse_x, mouse_y = mouse
+
+        
+        # Use current frame to get cursor size
+        frame = self.click_frames[self.current_frame_index] if self.clicking else self.idle_frames[self.current_frame_index]
+        width, height = frame.get_width(), frame.get_height()
+
+        hammer_x = mouse_x - width // 2
+        hammer_y = mouse_y + height // 2 +5 # bottom edge
+
+        return hammer_x, hammer_y
+    
+    def click_effect(self, mouse):
+        # Particle + screen shake (your current effect)
+        hammer_x, hammer_y = self.get_hammer_tip_position(mouse)
+        try:
+            color = self.virtual_screen.surface.get_at((hammer_x, hammer_y))[:3]
+        except:
+            color = (255, 255, 255)
+
+        for _ in range(4):
+            self.particles.append(Particle((hammer_x, hammer_y), color, lifetime=30))
+
+        if hasattr(self.virtual_screen, "start_shake"):
+            self.virtual_screen.start_shake(duration=10, magnitude=6)
+
+class WandCursor(BaseCursor):
+    def get_wand_tip_position(self, mouse):
+        """Returns top-left corner of the wand cursor in virtual coordinates. for particles."""
+        if not self._initialized:
+            return 0, 0  # fallback
+
+        window_size = pygame.display.get_surface().get_size()
+        mouse_x, mouse_y = mouse
+
+        
+        # Use current frame to get cursor size
+        frame = self.click_frames[self.current_frame_index] if self.clicking else self.idle_frames[self.current_frame_index]
+        width, height = frame.get_width(), frame.get_height()
+
+        wandx = mouse_x - width // 2
+        wandy = mouse_y - height // 2  # top edge
+
+        return wandx, wandy
+    
+    def click_effect(self, mouse):
+        # glowing Particles
+        wand_x, wand_y = self.get_wand_tip_position(mouse)
+        
+        color = pygame.color(86, 50, 168)
+
+        for _ in range(4):
+            self.particles.append(Particle((wand_x, wand_y), color, lifetime=50))
 
 
