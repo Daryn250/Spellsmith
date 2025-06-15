@@ -5,6 +5,12 @@ from utility.screenswitcher import ScreenSwitcher
 
 FPS = 60
 
+
+# make utility for items, item creator:
+# make saving data for items, item saving and loading
+# make table screen an actual table and not the blue abyss of torture
+# make utility or something for switching ores between screens? maybe just use an inventory or something. Unsure bc I want to have ores with different types of imperfections
+
 def table(screen):
     switcher = ScreenSwitcher()
     clock = pygame.time.Clock()
