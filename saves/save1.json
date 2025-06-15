@@ -1,0 +1,16 @@
+[
+    {
+        "uuid": "41c212ad-ae33-43e6-b6ae-f0db0ccd6afc",
+        "image": "assets/boat/tempboat.png",
+        "pos": [
+            17,
+            77
+        ],
+        "flags": [
+            "save",
+            "draggable"
+        ],
+        "animated": false,
+        "frameDuration": 100
+    }
+]
