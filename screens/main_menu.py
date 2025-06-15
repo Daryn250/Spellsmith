@@ -25,8 +25,8 @@ def main_screen(screen):
     screenWidth, screenHeight = VIRTUAL_SIZE
     # Load tiles and sprite
     bg_tile = AnimatedTile("assets/ocean", frame_duration=150)
-    center_sprite = AnimatedTile("assets/boat", frame_duration=100)
-    sprite_img = center_sprite.get_current_frame()
+    boat_sprite = AnimatedTile("assets/boat", frame_duration=100)
+    sprite_img = boat_sprite.get_current_frame()
     center_rect = sprite_img.get_rect(center=(screenWidth // 2, screenHeight // 2))
 
     while True:
@@ -52,21 +52,21 @@ def main_screen(screen):
 
         # Update animation
         bg_tile.update(dt)
-        center_sprite.update(dt)
+        boat_sprite.update(dt)
         cursor.update(dt)
 
         # Draw to virtual surface
         virtual_surface.fill((0, 0, 0))  # Clear
 
-        tile_img = bg_tile.get_current_frame()
         for y in range(0, screenHeight, tile_size): # virtual width and height
             for x in range(0, screenWidth, tile_size):
-                virtual_surface.blit(tile_img, (x, y))
+                bg_tile.draw(virtual_surface, (x,y))
 
         # Update center sprite
-        sprite_img = center_sprite.get_current_frame()
+
         center_rect = sprite_img.get_rect(center=(screenWidth // 2, screenHeight // 2))
-        virtual_surface.blit(sprite_img, center_rect)
+
+        boat_sprite.draw(virtual_surface, center_rect)
 
 
         # make and blit the menu bar to the screen

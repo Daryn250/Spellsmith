@@ -26,10 +26,8 @@ class Cursor:
 
         if pygame.display.get_surface() is not None:
             pygame.mouse.set_visible(False)  # Prevent flashing default
-            print("Cursor: Display initialized.")
 
             if self.cursor_root and not self.idle_frames:
-                print("Cursor: Loading animations...")
                 self.load_animations(self.cursor_root)
             
             if not self.idle_frames:

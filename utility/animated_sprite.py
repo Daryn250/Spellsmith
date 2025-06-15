@@ -25,7 +25,7 @@ class AnimatedTile:
                 frames.append(img)
             except Exception as e:
                 print(f"[AnimatedTile] Failed to load frame: {f} — {e}")
-                frames.append(self.error_frame)  # Use fallback image
+                frames.append(self.error_frame)
 
         return frames
 
@@ -42,3 +42,13 @@ class AnimatedTile:
 
     def get_current_frame(self):
         return self.frames[self.index]
+
+    def draw(self, surface, position, scale_to=None, blend=None):
+        frame = self.get_current_frame()
+
+        if scale_to:
+            frame = pygame.transform.scale(frame, scale_to)
+
+        surface.blit(frame, position, special_flags=blend if blend else 0)
+
+
