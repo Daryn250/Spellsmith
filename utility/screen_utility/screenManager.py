@@ -5,12 +5,15 @@ def get_screen_function(name):
     elif name == "table":
         from screens.table import table
         return table
+    elif name == "testing":
+        from screens.testing import testScreen
+        return testScreen
     else:
         raise ValueError(f"Unknown screen function: {name}")
 
 
 def get_all_screen_functions():
-    screen_names = ["main_menu", "table"]
+    screen_names = ["main_menu", "table", "testScreen"]
     return {
         name: get_screen_function(name) for name in screen_names
     }

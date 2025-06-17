@@ -66,3 +66,19 @@ class ScreenChangeFlag:
                         else:
                             print(f"Warning: Item {item} has 'screen_change' flag but no 'next_screen' method.")
                         break
+
+class CharmFlag:
+    @staticmethod
+    def handle_event(event, itemlist, mouse_pos):
+        mx, my = mouse_pos
+
+        if event.type == pygame.MOUSEMOTION:
+            for item in reversed(itemlist):  # Reversed in case of overlap, top items get priority
+                if "charm" in getattr(item, "flags", []):
+                    rect = item.image.get_rect(topleft=item.pos)
+                    inside = rect.collidepoint(mx, my)
+
+                    if inside and not getattr(item, "is_hovered", False):
+                        item.is_hovered = True
+                    elif not inside and getattr(item, "is_hovered", False):
+                        item.is_hovered = False

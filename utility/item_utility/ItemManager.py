@@ -2,8 +2,8 @@ import uuid
 import json
 import os
 import pygame
-from utility.item import defaultItem  # Assuming your class is named `DefaultItem`
-from utility.screenManager import *
+from utility.item_utility.item import defaultItem  # Assuming your class is named `DefaultItem`
+from utility.screen_utility.screenManager import *
 
 class ItemManager:
     def __init__(self):
@@ -18,32 +18,37 @@ class ItemManager:
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
     def save_items(self, file_path):
-        save_data = []
+
+        grouped = {}
         for item in self.items:
+            screen_name = getattr(item, "origin_screen", "unknown")
+
             next_screen_name = None
             if item.next_screen:
-                # store the name of the function and not the actual function bc json
-                for name, func in get_all_screen_functions().items():
+                for name, func in get_all_screen_functions():
                     if func == item.next_screen:
                         next_screen_name = name
                         break
 
-            save_data.append({
-                "uuid": item.uuid,
+            data = {
                 "image": item.img_path,
+                "uuid": item.uuid,
                 "pos": item.pos,
                 "type": item.type,
                 "flags": item.flags,
                 "animated": item.animated,
                 "frameDuration": item.frameDuration,
                 "next_screen": next_screen_name,
-            })
+            }
+
+            grouped.setdefault(screen_name, []).append(data)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w") as f:
-            json.dump(save_data, f, indent=4)
+            json.dump(grouped, f, indent=4)
 
-    def load_items(self, file_path):
+
+    def load_items(self, file_path, current_screen):
         if not os.path.exists(file_path):
             print(f"[ItemManager] No save file found at {file_path}")
             return
@@ -51,31 +56,22 @@ class ItemManager:
         with open(file_path, "r") as f:
             loaded_data = json.load(f)
 
-        # Remove any existing items with saved UUIDs
-        saved_uuids = {data["uuid"] for data in loaded_data}
+        screen_data = loaded_data.get(current_screen, [])
+        saved_uuids = {data["uuid"] for data in screen_data}
         self.items = [item for item in self.items if item.uuid not in saved_uuids]
 
         # Now load saved items
-        for data in loaded_data:
-
-            # screenchanger functions
-            next_screen_name = data.get("next_screen")
-            next_screen_func = None
-
-            if next_screen_name:
-                try:
-                    next_screen_func = get_screen_function(next_screen_name)
-                except Exception as e:
-                    print(f"Warning: Failed to load screen function '{next_screen_name}': {e}")
-
+        for data in screen_data:
+            screen_func = get_screen_function(data["next_screen"]) if data["next_screen"] else None
             item = defaultItem(
-                uuidSave=data["uuid"],
                 img_path=data["image"],
-                pos=data["pos"],
+                pos=tuple(data["pos"]),
                 type=data["type"],
                 flags=data.get("flags", []),
                 animated=data.get("animated", False),
                 frameDuration=data.get("frameDuration", 100),
-                next_screen=next_screen_func
+                next_screen=(lambda s=screen_func: s) if screen_func else None
             )
+            item.origin_screen = current_screen
             self.items.append(item)
+

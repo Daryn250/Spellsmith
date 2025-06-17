@@ -1,35 +1,20 @@
-[
-    {
-        "uuid": "497dcba3-ecbf-4587-a2dd-5eb0665e6880",
-        "image": "assets/boat/tempboat.png",
-        "pos": [
-            62.245665015596686,
-            110
-        ],
-        "type": "items/default_item",
-        "flags": [
-            "save",
-            "draggable"
-        ],
-        "animated": false,
-        "frameDuration": 100,
-        "next_screen": null
-    },
-    {
-        "uuid": "50e14f43-dd4e-412f-864d-78943ea28d91",
-        "image": "assets/ocean",
-        "pos": [
-            283.134467717366,
-            190.26363636363578
-        ],
-        "type": "items/default_item",
-        "flags": [
-            "save",
-            "draggable",
-            "screen_change"
-        ],
-        "animated": true,
-        "frameDuration": 100,
-        "next_screen": "main_menu"
-    }
-]
+{
+    "testing": [
+        {
+            "image": "assets/gui/charm_board/moon_charm/passive",
+            "uuid": "a0257170-072f-405f-9604-282de6a5b1cc",
+            "pos": [
+                163.10494789052171,
+                183
+            ],
+            "type": "moonCharm",
+            "flags": [
+                "draggable",
+                "charm"
+            ],
+            "animated": true,
+            "frameDuration": 100,
+            "next_screen": null
+        }
+    ]
+}

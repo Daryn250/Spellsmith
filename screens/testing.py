@@ -4,10 +4,13 @@ from utility.animated_sprite import AnimatedTile
 from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.screen_utility.screenwrapper import VirtualScreen
 from utility.cursor_utility.cursorManager import CursorManager
-from utility.cursor_utility.cursor import BaseCursor
 from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import DraggableFlag # allow items to be dragged
 from utility.item_utility.item_flags import ScreenChangeFlag # changing screens on mouseclick
+
+from utility.gui_utility.GUIManager import GUIManager
+from utility.item_utility.item import defaultItem
+
 
 
 VIRTUAL_SIZE = (480, 270)
@@ -18,26 +21,30 @@ FPS = 60
 
 # make utility or something for switching ores between screens? maybe just use an inventory or something. Unsure bc I want to have ores with different types of imperfections
 
-def table(screen):
+def testScreen(screen):
     switcher = ScreenSwitcher()
     clock = pygame.time.Clock()
 
     virtual_surface = vscreen.get_surface()
-    screenWidth, screenHeight = VIRTUAL_SIZE
 
     item_manager = ItemManager()
     cursor_manager = CursorManager(virtual_surface)
+
+    # Somewhere in your setup code
+    gui_manager = GUIManager()
+    item_manager.add_item(
+        defaultItem("assets/gui/charm_board/moon_charm/passive", (240,90), "charm", flags=["draggable", "charm"], animated=True, frameDuration=100, origin_screen = "testing")
+    )
+
+    # In your game loop
+    
+
     
 
     # load sprites:
     background = AnimatedTile("assets/table/background/table", frame_duration=150)
-    background_lights = AnimatedTile("assets/table/background/lighting", frame_duration=150)
 
-    #test_item = defaultItem(None, (240,90), flags=["save", "draggable"])
-    #item_manager.add_item(test_item)
-
-    item_manager.load_items("saves/save1.json", "table")
-
+    item_manager.load_items("saves/save1.json", "testScreen")
 
 
     # run table
@@ -63,10 +70,11 @@ def table(screen):
         # draw tiles
         #update
         background.update(dt)
-        background_lights.update(dt)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
             item.update(virtual_surface, dt)
+        gui_manager.update(dt, virtual_mouse)
+    
 
         
 
@@ -83,12 +91,12 @@ def table(screen):
         for item in item_manager.items:
             item.draw(virtual_surface)
 
-        background_lights.draw(virtual_surface, (0, 0), scale_to=VIRTUAL_SIZE, blend=pygame.BLEND_ADD)
         
         
-
+        gui_manager.draw(screen)
+        switcher.update_and_draw(screen)
         cursor_manager.draw(virtual_surface, virtual_mouse)
 
         vscreen.draw_to_screen(screen)
-        switcher.update_and_draw(screen)
+        
         pygame.display.flip()

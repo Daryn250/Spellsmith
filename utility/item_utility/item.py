@@ -2,10 +2,9 @@ import pygame
 import os
 import uuid
 from utility.animated_sprite import AnimatedTile
-from utility.screenswitcher import ScreenSwitcher
 
 class defaultItem:
-    def __init__(self, img_path, pos, type, flags=None, animated=False, frameDuration=100, uuidSave=None, friction = 1.05, next_screen = None):
+    def __init__(self, img_path, pos, type, flags=None, animated=False, frameDuration=100, uuidSave=None, friction = 1.05, next_screen = None, origin_screen = None):
         if not img_path or not os.path.exists(img_path):
             img_path = "assets/error.png"
         self.img_path = img_path
@@ -23,6 +22,9 @@ class defaultItem:
         self.frameDuration = frameDuration
         self.uuid = uuidSave or str(uuid.uuid4())
 
+        # for saving
+        self.origin_screen = origin_screen
+
         # for the draggable flag
         self.rotation = 0.0
         self.rotational_velocity = 0.0
@@ -39,6 +41,11 @@ class defaultItem:
 
         # for the screen_change flag
         self.next_screen = next_screen
+
+        # for the charm class:
+        self.is_hovered = False
+        self.on_hover = None
+        self.on_unhover = None
 
     
     @property
@@ -150,8 +157,7 @@ class defaultItem:
 
     def start_screen_switch(self, screen, screenSwitcher):
         screenSwitcher.start(lambda: self.next_screen(screen))
-
-
+        
     def set_position(self, pos):
         self.pos = pos
 

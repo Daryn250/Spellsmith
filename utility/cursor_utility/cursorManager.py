@@ -1,6 +1,6 @@
 import pygame
-from utility.cursor import HammerCursor
-from utility.cursor import BaseCursor
+from utility.cursor_utility.cursor import HammerCursor
+from utility.cursor_utility.cursor import BaseCursor
 
 class CursorManager:
     def __init__(self, screen):

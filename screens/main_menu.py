@@ -1,11 +1,11 @@
 import pygame
 import sys
 from utility.animated_sprite import AnimatedTile
-from utility.screenwrapper import VirtualScreen
+from utility.screen_utility.screenwrapper import VirtualScreen
 from utility.button import Button
-from utility.cursorManager import CursorManager
-from utility.cursor import HammerCursor
-from utility.screenswitcher import ScreenSwitcher
+from utility.cursor_utility.cursorManager import CursorManager
+from utility.cursor_utility.cursor import HammerCursor
+from utility.screen_utility.screenswitcher import ScreenSwitcher
 
 # screens
 from screens.table import table
