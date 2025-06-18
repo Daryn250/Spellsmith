@@ -56,7 +56,7 @@ class defaultItem:
             return self.img.get_current_frame()
         return self.img
 
-    def draw(self, surface, screensize):
+    def draw(self, surface, screensize, gui_manager):
         angle = -self.rotation  # Invert for natural lean direction
 
         # Compute scale based on screen resolution
@@ -102,9 +102,10 @@ class defaultItem:
         if getattr(self, "show_nail", False):
             nail_img = self.NAIL_IMAGE
             nail_w, nail_h = nail_img.get_size()
-            center_x = self.pos[0] + self.image.get_width() // 2 - nail_w // 2
-            top_y = self.pos[1] - nail_h // 2
-            surface.blit(nail_img, (center_x, top_y))
+            x = self.anchor_pos[0] + self.image.get_width() / 2
+            y = self.anchor_pos[1]
+            gui_manager.nails.append([nail_img, x, y])
+
 
 
         
@@ -112,7 +113,7 @@ class defaultItem:
         surface.blit(rotated_img, rect.topleft)
 
 
-    def update(self, screen, gui_manager, dt=None):
+    def update(self, screen, gui_manager, virtual_size, dt=None):
         """Update physics, animation, and rotation for the item."""
 
         if self.animated:
@@ -187,7 +188,59 @@ class defaultItem:
                     gui_manager.windows.remove(self.window)
                 del self.window
 
-        # if has hanging flag, do hanging physics
+        if "hangable" in self.flags:
+            if hasattr(self, "anchor") and self.anchor is not None and self.anchor_pos is not None:
+                self.floor = 9999
+                # 1. Get anchor's world position
+                if self.anchor == "charmboard":
+                    img = gui_manager.charmboard_img
+                    img_width, img_height = img.get_size()
+                    scale_x = virtual_size[0] / 480
+                    scale_y = virtual_size[1] / 270
+                    scaled_size = (img_width * scale_x, img_height * scale_y)
+                    anchor_x = virtual_size[0] - scaled_size[0] * 1.25 + self.anchor_pos[0]
+                    anchor_y = 25 + self.anchor_pos[1]
+                    self.show_nail = True
+                else:
+                    anchor_x = self.anchor.pos[0] + self.anchor_pos[0]
+                    anchor_y = self.anchor.pos[1] + self.anchor_pos[1]
+                    self.show_nail = False
+
+                # 2. Init values
+                if not hasattr(self, "vx"): self.vx = 0
+                if not hasattr(self, "vy"): self.vy = 0
+                if not hasattr(self, "mass"): self.mass = 1
+                if not hasattr(self, "rope_length"):
+                    dx = self.pos[0] - anchor_x
+                    dy = self.pos[1] - anchor_y
+                    self.rope_length = max(10, (dx**2 + dy**2)**0.5)
+
+                # 3. Apply gravity
+                self.vy += self.currentGravity  # Feel free to tweak this
+
+                # 4. Update position from velocity
+                self.pos = (self.pos[0] + self.vx, self.pos[1] + self.vy)
+
+                # 5. Rope soft constraint (spring effect)
+                dx = self.pos[0] - anchor_x
+                dy = self.pos[1] - anchor_y
+                dist = (dx**2 + dy**2)**0.5
+
+                if dist > self.rope_length:
+                    stretch = dist - self.rope_length
+                    pull_strength = 0.3  # How elastic it feels; tweak this!
+                    nx, ny = dx / dist, dy / dist  # Normalize direction
+
+                    # Apply spring-like force
+                    self.vx -= nx * stretch * pull_strength
+                    self.vy -= ny * stretch * pull_strength
+
+                # 6. Damping
+                self.vx /= self.friction
+                self.vy /= self.friction
+            else:
+                self.show_nail = False # if not connected
+
         
     def start_screen_switch(self, screen, screenSwitcher):
         screenSwitcher.start(lambda: self.next_screen(screen))

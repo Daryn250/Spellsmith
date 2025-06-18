@@ -3,6 +3,7 @@ import pygame
 class GUIManager:
     def __init__(self):
         self.windows = []
+        self.nails = []
         self.drawCharmBoard = True
 
         # Load charmboard image
@@ -18,6 +19,11 @@ class GUIManager:
 
             top_right_pos = (screen_width - scaled[0]*1.25, 25)  # Align to top-right corner
             screen.blit(new_img, top_right_pos)
+        
+        for img, x, y in self.nails:
+            screen.blit(img, (x+top_right_pos[0], y+top_right_pos[1]))
+        self.nails.clear()
+
 
         # Draw all GUI windows
         for window in self.windows:
