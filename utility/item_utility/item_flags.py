@@ -31,7 +31,9 @@ class DraggableFlag:
                         item.vy = item.ovy
                 item.dragging_for = 0
 
-                HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager)
+                if hasattr(item, "anchor_pos"):
+                    if item.anchor_pos==None:
+                        HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager)
 
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
@@ -114,7 +116,7 @@ class HangableFlag:
         if charmboard_rect.collidepoint(mx, my):
             item.anchor = "charmboard"
             # Store position relative to charmboard's top-left
-            item.anchor_pos = (mx - charmboard_rect.x, my - charmboard_rect.y)
+            item.anchor_pos = (mx, my)
             print("connected to charmboard")
             return
 
@@ -135,5 +137,22 @@ class HangableFlag:
         item.anchor_pos = None
         print("no candidate found.")
     def try_detatch(item):
-        item.anchor = None
-        item.anchor_pos = None
+        if hasattr(item, "anchor") and item.anchor is not None and item.anchor_pos is not None:
+            # Determine anchor world position
+            if item.anchor == "charmboard":
+                anchor_x = item.anchor_pos[0]
+                anchor_y = 25 + item.anchor_pos[1]
+            else:
+                anchor_x = item.anchor.pos[0] + item.anchor_pos[0]
+                anchor_y = item.anchor.pos[1] + item.anchor_pos[1]
+
+            # Compute current distance
+            dx = item.pos[0] - anchor_x
+            dy = item.pos[1] - anchor_y
+            dist = (dx**2 + dy**2) ** 0.5
+
+            # Check if stretched beyond 1.5x rope length
+            if dist > item.rope_length * 4:
+                item.anchor = None
+                item.anchor_pos = None
+                item.show_nail = False

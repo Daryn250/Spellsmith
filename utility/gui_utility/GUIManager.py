@@ -5,6 +5,7 @@ class GUIManager:
         self.windows = []
         self.nails = []
         self.drawCharmBoard = True
+        self.charmboard_topright = None
 
         # Load charmboard image
         self.charmboard_img = pygame.image.load("assets/gui/charm_board/charm_board.png").convert_alpha()
@@ -19,9 +20,10 @@ class GUIManager:
 
             top_right_pos = (screen_width - scaled[0]*1.25, 25)  # Align to top-right corner
             screen.blit(new_img, top_right_pos)
+            self.charmboard_topright = top_right_pos
         
         for img, x, y in self.nails:
-            screen.blit(img, (x+top_right_pos[0], y+top_right_pos[1]))
+            screen.blit(img, (x, y))
         self.nails.clear()
 
 

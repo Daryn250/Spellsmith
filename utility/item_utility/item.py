@@ -101,10 +101,28 @@ class defaultItem:
 
         if getattr(self, "show_nail", False):
             nail_img = self.NAIL_IMAGE
-            nail_w, nail_h = nail_img.get_size()
-            x = self.anchor_pos[0] + self.image.get_width() / 2
+            x = self.anchor_pos[0] + (nail_img.get_width()*1.5)
             y = self.anchor_pos[1]
             gui_manager.nails.append([nail_img, x, y])
+
+        # Draw rope if anchored
+        if "hangable" in self.flags and hasattr(self, "anchor_pos") and self.anchor_pos:
+            # Define rope start and end
+            rope_start = self.anchor_pos[0] + self.image.get_width(), self.anchor_pos[1]
+
+            rope_end = (self.pos[0] + img.get_width() // 2, self.pos[1] + img.get_height() // 6)
+
+            # Optionally add rope slack curvature (simple midpoint sag)
+            mid_x = (rope_start[0] + rope_end[0]) / 2
+            mid_y = (rope_start[1] + rope_end[1]) / 2 + 2  # 10px sag, you can make this dynamic
+
+            # Use quadratic Bézier-style curve approximation (3-point rope)
+            pygame.draw.lines(surface, (34, 32, 52), False, [
+                rope_start,
+                (mid_x, mid_y),
+                rope_end
+            ], width=2)
+
 
 
 
@@ -193,12 +211,7 @@ class defaultItem:
                 self.floor = 9999
                 # 1. Get anchor's world position
                 if self.anchor == "charmboard":
-                    img = gui_manager.charmboard_img
-                    img_width, img_height = img.get_size()
-                    scale_x = virtual_size[0] / 480
-                    scale_y = virtual_size[1] / 270
-                    scaled_size = (img_width * scale_x, img_height * scale_y)
-                    anchor_x = virtual_size[0] - scaled_size[0] * 1.25 + self.anchor_pos[0]
+                    anchor_x = self.anchor_pos[0]
                     anchor_y = 25 + self.anchor_pos[1]
                     self.show_nail = True
                 else:
@@ -213,13 +226,14 @@ class defaultItem:
                 if not hasattr(self, "rope_length"):
                     dx = self.pos[0] - anchor_x
                     dy = self.pos[1] - anchor_y
-                    self.rope_length = max(10, (dx**2 + dy**2)**0.5)
+                    self.rope_length = max(15, (dx**2 + dy**2)**0.5)
 
                 # 3. Apply gravity
                 self.vy += self.currentGravity  # Feel free to tweak this
 
-                # 4. Update position from velocity
-                self.pos = (self.pos[0] + self.vx, self.pos[1] + self.vy)
+                # 4. Update position from velocity IF NOT DRAGGING
+                if not self.dragging:
+                    self.pos = (self.pos[0] + self.vx, self.pos[1] + self.vy)
 
                 # 5. Rope soft constraint (spring effect)
                 dx = self.pos[0] - anchor_x
@@ -228,7 +242,7 @@ class defaultItem:
 
                 if dist > self.rope_length:
                     stretch = dist - self.rope_length
-                    pull_strength = 0.3  # How elastic it feels; tweak this!
+                    pull_strength = 0.1  # How elastic it feels; tweak this!
                     nx, ny = dx / dist, dy / dist  # Normalize direction
 
                     # Apply spring-like force
@@ -236,8 +250,21 @@ class defaultItem:
                     self.vy -= ny * stretch * pull_strength
 
                 # 6. Damping
-                self.vx /= self.friction
+                self.vx *= 0.9
                 self.vy /= self.friction
+                # 7. Rotational physics (spin based on horizontal movement)
+                if not hasattr(self, "rotational_velocity"): # should never trigger but just incase
+                    self.rotational_velocity = 0
+
+                # Add torque based on vx (tweak multiplier as needed)
+                self.rotational_velocity += self.vx * 0.05  # Feel free to tune
+
+                # Damping for spin (acts like air resistance)
+                self.rotational_velocity *= 0.95
+
+                # Apply to rotation
+                self.rotation += self.rotational_velocity
+
             else:
                 self.show_nail = False # if not connected
 

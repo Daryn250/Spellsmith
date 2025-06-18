@@ -8,6 +8,7 @@ from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.guiManager import GUIManager
 
+from utility.item_utility.item import defaultItem
 
 
 
@@ -35,6 +36,14 @@ def testScreen(screen):
     background = AnimatedTile("assets/table/background/table", frame_duration=150)
 
     item_manager.load_items("saves/save1.json", "testing")
+
+    item_manager.add_item( defaultItem("charm", (70,70), 
+            {
+            "flags":["draggable", "charm", "hangable"],
+            
+            }
+        )
+    )
 
 
     # run table
