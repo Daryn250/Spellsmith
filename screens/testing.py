@@ -37,10 +37,13 @@ def testScreen(screen):
 
     item_manager.load_items("saves/save1.json", "testing")
 
-    item_manager.add_item( defaultItem("charm", (70,70), 
+    item_manager.add_item(defaultItem(item_manager,"charm", (70,70), 
             {
+            "img_path":"assets/gui/charm_board/moon_charm/active",
+            "animated":True,
             "flags":["draggable", "charm", "hangable"],
-            
+            "origin_screen":"testing",
+            "charmType":"sun_charm",
             }
         )
     )

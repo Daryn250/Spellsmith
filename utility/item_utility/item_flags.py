@@ -127,7 +127,7 @@ class HangableFlag:
             if "charm" in getattr(candidate, "flags", []):
                 candidate_rect = candidate.get_scaled_hitbox(virtual_size)
                 if candidate_rect.collidepoint(mx, my):
-                    item.anchor = candidate
+                    item.anchor = candidate.uuid
                     item.anchor_pos = (mx - candidate.pos[0], my - candidate.pos[1])
                     print(f"connected to charm {candidate}")
                     return

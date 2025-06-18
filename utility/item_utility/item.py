@@ -6,7 +6,9 @@ from utility.item_utility.charmWindows import returnCharmWindow
 
 
 class defaultItem:
-    def __init__(self, type, pos, nbt_data = {}):
+    def __init__(self, manager, type, pos, nbt_data = {}):
+
+        self.manager = manager
 
         self.nbt =dict(nbt_data)
 
@@ -15,7 +17,21 @@ class defaultItem:
 
         self.__dict__.update(self.nbt)
 
-
+        if not hasattr(self, "animated"):
+            self.animated = False
+        if not hasattr(self, "frameDuration") and self.animated:
+            self.frameDuration = 100
+        if not hasattr(self, "img_path"):
+            self.img_path = "assets/error.png"
+        if not hasattr(self, "friction"):
+            self.friction = 1.05
+        if not hasattr(self, "flags"):
+            self.flags = []
+        
+        if not hasattr(self, "anchor_pos") and "hangable" in self.flags:
+            self.anchor_pos = None
+            self.anchor = None
+        
         if self.animated:
             self.img = AnimatedTile(self.img_path, frame_duration=self.frameDuration)
         else:
@@ -46,7 +62,7 @@ class defaultItem:
         self.show_nail = False
 
 
-    def to_nbt(self, exclude=["pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE"]):
+    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
 
@@ -215,8 +231,12 @@ class defaultItem:
                     anchor_y = 25 + self.anchor_pos[1]
                     self.show_nail = True
                 else:
-                    anchor_x = self.anchor.pos[0] + self.anchor_pos[0]
-                    anchor_y = self.anchor.pos[1] + self.anchor_pos[1]
+                    # get item by uuid
+                    anchoritem = self.manager.getItemByUUID(self.anchor)
+                    if anchoritem==None:
+                        raise LookupError(f"the item with uuid {self.anchor} could not be found")
+                    anchor_x = anchoritem.pos[0]
+                    anchor_y = anchoritem.pos[1]
                     self.show_nail = False
 
                 # 2. Init values

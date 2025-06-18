@@ -3,41 +3,32 @@
         {
             "type": "charm",
             "pos": [
-                879.8935182670788,
-                74.61000773234588
+                70.0,
+                70
             ],
-            "img_path": "assets/gui/charm_board/moon_charm/passive",
+            "img_path": "assets/gui/charm_board/moon_charm/active",
+            "animated": true,
             "flags": [
                 "draggable",
                 "charm",
                 "hangable"
             ],
-            "animated": true,
-            "frameDuration": 100,
             "origin_screen": "testing",
-            "uuid": "ded007b1-55b4-47d2-8938-34a5168b2fc4",
+            "charmType": "sun_charm",
+            "frameDuration": 100,
             "friction": 1.05,
-            "next_screen": null,
-            "rotation": 43.20130445790266,
-            "rotational_velocity": -0.13672520074713285,
-            "vx": -1.7156819824384155,
-            "vy": -0.2444362933947451,
+            "anchor_pos": null,
+            "anchor": null,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "charmType": "moon_charm",
-            "on_hover": null,
-            "on_unhover": null,
-            "is_clicked": true,
-            "dragging_for": 0,
+            "is_clicked": false,
             "attached_to": null,
-            "show_nail": true,
-            "anchor": "charmboard",
-            "anchor_pos": [
-                880,
-                35
-            ],
-            "mass": 1,
-            "rope_length": 22.66291528222314
+            "show_nail": false,
+            "uuid": "e09bf354-371a-4c4d-a759-7537a4a8f412"
         }
     ]
 }

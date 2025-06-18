@@ -63,5 +63,9 @@ class ItemManager:
             except Exception as e:
                 print(f"[ItemManager] Failed to load item {entry.get('uuid', '?')}: {e}")
 
-
+    def getItemByUUID(self, uuid):
+        for item in self.items:
+            if item.uuid == uuid:
+                return item
+        return None
 
