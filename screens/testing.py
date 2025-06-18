@@ -5,15 +5,14 @@ from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.screen_utility.screenwrapper import VirtualScreen
 from utility.cursor_utility.cursorManager import CursorManager
 from utility.item_utility.ItemManager import ItemManager
-from utility.item_utility.item_flags import DraggableFlag # allow items to be dragged
-from utility.item_utility.item_flags import ScreenChangeFlag # changing screens on mouseclick
+from utility.item_utility.item_flags import * # import all item flags
+from utility.gui_utility.guiManager import GUIManager
 
-from utility.gui_utility.GUIManager import GUIManager
 from utility.item_utility.item import defaultItem
 
 
 
-VIRTUAL_SIZE = (480, 270)
+VIRTUAL_SIZE = (960, 540)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 tile_size = 32
 FPS = 60
@@ -29,22 +28,13 @@ def testScreen(screen):
 
     item_manager = ItemManager()
     cursor_manager = CursorManager(virtual_surface)
-
-    # Somewhere in your setup code
     gui_manager = GUIManager()
-    item_manager.add_item(
-        defaultItem("assets/gui/charm_board/moon_charm/passive", (240,90), "charm", flags=["draggable", "charm"], animated=True, frameDuration=100, origin_screen = "testing")
-    )
-
-    # In your game loop
-    
 
     
-
     # load sprites:
     background = AnimatedTile("assets/table/background/table", frame_duration=150)
 
-    item_manager.load_items("saves/save1.json", "testScreen")
+    item_manager.load_items("saves/save1.json", "testing")
 
 
     # run table
@@ -62,9 +52,9 @@ def testScreen(screen):
                 if event.button == 1:  # Left mouse click
                     cursor_manager.click()
                     # Check for input on buttons here:
-            DraggableFlag.handle_event(event, item_manager.items, vscreen.get_virtual_mouse(screen.get_size())) # rio de janero handle draggable items
-            ScreenChangeFlag.handle_event(event, item_manager.items, vscreen.get_virtual_mouse(screen.get_size()), screen, switcher) # rio de janero 2 handle screen change boogaloo
-
+            DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE) # rio de janero handle draggable items
+            ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
+            CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
                     
 
         # draw tiles
@@ -72,8 +62,7 @@ def testScreen(screen):
         background.update(dt)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
-            item.update(virtual_surface, dt)
-        gui_manager.update(dt, virtual_mouse)
+            item.update(virtual_surface, gui_manager, dt)
     
 
         
@@ -89,12 +78,15 @@ def testScreen(screen):
 
         # draw items
         for item in item_manager.items:
-            item.draw(virtual_surface)
+            item.draw(virtual_surface, VIRTUAL_SIZE)
 
-        
-        
-        gui_manager.draw(screen)
+        # draw guis
+        gui_manager.draw(virtual_surface)
+
+        # draw screenswitcher
         switcher.update_and_draw(screen)
+
+        # draw cursor
         cursor_manager.draw(virtual_surface, virtual_mouse)
 
         vscreen.draw_to_screen(screen)

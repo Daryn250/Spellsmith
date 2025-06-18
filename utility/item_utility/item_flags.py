@@ -6,13 +6,13 @@ class DraggableFlag:
     last_pos = None
 
     @staticmethod
-    def handle_event(event, item_list, mouse_pos):
+    def handle_event(event, item_list, mouse_pos, virtual_size):
         mx, my = mouse_pos
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for item in reversed(item_list):
                 if "draggable" in getattr(item, "flags", []):
-                    rect = item.image.get_rect(topleft=item.pos)
+                    rect = item.get_scaled_hitbox(virtual_size)
                     if rect.collidepoint(mx, my):
                         DraggableFlag.dragging_item = item
                         DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
@@ -25,8 +25,9 @@ class DraggableFlag:
                 item.dragging = False
                 item.floor = item.pos[1] + 30
                 item.currentGravity = item.storedGravity
-                item.vx = item.ovx
-                item.vy = item.ovy
+                if hasattr(item, "ovx"):
+                    item.vx = item.ovx
+                    item.vy = item.ovy
 
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
@@ -53,13 +54,13 @@ class DraggableFlag:
 
 class ScreenChangeFlag:
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, screen, screenSwitcher):
+    def handle_event(event, item_list, mouse_pos, screen, screenSwitcher, virtual_size):
         mx, my = mouse_pos
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             for item in reversed(item_list):  # Topmost items get priority
                 if "screen_change" in getattr(item, "flags", []):
-                    rect = item.image.get_rect(topleft=item.pos)
+                    rect = item.get_scaled_hitbox(virtual_size)
                     if rect.collidepoint(mx, my):
                         if hasattr(item, "next_screen"):
                             item.start_screen_switch(screen, screenSwitcher)
@@ -69,16 +70,15 @@ class ScreenChangeFlag:
 
 class CharmFlag:
     @staticmethod
-    def handle_event(event, itemlist, mouse_pos):
+    def handle_event(event, itemlist, mouse_pos, virtual_size):
         mx, my = mouse_pos
-
-        if event.type == pygame.MOUSEMOTION:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for item in reversed(itemlist):  # Reversed in case of overlap, top items get priority
                 if "charm" in getattr(item, "flags", []):
-                    rect = item.image.get_rect(topleft=item.pos)
+                    rect = item.get_scaled_hitbox(virtual_size)
                     inside = rect.collidepoint(mx, my)
 
-                    if inside and not getattr(item, "is_hovered", False):
-                        item.is_hovered = True
-                    elif not inside and getattr(item, "is_hovered", False):
-                        item.is_hovered = False
+                    if inside and not getattr(item, "is_clicked", False):
+                        item.is_clicked = True
+                    elif not inside and getattr(item, "is_clicked", False):
+                        item.is_clicked = False

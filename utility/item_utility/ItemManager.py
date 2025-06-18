@@ -18,34 +18,21 @@ class ItemManager:
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
     def save_items(self, file_path):
-
         grouped = {}
+
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
-
-            next_screen_name = None
-            if item.next_screen:
-                for name, func in get_all_screen_functions():
-                    if func == item.next_screen:
-                        next_screen_name = name
-                        break
-
             data = {
-                "image": item.img_path,
-                "uuid": item.uuid,
-                "pos": item.pos,
                 "type": item.type,
-                "flags": item.flags,
-                "animated": item.animated,
-                "frameDuration": item.frameDuration,
-                "next_screen": next_screen_name,
+                "pos": list(item.pos),  # JSON doesn't support tuples
+                **item.to_nbt()
             }
-
             grouped.setdefault(screen_name, []).append(data)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w") as f:
             json.dump(grouped, f, indent=4)
+
 
 
     def load_items(self, file_path, current_screen):
@@ -54,24 +41,27 @@ class ItemManager:
             return
 
         with open(file_path, "r") as f:
-            loaded_data = json.load(f)
+            data = json.load(f)
 
-        screen_data = loaded_data.get(current_screen, [])
-        saved_uuids = {data["uuid"] for data in screen_data}
+        screen_data = data.get(current_screen)
+        if not screen_data:
+            print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
+            return  # don't touch current items if screen has nothing to load
+
+        # Get UUIDs that are going to be replaced
+        saved_uuids = {entry["uuid"] for entry in screen_data if "uuid" in entry}
         self.items = [item for item in self.items if item.uuid not in saved_uuids]
 
-        # Now load saved items
-        for data in screen_data:
-            screen_func = get_screen_function(data["next_screen"]) if data["next_screen"] else None
-            item = defaultItem(
-                img_path=data["image"],
-                pos=tuple(data["pos"]),
-                type=data["type"],
-                flags=data.get("flags", []),
-                animated=data.get("animated", False),
-                frameDuration=data.get("frameDuration", 100),
-                next_screen=(lambda s=screen_func: s) if screen_func else None
-            )
-            item.origin_screen = current_screen
-            self.items.append(item)
+        for entry in screen_data:
+            type_ = entry["type"]
+            pos = tuple(entry["pos"])
+            nbt = {k: v for k, v in entry.items() if k not in {"type", "pos"}}
+
+            try:
+                item = defaultItem(type_, pos, nbt)
+                self.items.append(item)
+            except Exception as e:
+                print(f"[ItemManager] Failed to load item {entry.get('uuid', '?')}: {e}")
+
+
 

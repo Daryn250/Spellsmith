@@ -2,61 +2,68 @@ import pygame
 import os
 import uuid
 from utility.animated_sprite import AnimatedTile
+from utility.item_utility.charmWindows import returnCharmWindow
+
 
 class defaultItem:
-    def __init__(self, img_path, pos, type, flags=None, animated=False, frameDuration=100, uuidSave=None, friction = 1.05, next_screen = None, origin_screen = None):
-        if not img_path or not os.path.exists(img_path):
-            img_path = "assets/error.png"
-        self.img_path = img_path
-        self.animated = animated
+    def __init__(self, type, pos, nbt_data = {}):
 
-        self.type = type
+        self.nbt =dict(nbt_data)
 
-        if animated:
-            self.img = AnimatedTile(img_path, frame_duration=frameDuration)
-        else:
-            self.img = pygame.image.load(img_path).convert_alpha()
-
+        self.type = type or "undefined_itemType"
         self.pos = pos
-        self.flags = flags or []
-        self.frameDuration = frameDuration
-        self.uuid = uuidSave or str(uuid.uuid4())
 
-        # for saving
-        self.origin_screen = origin_screen
+        self.__dict__.update(self.nbt)
+
+
+        if self.animated:
+            self.img = AnimatedTile(self.img_path, frame_duration=self.frameDuration)
+        else:
+            self.img = pygame.image.load(self.img_path).convert_alpha()
+
+
 
         # for the draggable flag
-        self.rotation = 0.0
-        self.rotational_velocity = 0.0
+        if not hasattr(self, "vx"):
+            self.rotation = 0.0
+            self.rotational_velocity = 0.0
 
-        self.vx = 0
-        self.vy = 0
+            self.vx = 0
+            self.vy = 0
 
-        self.friction = friction
-        self.currentGravity = 0.3
-        self.storedGravity = 0.3
+            self.currentGravity = 0.3
+            self.storedGravity = 0.3
 
         self.floor = pos[1]
         self.dragging = False
 
-        # for the screen_change flag
-        self.next_screen = next_screen
-
         # for the charm class:
-        self.is_hovered = False
-        self.on_hover = None
-        self.on_unhover = None
+        self.is_clicked = False
 
-    
+    def to_nbt(self, exclude=["pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window"]):
+        if exclude is None:
+            exclude = ["pos", "type"]  # Add any attributes you *don't* want to serialize
+        return {k: v for k, v in self.__dict__.items() if k not in exclude}
+
+
     @property
     def image(self):
         if self.animated:
             return self.img.get_current_frame()
         return self.img
 
-    def draw(self, surface):
-        img = self.image
+    def draw(self, surface, screensize):
         angle = -self.rotation  # Invert for natural lean direction
+
+        # Compute scale based on screen resolution
+        x_scale = screensize[0] / 480
+        y_scale = screensize[1] / 270
+        scale = min(x_scale, y_scale)  # use uniform scaling to preserve aspect ratio
+
+        # Scale image
+        original_img = self.image
+        scaled_size = (int(original_img.get_width() * scale), int(original_img.get_height() * scale))
+        img = pygame.transform.scale(original_img, scaled_size)
 
         # Draw shadow
         shadow_width = img.get_width() * 0.8
@@ -66,19 +73,36 @@ class defaultItem:
         pygame.draw.ellipse(shadow_surface, (0, 0, 0, shadow_alpha), shadow_surface.get_rect())
 
         shadow_x = self.pos[0] + (img.get_width() - shadow_width) / 2
-        shadow_y = self.floor + img.get_height()*0.75  # Centered on floor
+        shadow_y = self.floor + img.get_height() * 0.75  # Centered on floor
         surface.blit(shadow_surface, (shadow_x, shadow_y))
 
-        # Draw rotated image
+        # Rotate image
         rotated_img = pygame.transform.rotate(img, angle)
         rect = rotated_img.get_rect(center=(self.pos[0] + img.get_width() // 2,
                                             self.pos[1] + img.get_height() // 2))
+
+        if self.is_clicked:
+            # Create a mask from the rotated image
+            mask = pygame.mask.from_surface(rotated_img)
+
+            # Convert mask outline to polygon points
+            outline_points = mask.outline()
+
+            if outline_points:
+                # Offset all points by the top-left position where image is drawn
+                offset_outline = [(point[0] + rect.left, point[1] + rect.top) for point in outline_points]
+
+                # Draw the outline as a polygon
+                pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
+
+
+
         
-
-
+        # Draw rotated image
         surface.blit(rotated_img, rect.topleft)
 
-    def update(self, screen, dt=None):
+
+    def update(self, screen, gui_manager, dt=None):
         """Update physics, animation, and rotation for the item."""
 
         if self.animated:
@@ -99,67 +123,76 @@ class defaultItem:
                 self.rotation *= 0.9
 
 
-        # Physics & bounds
-        screenW, screenH = screen.get_size()
-        currentX, currentY = self.pos
+            # Physics & bounds
+            screenW, screenH = screen.get_size()
+            currentX, currentY = self.pos
 
-        # Apply velocity
-        if self.dragging!=True:
-            currentX += self.vx
-            currentY += self.vy
+            # Apply velocity
+            if self.dragging!=True:
+                currentX += self.vx
+                currentY += self.vy
 
-        
+            # Apply friction (to gradually reduce movement)
+            self.vx /= self.friction
 
-        # Apply friction (to gradually reduce movement)
-        self.vx /= self.friction
+            # Gravity
+            self.vy += self.currentGravity
 
-        # Gravity
-        self.vy += self.currentGravity
+            # Bounds and bounce
+            item_width, item_height = self.image.get_size()
 
-        
+            # Floor bounce
+            if not self.dragging:
+                if currentY > self.floor:
+                    currentY = self.floor
+                    self.vy = 0
+                    self.vx /=1.5
+            # Left bound
+            if currentX < 0:
+                currentX = 0
+                self.vx = abs(self.vx) / 1.1
 
-        # Bounds and bounce
-        item_width, item_height = self.image.get_size()
+            # Right bound
+            if currentX + item_width > screenW:
+                currentX = screenW - item_width
+                self.vx = -abs(self.vx) / 1.1
+            # Ceiling
+            if currentY < 0:
+                currentY = 0
+                self.vy = abs(self.vy) / 1.1
+            # Bottom bound
+            if currentY + item_height > screenH:
+                currentY = screenH - item_height
+                self.vy = abs(self.vy) / 1.1
 
-        # Floor bounce
-        if not self.dragging:
-            if currentY > self.floor:
-                currentY = self.floor
-                self.vy = 0
-                self.vx /=1.5
-                # play hit sound
-        
-        
+            self.pos = currentX, currentY
 
-        # Left bound
-        if currentX < 0:
-            currentX = 0
-            self.vx = abs(self.vx) / 1.1
-
-        # Right bound
-        if currentX + item_width > screenW:
-            currentX = screenW - item_width
-            self.vx = -abs(self.vx) / 1.1
-
-        # Ceiling
-        if currentY < 0:
-            currentY = 0
-            self.vy = abs(self.vy) / 1.1
-        
-        # Bottom bound
-        if currentY + item_height > screenH:
-            currentY = screenH - item_height
-            self.vy = abs(self.vy) / 1.1
-
-            
-
-        self.pos = currentX, currentY
-
+        if "charm" in self.flags:
+            if self.is_clicked:
+                if not hasattr(self, "window"):
+                    self.window = returnCharmWindow(self)
+                    gui_manager.windows.append(self.window)
+            elif hasattr(self, "window"):
+                if self.window in gui_manager.windows:
+                    gui_manager.windows.remove(self.window)
+                del self.window
+ 
     def start_screen_switch(self, screen, screenSwitcher):
         screenSwitcher.start(lambda: self.next_screen(screen))
         
     def set_position(self, pos):
         self.pos = pos
 
-    def get_rect(self):
-        return self.img.get_rect(topleft=self.pos)
+    def get_scaled_hitbox(self, screensize):
+        # Compute scale based on screen size
+        x_scale = screensize[0] / 480
+        y_scale = screensize[1] / 270
+        scale = min(x_scale, y_scale)
+
+        # Scale dimensions
+        width = int(self.image.get_width() * scale)
+        height = int(self.image.get_height() * scale)
+
+        # Return rect with scaled size at position
+        return pygame.Rect(self.pos[0], self.pos[1], width, height)
+

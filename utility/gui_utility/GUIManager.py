@@ -1,11 +1,9 @@
 class GUIManager:
     def __init__(self):
-        self.elements = []
+        self.windows = []
 
-    def update(self, dt, mouse_pos):
-        for element in self.elements:
-            element.update(dt, mouse_pos)
-
-    def draw(self, surface):
-        for element in self.elements:
-            element.draw(surface)
+    def draw(self, screen):
+        for window in self.windows:
+            if hasattr(window, "update_position"):
+                window.update_position()
+            window.draw(screen)
