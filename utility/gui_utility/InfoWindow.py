@@ -1,7 +1,7 @@
 import pygame
 
 class InfoWindow:
-    def __init__(self, anchor, title, description, position, image_path=None, size=(150, 180), padding=8, scale=2):
+    def __init__(self, anchor, title, description, position, image_path=None, size=(150, 180), padding=8):
         self.anchor_item = anchor
         self.title = title
         self.description = description
@@ -9,17 +9,27 @@ class InfoWindow:
         self.pos = position
         self.size = size  # Final display size (width only matters initially)
         self.padding = padding
-        self.scale = scale
-        self.render_width = size[0] * scale
+
+
+        # touch these and the code breaks not even gonna lie
+        self.display_width, self.display_height = size
+        self.render_width = self.display_width
+        self.scale = 1
+        #
+
+        self.cached_surface = None
+        self.cached_display_size = None
+        self.cached_total_height = None
+        self.needs_redraw = True
 
         # Load pixel fonts
-        self.font_title = pygame.font.Font("assets/spellsmithy.ttf", 20 * scale)
-        self.font_content = pygame.font.Font("assets/spellsmithy.ttf", 16 * scale)
+        self.font_title = pygame.font.Font("assets/spellsmithy.ttf", 20 )
+        self.font_content = pygame.font.Font("assets/spellsmithy.ttf", 16 )
 
         # Load optional image
         self.image = None
         if self.image_path:
-            raw_img = pygame.image.load(self.image_path).convert_alpha()
+            raw_img = pygame.image.load(self.image_path)
             self.image = raw_img
 
     def update_position(self, offset=None):
@@ -29,15 +39,18 @@ class InfoWindow:
         self.pos = (mx + offset[0], my + offset[1])
 
     def draw(self, screen):
-        x = self.padding * self.scale
-        y = self.padding * self.scale
+        if not self.needs_redraw:
+            screen.blit(self.cached_surface, (round(self.pos[0]), round(self.pos[1])))
+            return
+
+        x = int(self.padding * self.scale)
+        y = int(self.padding * self.scale)
         max_width = self.render_width - 2 * x
 
-        # Render title to measure space
         title_surf = self.font_title.render(self.title, False, (255, 255, 255))
-        y += title_surf.get_height() + self.padding * self.scale
+        title_height = title_surf.get_height()
+        y += title_height + int(self.padding * self.scale)
 
-        # Measure wrapped description
         words = self.description.split(' ')
         line = ''
         description_surfs = []
@@ -45,52 +58,55 @@ class InfoWindow:
             test_line = line + word + ' '
             test_surf = self.font_content.render(test_line, False, (220, 220, 220))
             if test_surf.get_width() > max_width:
-                description_surfs.append(self.font_content.render(line, False, (220, 220, 220)))
-                y += description_surfs[-1].get_height() + 2 * self.scale
+                final_surf = self.font_content.render(line, False, (220, 220, 220))
+                description_surfs.append(final_surf)
+                y += final_surf.get_height() + int(2 * self.scale)
                 line = word + ' '
             else:
                 line = test_line
         if line:
-            description_surfs.append(self.font_content.render(line, False, (220, 220, 220)))
-            y += description_surfs[-1].get_height() + 2 * self.scale
+            final_surf = self.font_content.render(line, False, (220, 220, 220))
+            description_surfs.append(final_surf)
+            y += final_surf.get_height() + int(2 * self.scale)
 
-        # Add space for image if present
+        image_height = 0
         if self.image:
             img_w, img_h = self.image.get_size()
             scale_factor = max_width / img_w
-            scaled_height = int(img_h * scale_factor)
-            y += scaled_height + self.padding * self.scale
+            image_height = int(img_h * scale_factor)
+            y += image_height + int(self.padding * self.scale)
 
-        # Add final bottom padding
-        total_height = y + self.padding * self.scale
+        total_height = y + int(self.padding * self.scale)
+        self.cached_total_height = total_height
 
-        # Now create surface based on actual size
         render_size = (self.render_width, total_height)
-        surface = pygame.Surface(render_size, pygame.SRCALPHA)
-
-        # Fill background and draw border
-        surface.fill((0, 0, 0, 200))
+        surface = pygame.Surface(render_size)
+        surface.set_alpha(None)
+        surface.fill((15, 15, 15))
         pygame.draw.rect(surface, (255, 255, 255), surface.get_rect(), 3)
 
-        # Reset draw y
-        y = self.padding * self.scale
+        # Re-draw everything to the cached surface
+        y = int(self.padding * self.scale)
         surface.blit(title_surf, (x, y))
-        y += title_surf.get_height() + self.padding * self.scale
-
+        y += title_height + int(self.padding * self.scale)
         for surf in description_surfs:
             surface.blit(surf, (x, y))
-            y += surf.get_height() + 2 * self.scale
-
-        # Draw image
+            y += surf.get_height() + int(2 * self.scale)
         if self.image:
-            img_w, img_h = self.image.get_size()
-            scale_factor = max_width / img_w
-            scaled_height = int(img_h * scale_factor)
-            scaled_img = pygame.transform.scale(self.image, (max_width, scaled_height))
+            scaled_img = pygame.transform.scale(self.image, (max_width, image_height))
             surface.blit(scaled_img, (x, y))
-            y += scaled_height + self.padding * self.scale
+            y += image_height + int(self.padding * self.scale)
 
-        # Scale down and blit to screen
-        final_display_size = (self.size[0], total_height // self.scale)
-        scaled_surface = pygame.transform.scale(surface, final_display_size)
-        screen.blit(scaled_surface, self.pos)
+        final_height = total_height // self.scale
+        if final_height % 2 != 0:
+            final_height += 1
+        final_display_size = (self.size[0], final_height)
+        self.cached_display_size = final_display_size
+
+        self.cached_surface = pygame.transform.scale(surface, final_display_size)
+        screen.blit(self.cached_surface, (round(self.pos[0]), round(self.pos[1])))
+
+        self.needs_redraw = False
+
+
+

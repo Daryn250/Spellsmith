@@ -40,9 +40,13 @@ class defaultItem:
         # for the charm class:
         self.is_clicked = False
 
-    def to_nbt(self, exclude=["pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window"]):
-        if exclude is None:
-            exclude = ["pos", "type"]  # Add any attributes you *don't* want to serialize
+        # for the hanging class
+        self.NAIL_IMAGE = pygame.image.load("assets/gui/charm_board/nail.png").convert_alpha()
+        self.attached_to = None
+        self.show_nail = False
+
+
+    def to_nbt(self, exclude=["pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
 
@@ -95,6 +99,12 @@ class defaultItem:
                 # Draw the outline as a polygon
                 pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
 
+        if getattr(self, "show_nail", False):
+            nail_img = self.NAIL_IMAGE
+            nail_w, nail_h = nail_img.get_size()
+            center_x = self.pos[0] + self.image.get_width() // 2 - nail_w // 2
+            top_y = self.pos[1] - nail_h // 2
+            surface.blit(nail_img, (center_x, top_y))
 
 
         
@@ -176,7 +186,9 @@ class defaultItem:
                 if self.window in gui_manager.windows:
                     gui_manager.windows.remove(self.window)
                 del self.window
- 
+
+        # if has hanging flag, do hanging physics
+        
     def start_screen_switch(self, screen, screenSwitcher):
         screenSwitcher.start(lambda: self.next_screen(screen))
         

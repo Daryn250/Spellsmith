@@ -3,8 +3,8 @@
         {
             "type": "charm",
             "pos": [
-                345.03091830096525,
-                101.80000000000024
+                626.5589468250326,
+                248.3090909090908
             ],
             "img_path": "assets/gui/charm_board/moon_charm/passive",
             "flags": [
@@ -17,16 +17,19 @@
             "uuid": "ded007b1-55b4-47d2-8938-34a5168b2fc4",
             "friction": 1.05,
             "next_screen": null,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 5.59335827065012e-07,
+            "rotation": -1.6310866398224193,
+            "rotational_velocity": -0.008850912981802544,
+            "vx": 0.0,
             "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "charmType": "moon_charm",
             "on_hover": null,
             "on_unhover": null,
-            "is_clicked": false
+            "is_clicked": true,
+            "dragging_for": 0,
+            "attached_to": null,
+            "show_nail": false
         }
     ]
 }

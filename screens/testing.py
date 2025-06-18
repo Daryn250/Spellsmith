@@ -8,7 +8,6 @@ from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.guiManager import GUIManager
 
-from utility.item_utility.item import defaultItem
 
 
 
@@ -23,6 +22,7 @@ FPS = 60
 def testScreen(screen):
     switcher = ScreenSwitcher()
     clock = pygame.time.Clock()
+    
 
     virtual_surface = vscreen.get_surface()
 
@@ -81,7 +81,7 @@ def testScreen(screen):
             item.draw(virtual_surface, VIRTUAL_SIZE)
 
         # draw guis
-        gui_manager.draw(virtual_surface)
+        gui_manager.draw(virtual_surface, VIRTUAL_SIZE)
 
         # draw screenswitcher
         switcher.update_and_draw(screen)

@@ -1,12 +1,18 @@
-this is version 1.0.1
+this is version 1.1.0
 
 needed currently:
 
 
 
-gui classes and functions for guis # work on rn
+hanging physics for charms
 
-a bag that can be used to switch items between screens => utility for switching items between screens => get item uuid, save item to different screen and delete it from current
+make charms be nailed to the charmboard when hovered and released on the charmboard
+
+allow charms to also be nailed to other charms. dont show nail though. :D
+
+right clicking nailed charms releases them.
+
+a bag that can be used to switch items between screens
 
 maybe a day/night now? unsure.
 

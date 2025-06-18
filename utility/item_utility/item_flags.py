@@ -26,8 +26,10 @@ class DraggableFlag:
                 item.floor = item.pos[1] + 30
                 item.currentGravity = item.storedGravity
                 if hasattr(item, "ovx"):
-                    item.vx = item.ovx
-                    item.vy = item.ovy
+                    if item.dragging_for>1:
+                        item.vx = item.ovx
+                        item.vy = item.ovy
+                item.dragging_for = 0
 
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
@@ -36,6 +38,10 @@ class DraggableFlag:
             if DraggableFlag.dragging_item:
                 DraggableFlag.dragging_item.floor = DraggableFlag.dragging_item.pos[1] + 30 # set value so it doesn't interfere with dragging
                 DraggableFlag.dragging_item.dragging = True
+                if hasattr(DraggableFlag.dragging_item, "dragging_for"):
+                    DraggableFlag.dragging_item.dragging_for +=1
+                else:
+                    DraggableFlag.dragging_item.dragging_for = 1
                 dx, dy = DraggableFlag.offset
                 new_pos = (mx - dx, my - dy)
 
@@ -82,3 +88,46 @@ class CharmFlag:
                         item.is_clicked = True
                     elif not inside and getattr(item, "is_clicked", False):
                         item.is_clicked = False
+
+class HangableFlag:
+    @staticmethod
+    def handle_event(event, itemlist, mouse_pos, virtual_size):
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            item = DraggableFlag.dragging_item
+            if item and "hangable" in getattr(item, "flags", []):
+                # You can define a function to find the closest valid anchor
+                anchor = HangableFlag.find_anchor(item, itemlist, virtual_size)
+
+                if anchor:
+                    # Snap item to anchor
+                    item.pos = HangableFlag.snap_to_anchor(anchor, item)
+                    item.floor = item.pos[1]  # fix vertical settling
+                    item.attached_to = anchor
+                    item.show_nail = "charmboard" in getattr(anchor, "flags", [])
+                else:
+                    # Unanchor and let fall
+                    if hasattr(item, "attached_to"):
+                        del item.attached_to
+                    item.show_nail = False
+
+    @staticmethod
+    def find_anchor(item, itemlist, virtual_size):
+        # Find anchor within proximity (you define the threshold logic)
+        mx, my = item.pos
+        for candidate in itemlist:
+            if candidate == item:
+                continue
+            if "charmboard" in getattr(candidate, "flags", []) or "charm" in getattr(candidate, "flags", []):
+                rect = candidate.get_scaled_hitbox(virtual_size)
+                if rect.collidepoint(mx, my):
+                    return candidate
+        return None
+
+    @staticmethod
+    def snap_to_anchor(anchor, item):
+        anchor_rect = anchor.get_rect()
+        # You can tweak the anchor point as desired
+        x = anchor.pos[0] + anchor_rect.width // 2 - item.image.get_width() // 2
+        y = anchor.pos[1] + anchor_rect.height
+        return (x, y)
+
