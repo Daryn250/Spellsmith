@@ -64,10 +64,9 @@ def testScreen(screen):
                 if event.button == 1:  # Left mouse click
                     cursor_manager.click()
                     # Check for input on buttons here:
-            DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager) # rio de janero handle draggable items
+            DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
-                    
 
         # draw tiles
         #update
@@ -90,7 +89,7 @@ def testScreen(screen):
 
         # draw items
         for item in item_manager.items:
-            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager)
+            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager)
 
         # draw guis
         gui_manager.draw(virtual_surface, VIRTUAL_SIZE)

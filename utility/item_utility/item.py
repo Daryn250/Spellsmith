@@ -72,7 +72,7 @@ class defaultItem:
             return self.img.get_current_frame()
         return self.img
 
-    def draw(self, surface, screensize, gui_manager):
+    def draw(self, surface, screensize, gui_manager, item_manager):
         angle = -self.rotation  # Invert for natural lean direction
 
         # Compute scale based on screen resolution
@@ -124,7 +124,11 @@ class defaultItem:
         # Draw rope if anchored
         if "hangable" in self.flags and hasattr(self, "anchor_pos") and self.anchor_pos:
             # Define rope start and end
-            rope_start = self.anchor_pos[0] + self.image.get_width(), self.anchor_pos[1]
+            if self.anchor == "charmboard":
+                rope_start = self.anchor_pos[0]+ img.get_width()//2, self.anchor_pos[1]
+            else:
+                anchor_item = item_manager.getItemByUUID(self.anchor)
+                rope_start = anchor_item.pos[0] + img.get_width()//2, anchor_item.pos[1]+ img.get_height()
 
             rope_end = (self.pos[0] + img.get_width() // 2, self.pos[1] + img.get_height() // 6)
 
@@ -246,10 +250,12 @@ class defaultItem:
                 if not hasattr(self, "rope_length"):
                     dx = self.pos[0] - anchor_x
                     dy = self.pos[1] - anchor_y
-                    self.rope_length = max(15, (dx**2 + dy**2)**0.5)
+                    self.rope_length = max(20, (dx**2 + dy**2)**0.5)
+                if self.rope_length>20:
+                    self.rope_length = 20
 
                 # 3. Apply gravity
-                self.vy += self.currentGravity  # Feel free to tweak this
+                self.vy += self.currentGravity
 
                 # 4. Update position from velocity IF NOT DRAGGING
                 if not self.dragging:
@@ -259,31 +265,29 @@ class defaultItem:
                 dx = self.pos[0] - anchor_x
                 dy = self.pos[1] - anchor_y
                 dist = (dx**2 + dy**2)**0.5
+                nx, ny = dx / (dist or 1), dy / (dist or 1)
 
-                if dist > self.rope_length:
-                    stretch = dist - self.rope_length
-                    pull_strength = 0.1  # How elastic it feels; tweak this!
-                    nx, ny = dx / dist, dy / dist  # Normalize direction
-
-                    # Apply spring-like force
-                    self.vx -= nx * stretch * pull_strength
-                    self.vy -= ny * stretch * pull_strength
+                stretch = dist - self.rope_length
+                pull_strength = 0.1  # more gentle for stability
+                self.vx -= (nx * stretch * pull_strength)/3
+                self.vy -= (ny * stretch * pull_strength)/3
 
                 # 6. Damping
-                self.vx *= 0.9
-                self.vy /= self.friction
-                # 7. Rotational physics (spin based on horizontal movement)
-                if not hasattr(self, "rotational_velocity"): # should never trigger but just incase
-                    self.rotational_velocity = 0
+                self.vx *= 0.8
+                self.vy *= 0.8
 
-                # Add torque based on vx (tweak multiplier as needed)
-                self.rotational_velocity += self.vx * 0.05  # Feel free to tune
+                # Clamp velocities to prevent explosive forces
+                max_velocity = 20
+                self.vx = max(min(self.vx, max_velocity), -max_velocity)
+                self.vy = max(min(self.vy, max_velocity), -max_velocity)
 
-                # Damping for spin (acts like air resistance)
+                # 7. Rotational physics
+                self.rotational_velocity -= self.vx * 0.01
                 self.rotational_velocity *= 0.95
 
-                # Apply to rotation
-                self.rotation += self.rotational_velocity
+                
+                if self.anchor!="charmboard":
+                    self.anchor_pos = anchor_x,anchor_x
 
             else:
                 self.show_nail = False # if not connected

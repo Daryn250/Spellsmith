@@ -6,9 +6,8 @@ class DraggableFlag:
     last_pos = None
 
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager):
         mx, my = mouse_pos
-
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for item in reversed(item_list):
                 if "draggable" in getattr(item, "flags", []):
@@ -34,6 +33,9 @@ class DraggableFlag:
                 if hasattr(item, "anchor_pos"):
                     if item.anchor_pos==None:
                         HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager)
+                if hasattr(item, "anchor"):
+                    if item.anchor == None:
+                        detatch_connected(item, item_list, item_manager)
 
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
@@ -61,7 +63,8 @@ class DraggableFlag:
                 DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
                 DraggableFlag.dragging_item.ovx = vx
                 DraggableFlag.dragging_item.ovy = vy
-                HangableFlag.try_detatch(DraggableFlag.dragging_item)
+                HangableFlag.try_detatch(DraggableFlag.dragging_item, item_manager)
+                
 
 class ScreenChangeFlag:
     @staticmethod
@@ -99,6 +102,8 @@ class HangableFlag:
     def try_attatch(event, item, itemlist, mouse_pos, virtual_size, gui_manager):
         if "hangable" not in item.flags:
             return
+        if item.anchor!=None:
+            return
 
         mx, my = mouse_pos
 
@@ -126,9 +131,10 @@ class HangableFlag:
                 continue
             if "charm" in getattr(candidate, "flags", []):
                 candidate_rect = candidate.get_scaled_hitbox(virtual_size)
+                
                 if candidate_rect.collidepoint(mx, my):
                     item.anchor = candidate.uuid
-                    item.anchor_pos = (mx - candidate.pos[0], my - candidate.pos[1])
+                    item.anchor_pos = (candidate.pos[0],candidate.pos[1])
                     print(f"connected to charm {candidate}")
                     return
 
@@ -136,15 +142,16 @@ class HangableFlag:
         item.anchor = None
         item.anchor_pos = None
         print("no candidate found.")
-    def try_detatch(item):
+    def try_detatch(item, item_manager):
         if hasattr(item, "anchor") and item.anchor is not None and item.anchor_pos is not None:
             # Determine anchor world position
             if item.anchor == "charmboard":
                 anchor_x = item.anchor_pos[0]
                 anchor_y = 25 + item.anchor_pos[1]
             else:
-                anchor_x = item.anchor.pos[0] + item.anchor_pos[0]
-                anchor_y = item.anchor.pos[1] + item.anchor_pos[1]
+                anchoritem = item_manager.getItemByUUID(item.anchor)
+                anchor_x = anchoritem.pos[0]
+                anchor_y = anchoritem.pos[1]
 
             # Compute current distance
             dx = item.pos[0] - anchor_x
@@ -156,3 +163,19 @@ class HangableFlag:
                 item.anchor = None
                 item.anchor_pos = None
                 item.show_nail = False
+                return True
+
+    
+def detatch_connected(item, itemlist, item_manager):
+    for a in itemlist:
+        # If this item's anchor is the current item
+        if getattr(a, "anchor", None) == item.uuid:
+            # Detach this item
+            a.anchor = None
+            a.anchor_pos = None
+            a.floor = a.pos[1]+30
+
+            # Recursively detach any items anchored to this one
+            detatch_connected(a, itemlist, item_manager)
+
+

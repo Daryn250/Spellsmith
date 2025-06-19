@@ -58,7 +58,7 @@ class ItemManager:
             nbt = {k: v for k, v in entry.items() if k not in {"type", "pos"}}
 
             try:
-                item = defaultItem(type_, pos, nbt)
+                item = defaultItem(self, type_, pos, nbt)
                 self.items.append(item)
             except Exception as e:
                 print(f"[ItemManager] Failed to load item {entry.get('uuid', '?')}: {e}")
