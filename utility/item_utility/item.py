@@ -228,7 +228,7 @@ class defaultItem:
 
         if "hangable" in self.flags:
             if hasattr(self, "anchor") and self.anchor is not None and self.anchor_pos is not None:
-                self.floor = 9999
+                self.floor = screen.get_height()-(self.image.get_height()*2)
                 # 1. Get anchor's world position
                 if self.anchor == "charmboard":
                     anchor_x = self.anchor_pos[0]
