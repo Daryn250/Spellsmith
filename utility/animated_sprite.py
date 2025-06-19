@@ -14,6 +14,7 @@ class AnimatedTile:
         self.timer = 0
 
     def _load_frames_from_folder(self, folder_path):
+        self.index = 0
         supported = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
         files = sorted(f for f in os.listdir(folder_path) if f.lower().endswith(supported))
         frames = []

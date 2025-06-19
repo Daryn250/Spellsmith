@@ -8,7 +8,7 @@ from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.guiManager import GUIManager
 
-from utility.item_utility.item import defaultItem
+from utility.item_utility.itemMaker import makeItem
 
 
 
@@ -16,9 +16,6 @@ VIRTUAL_SIZE = (960, 540)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 tile_size = 32
 FPS = 60
-
-
-# make utility or something for switching ores between screens? maybe just use an inventory or something. Unsure bc I want to have ores with different types of imperfections
 
 def testScreen(screen):
     switcher = ScreenSwitcher()
@@ -37,16 +34,7 @@ def testScreen(screen):
 
     item_manager.load_items("saves/save1.json", "testing")
 
-    item_manager.add_item(defaultItem(item_manager,"charm", (70,70), 
-            {
-            "img_path":"assets/gui/charm_board/moon_charm/active",
-            "animated":True,
-            "flags":["draggable", "charm", "hangable"],
-            "origin_screen":"testing",
-            "charmType":"sun_charm",
-            }
-        )
-    )
+    makeItem(item_manager, "iron_ingot", (200,200), "testing")
 
 
     # run table

@@ -1,1 +1,26 @@
-{}
+{
+    "testing": [
+        {
+            "type": "iron_ingot",
+            "pos": [
+                665.9135930860042,
+                213
+            ],
+            "img_path": "assets/items/iron/iron2.png",
+            "flags": [
+                "draggable"
+            ],
+            "origin_screen": "testing",
+            "animated": false,
+            "friction": 1.05,
+            "rotation": 2.2978283439484413,
+            "rotational_velocity": 0.010127753997123451,
+            "vx": 1.215466208307988,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "6ffc194f-31ef-4d24-b754-b8356a487062",
+            "dragging_for": 0
+        }
+    ]
+}

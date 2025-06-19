@@ -94,8 +94,12 @@ class CharmFlag:
 
                     if inside and not getattr(item, "is_clicked", False):
                         item.is_clicked = True
+                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/active")
+                        item.img_path = f"assets/gui/charm_board/{item.charmType}/passive"
                     elif not inside and getattr(item, "is_clicked", False):
                         item.is_clicked = False
+                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/passive")
+                        item.img_path = f"assets/gui/charm_board/{item.charmType}/passive"
 
 class HangableFlag:
     @staticmethod

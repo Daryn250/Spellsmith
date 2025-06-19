@@ -17,6 +17,9 @@ class defaultItem:
 
         self.__dict__.update(self.nbt)
 
+
+        if not hasattr(self, "flags"):
+            self.flags = []
         if not hasattr(self, "animated"):
             self.animated = False
         if not hasattr(self, "frameDuration") and self.animated:
@@ -24,9 +27,9 @@ class defaultItem:
         if not hasattr(self, "img_path"):
             self.img_path = "assets/error.png"
         if not hasattr(self, "friction"):
-            self.friction = 1.05
-        if not hasattr(self, "flags"):
-            self.flags = []
+            if self.flags != []:
+                self.friction = 1.05
+        
         
         if not hasattr(self, "anchor_pos") and "hangable" in self.flags:
             self.anchor_pos = None
@@ -40,26 +43,29 @@ class defaultItem:
 
 
         # for the draggable flag
-        if not hasattr(self, "vx"):
-            self.rotation = 0.0
-            self.rotational_velocity = 0.0
+        if "draggable" in self.flags:
+            if not hasattr(self, "vx"):
+                self.rotation = 0.0
+                self.rotational_velocity = 0.0
 
-            self.vx = 0
-            self.vy = 0
+                self.vx = 0
+                self.vy = 0
 
-            self.currentGravity = 0.3
-            self.storedGravity = 0.3
+                self.currentGravity = 0.3
+                self.storedGravity = 0.3
 
-        self.floor = pos[1]
-        self.dragging = False
+            self.floor = pos[1]
+            self.dragging = False
 
         # for the charm class:
-        self.is_clicked = False
+        if "charm" in self.flags:
+            self.is_clicked = False
 
         # for the hanging class
-        self.NAIL_IMAGE = pygame.image.load("assets/gui/charm_board/nail.png").convert_alpha()
-        self.attached_to = None
-        self.show_nail = False
+        if "hanging" in self.flags:
+            self.NAIL_IMAGE = pygame.image.load("assets/gui/charm_board/nail.png").convert_alpha()
+            self.attached_to = None
+            self.show_nail = False
 
 
     def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE"]):
@@ -73,7 +79,10 @@ class defaultItem:
         return self.img
 
     def draw(self, surface, screensize, gui_manager, item_manager):
-        angle = -self.rotation  # Invert for natural lean direction
+        if hasattr(self, "rotation"):
+            angle = -self.rotation  # Invert for natural lean direction
+        else:
+            angle = 0
 
         # Compute scale based on screen resolution
         x_scale = screensize[0] / 480
@@ -88,12 +97,15 @@ class defaultItem:
         # Draw shadow
         shadow_width = img.get_width() * 0.8
         shadow_height = img.get_height() * 0.2
-        shadow_alpha = 100 if not self.dragging else 20
+        shadow_alpha = 100 if getattr(self, "dragging", False) else 20
         shadow_surface = pygame.Surface((shadow_width, shadow_height), pygame.SRCALPHA)
         pygame.draw.ellipse(shadow_surface, (0, 0, 0, shadow_alpha), shadow_surface.get_rect())
 
         shadow_x = self.pos[0] + (img.get_width() - shadow_width) / 2
-        shadow_y = self.floor + img.get_height() * 0.75  # Centered on floor
+        if hasattr(self, "floor"):
+            shadow_y = self.floor + img.get_height() * 0.75  # Centered on floor
+        else:
+            shadow_y = self.pos[1]+img.get_height()*0.75
         surface.blit(shadow_surface, (shadow_x, shadow_y))
 
         # Rotate image
@@ -101,25 +113,21 @@ class defaultItem:
         rect = rotated_img.get_rect(center=(self.pos[0] + img.get_width() // 2,
                                             self.pos[1] + img.get_height() // 2))
 
-        if self.is_clicked:
-            # Create a mask from the rotated image
-            mask = pygame.mask.from_surface(rotated_img)
+        if hasattr(self, "is_clicked"):
+            if self.is_clicked:
+                # Create a mask from the rotated image
+                mask = pygame.mask.from_surface(rotated_img)
 
-            # Convert mask outline to polygon points
-            outline_points = mask.outline()
+                # Convert mask outline to polygon points
+                outline_points = mask.outline()
 
-            if outline_points:
-                # Offset all points by the top-left position where image is drawn
-                offset_outline = [(point[0] + rect.left, point[1] + rect.top) for point in outline_points]
+                if outline_points:
+                    # Offset all points by the top-left position where image is drawn
+                    offset_outline = [(point[0] + rect.left, point[1] + rect.top) for point in outline_points]
 
-                # Draw the outline as a polygon
-                pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
+                    # Draw the outline as a polygon
+                    pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
 
-        if getattr(self, "show_nail", False):
-            nail_img = self.NAIL_IMAGE
-            x = self.anchor_pos[0] + (nail_img.get_width()*1.5)
-            y = self.anchor_pos[1]
-            gui_manager.nails.append([nail_img, x, y])
 
         # Draw rope if anchored
         if "hangable" in self.flags and hasattr(self, "anchor_pos") and self.anchor_pos:
@@ -142,6 +150,10 @@ class defaultItem:
                 (mid_x, mid_y),
                 rope_end
             ], width=2)
+            if getattr(self, "show_nail", False):
+                nail_img = self.NAIL_IMAGE
+                x, y = rope_start
+                gui_manager.nails.append([nail_img, x, y])
 
 
 
