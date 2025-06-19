@@ -32,7 +32,7 @@ class DraggableFlag:
 
                 if hasattr(item, "anchor_pos"):
                     if item.anchor_pos==None:
-                        HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager)
+                        HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager, item_manager)
                 if hasattr(item, "anchor"):
                     if item.anchor == None:
                         detatch_connected(item, item_list, item_manager)
@@ -99,7 +99,7 @@ class CharmFlag:
 
 class HangableFlag:
     @staticmethod
-    def try_attatch(event, item, itemlist, mouse_pos, virtual_size, gui_manager):
+    def try_attatch(event, item, itemlist, mouse_pos, virtual_size, gui_manager, item_manager):
         if "hangable" not in item.flags:
             return
         if item.anchor!=None:
@@ -122,26 +122,31 @@ class HangableFlag:
             item.anchor = "charmboard"
             # Store position relative to charmboard's top-left
             item.anchor_pos = (mx, my)
-            print("connected to charmboard")
             return
 
         # --- 2. Check if dropped on another charm ---
         for candidate in reversed(itemlist):
             if candidate == item:
                 continue
+
             if "charm" in getattr(candidate, "flags", []):
                 candidate_rect = candidate.get_scaled_hitbox(virtual_size)
-                
+
+                # Prevent attaching to a charm that's already occupied
+                connected_item = get_connected(candidate.uuid, itemlist, item_manager)
+                if connected_item is not None:
+                    continue
+
+                # Check mouse overlap
                 if candidate_rect.collidepoint(mx, my):
                     item.anchor = candidate.uuid
-                    item.anchor_pos = (candidate.pos[0],candidate.pos[1])
-                    print(f"connected to charm {candidate}")
+                    item.anchor_pos = (candidate.pos[0], candidate.pos[1])
                     return
+
 
         # --- 3. No valid anchor found ---
         item.anchor = None
         item.anchor_pos = None
-        print("no candidate found.")
     def try_detatch(item, item_manager):
         if hasattr(item, "anchor") and item.anchor is not None and item.anchor_pos is not None:
             # Determine anchor world position
@@ -177,5 +182,14 @@ def detatch_connected(item, itemlist, item_manager):
 
             # Recursively detach any items anchored to this one
             detatch_connected(a, itemlist, item_manager)
+
+def get_connected(item, itemlist, item_manager):
+    """Returns the first item that is anchored to the given item, or None if none exist."""
+    for other in itemlist:
+        if hasattr(other, "anchor"):
+            if other.anchor == item:
+                return other
+    return None
+
 
 
