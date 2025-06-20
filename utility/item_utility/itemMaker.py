@@ -2,6 +2,17 @@ from .item import defaultItem
 from utility.screen_utility.screenManager import get_screen_function
 
 ITEM_BASES = {
+    #### UTILITY ####
+    "slot_node": {
+        "type": "slot",
+        "nbt": {
+            "flags": ["slot", "invisible"],
+            "slot_accepts": [],  # allowed item names
+            "img_path": "assets/very_important/cat.png",  # optional fallback
+            "animated": False,
+            "contains": None
+        }
+    },
     #### CHARMS ####
     "rain_charm": {
         "type": "charm",

@@ -34,8 +34,8 @@ def testScreen(screen):
 
     item_manager.load_items("saves/save1.json", "testing")
 
-    makeItem(item_manager, "iron_ingot", (200,200), "testing")
-
+    makeItem(item_manager, "moon_charm", (50,50), "testing")
+    makeItem(item_manager, "mana_charm", (50,50), "testing")
 
     # run table
     while True:
@@ -55,7 +55,6 @@ def testScreen(screen):
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
-
         # draw tiles
         #update
         background.update(dt)
@@ -78,6 +77,11 @@ def testScreen(screen):
         # draw items
         for item in item_manager.items:
             item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager)
+
+        # draw slot if available
+        dragged = next((i for i in item_manager.items if getattr(i, "dragging", False)), None)
+        SlotFlag.draw_overlay(virtual_surface, item_manager.items, dragged, virtual_mouse, VIRTUAL_SIZE)
+
 
         # draw guis
         gui_manager.draw(virtual_surface, VIRTUAL_SIZE)

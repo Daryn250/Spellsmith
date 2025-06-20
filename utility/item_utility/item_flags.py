@@ -16,12 +16,18 @@ class DraggableFlag:
                         DraggableFlag.dragging_item = item
                         DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
                         DraggableFlag.last_pos = item.pos
+                        for slot in item_list:
+                            if "slot" not in slot.flags:
+                                continue
+                            if slot.contains == DraggableFlag.dragging_item.uuid:
+                                slot.contains = None
+                                break
                         break
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if DraggableFlag.dragging_item != None:
                 item = DraggableFlag.dragging_item
-                item.dragging = False
+                
                 item.floor = item.pos[1] + 30
                 item.currentGravity = item.storedGravity
                 if hasattr(item, "ovx"):
@@ -36,7 +42,8 @@ class DraggableFlag:
                 if hasattr(item, "anchor"):
                     if item.anchor == None:
                         detatch_connected(item, item_list, item_manager)
-
+                SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
+                item.dragging = False
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
 
@@ -63,6 +70,7 @@ class DraggableFlag:
                 DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
                 DraggableFlag.dragging_item.ovx = vx
                 DraggableFlag.dragging_item.ovy = vy
+                
                 HangableFlag.try_detatch(DraggableFlag.dragging_item, item_manager)
                 
 
@@ -195,5 +203,58 @@ def get_connected(item, itemlist, item_manager):
                 return other
     return None
 
+class SlotFlag:
+    @staticmethod
+    def handle_event(event, items, mouse_pos, virtual_size):
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
+                slot_rect = slot.get_scaled_hitbox(virtual_size)
+                for dragged in [j for j in items if getattr(j, "dragging", False)]:
+                    if slot_rect.collidepoint(mouse_pos):
+                        accepted = getattr(slot, "slot_accepts", None)
+                        if accepted is None or dragged.type in accepted:
+                            if slot.contains == None:
+                                dragged.set_position(slot.pos)
+                                slot.contains = dragged.uuid
 
+    @staticmethod
+    def draw_overlay(surface, items, dragged_item, mouse_pos, virtual_size):
+        if not dragged_item:
+            return
+
+        for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
+            accepted = getattr(slot, "slot_accepts", None)
+            if accepted is not None and dragged_item.type not in accepted:
+                continue
+
+            if slot.contains != None:
+                continue
+
+            # --- Scale the ghost image correctly
+            ghost_img = dragged_item.image.copy()
+            ghost_img.set_alpha(100)
+
+            # Get uniform screen scale
+            x_scale = virtual_size[0] / 480
+            y_scale = virtual_size[1] / 270
+            scale = min(x_scale, y_scale)
+
+            # Scale image
+            scaled_size = (int(ghost_img.get_width() * scale), int(ghost_img.get_height() * scale))
+            ghost_img = pygame.transform.scale(ghost_img, scaled_size)
+
+            # Draw ghost image at slot's position
+            surface.blit(ghost_img, slot.pos)
+
+            # --- If hovering, draw glowing outline using image mask
+            slot_rect = slot.get_scaled_hitbox(virtual_size)
+            if slot_rect.collidepoint(mouse_pos):
+                # Create mask and outline from the ghost image
+                mask = pygame.mask.from_surface(ghost_img)
+                outline = mask.outline()
+
+                if outline:
+                    # Offset the outline by the image position
+                    offset_outline = [(slot.pos[0] + x, slot.pos[1] + y) for x, y in outline]
+                    pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
 

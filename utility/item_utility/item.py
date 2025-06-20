@@ -62,7 +62,7 @@ class defaultItem:
             self.is_clicked = False
 
         # for the hanging class
-        if "hanging" in self.flags:
+        if "hangable" in self.flags:
             self.NAIL_IMAGE = pygame.image.load("assets/gui/charm_board/nail.png").convert_alpha()
             self.attached_to = None
             self.show_nail = False
@@ -79,6 +79,8 @@ class defaultItem:
         return self.img
 
     def draw(self, surface, screensize, gui_manager, item_manager):
+        if "invisible" in self.flags:
+            return # skip drawing logic :D its invisible 
         if hasattr(self, "rotation"):
             angle = -self.rotation  # Invert for natural lean direction
         else:
@@ -151,9 +153,8 @@ class defaultItem:
                 rope_end
             ], width=2)
             if getattr(self, "show_nail", False):
-                nail_img = self.NAIL_IMAGE
                 x, y = rope_start
-                gui_manager.nails.append([nail_img, x, y])
+                gui_manager.nails.append([self.NAIL_IMAGE, x, y])
 
 
 
@@ -310,6 +311,13 @@ class defaultItem:
         
     def set_position(self, pos):
         self.pos = pos
+        if "draggable" in self.flags:
+            self.vx = 0
+            self.vy = 0
+            self.floor = pos[1]
+            self.ovx = 0
+            self.ovy = 0
+            self.rotation = 0
 
     def get_scaled_hitbox(self, screensize):
         # Compute scale based on screen size
