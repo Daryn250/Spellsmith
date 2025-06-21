@@ -9,10 +9,11 @@ from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.guiManager import GUIManager
 
 from utility.item_utility.itemMaker import makeItem
+from utility.tool_utility.tool import Tool
 
 
 
-VIRTUAL_SIZE = (960, 540)
+VIRTUAL_SIZE = (960*2, 540*2)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 tile_size = 32
 FPS = 60
@@ -34,8 +35,7 @@ def testScreen(screen):
 
     item_manager.load_items("saves/save1.json", "testing")
 
-    makeItem(item_manager, "moon_charm", (50,50), "testing")
-    makeItem(item_manager, "mana_charm", (50,50), "testing")
+
 
     # run table
     while True:
@@ -55,13 +55,14 @@ def testScreen(screen):
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
+            TrickFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager)
         # draw tiles
         #update
         background.update(dt)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
             item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt)
-    
+        gui_manager.update(dt/1000)
 
         
 
@@ -76,7 +77,7 @@ def testScreen(screen):
 
         # draw items
         for item in item_manager.items:
-            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager)
+            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager, 3)
 
         # draw slot if available
         dragged = next((i for i in item_manager.items if getattr(i, "dragging", False)), None)

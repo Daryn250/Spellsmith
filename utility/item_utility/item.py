@@ -1,6 +1,7 @@
 import pygame
 import os
 import uuid
+import random
 from utility.animated_sprite import AnimatedTile
 from utility.item_utility.charmWindows import returnCharmWindow
 
@@ -16,6 +17,7 @@ class defaultItem:
         self.pos = pos
 
         self.__dict__.update(self.nbt)
+
 
 
         if not hasattr(self, "flags"):
@@ -78,7 +80,7 @@ class defaultItem:
             return self.img.get_current_frame()
         return self.img
 
-    def draw(self, surface, screensize, gui_manager, item_manager):
+    def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
         if "invisible" in self.flags:
             return # skip drawing logic :D its invisible 
         if hasattr(self, "rotation"):

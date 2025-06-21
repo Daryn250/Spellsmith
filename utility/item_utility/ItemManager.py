@@ -2,7 +2,8 @@ import uuid
 import json
 import os
 import pygame
-from utility.item_utility.item import defaultItem  # Assuming your class is named `DefaultItem`
+from utility.item_utility.item import defaultItem  # Assuming your class is named `DefaultItem` # it is thank you chat gpt you're amazing
+from utility.tool_utility.tool import Tool
 from utility.screen_utility.screenManager import *
 
 class ItemManager:
@@ -22,11 +23,18 @@ class ItemManager:
 
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
-            data = {
-                "type": item.type,
-                "pos": list(item.pos),  # JSON doesn't support tuples
-                **item.to_nbt()
-            }
+            if hasattr(item, "type"):
+                data = {
+                    "type": item.type,
+                    "pos": list(item.pos),  # JSON doesn't support tuples
+                    **item.to_nbt()
+                }
+            elif hasattr(item, "tool_type"):
+                data = {
+                    "tool_type": item.tool_type,
+                    "pos": list(item.pos),
+                    **item.to_nbt()
+                }
             grouped.setdefault(screen_name, []).append(data)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -46,22 +54,33 @@ class ItemManager:
         screen_data = data.get(current_screen)
         if not screen_data:
             print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
-            return  # don't touch current items if screen has nothing to load
+            return
 
-        # Get UUIDs that are going to be replaced
-        saved_uuids = {entry["uuid"] for entry in screen_data if "uuid" in entry}
-        self.items = [item for item in self.items if item.uuid not in saved_uuids]
+        # Remove existing items with matching UUIDs
+        saved_uuids = {entry.get("uuid") for entry in screen_data if "uuid" in entry}
+        self.items = [item for item in self.items if getattr(item, "uuid", None) not in saved_uuids]
 
         for entry in screen_data:
-            type_ = entry["type"]
-            pos = tuple(entry["pos"])
-            nbt = {k: v for k, v in entry.items() if k not in {"type", "pos"}}
-
             try:
-                item = defaultItem(self, type_, pos, nbt)
-                self.items.append(item)
+                pos = tuple(entry["pos"])
+                nbt = {k: v for k, v in entry.items() if k not in {"type", "tool_type", "pos"}}
+
+                if "tool_type" in entry:
+                    tool_type = entry["tool_type"]
+                    item = Tool(self, tool_type, pos, nbt)
+                    self.items.append(item)
+
+                elif "type" in entry:
+                    item_type = entry["type"]
+                    item = defaultItem(self, item_type, pos, nbt)
+                    self.items.append(item)
+
+                else:
+                    raise ValueError("Item entry missing both 'type' and 'tool_type' fields")
+
             except Exception as e:
-                print(f"[ItemManager] Failed to load item {entry.get('uuid', '?')}: {e}")
+                print(f"[ItemManager] Failed to load item: {entry.get('uuid', 'unknown')} - {e}")
+
 
     def getItemByUUID(self, uuid):
         for item in self.items:

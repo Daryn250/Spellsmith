@@ -1,4 +1,5 @@
 import pygame
+from utility.gui_utility.quicktrick import QuickMenu
 
 class DraggableFlag:
     dragging_item = None
@@ -11,8 +12,14 @@ class DraggableFlag:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for item in reversed(item_list):
                 if "draggable" in getattr(item, "flags", []):
-                    rect = item.get_scaled_hitbox(virtual_size)
-                    if rect.collidepoint(mx, my):
+
+                    if hasattr(item, "type"):
+                        rect = item.get_scaled_hitbox(virtual_size)
+                        colliding = rect.collide_point(mx,my)
+                    elif hasattr(item, "tool_type"):
+                        colliding = item.is_point_inside((mx,my), virtual_size)
+
+                    if colliding:
                         DraggableFlag.dragging_item = item
                         DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
                         DraggableFlag.last_pos = item.pos
@@ -67,7 +74,10 @@ class DraggableFlag:
 
                 # Apply rotational velocity based on horizontal speed
                 DraggableFlag.dragging_item.currentGravity = 0
-                DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
+                if hasattr(DraggableFlag.dragging_item, "type"):
+                    DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
+                elif hasattr(DraggableFlag.dragging_item, "tool_type"):
+                    DraggableFlag.dragging_item.rotational_velocity += vx * 0.005
                 DraggableFlag.dragging_item.ovx = vx
                 DraggableFlag.dragging_item.ovy = vy
                 
@@ -258,3 +268,22 @@ class SlotFlag:
                     offset_outline = [(slot.pos[0] + x, slot.pos[1] + y) for x, y in outline]
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
 
+class TrickFlag: # allow performing of tricks when right clicked (tools only)
+    @staticmethod
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
+        mx, my = mouse_pos
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            for item in reversed(item_list):  # Topmost items get priority
+                if hasattr(item, "type"):
+                    continue # filter non-tool items
+                if "tricks" in getattr(item, "flags", []):
+                    if item.is_point_inside((mx,my), virtual_size):
+                        gui_manager.quick_menu = QuickMenu(
+                        center=(240, 135),
+                        radius=60,
+                        divisions=1,
+                        images=f"assets/tools/{item.tool_type}/tricks"
+                    )
+                    else:
+                        gui_manager.quick_menu.hide()

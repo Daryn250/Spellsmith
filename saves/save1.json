@@ -1,357 +1,43 @@
 {
     "testing": [
         {
-            "type": "iron_ingot",
+            "tool_type": "sword",
             "pos": [
-                269.0,
-                185
+                1240.0155023641132,
+                424.70000000000147
             ],
-            "img_path": "assets/items/iron/iron2.png",
             "flags": [
-                "draggable"
+                "tool",
+                "draggable",
+                "tricks"
             ],
-            "origin_screen": "testing",
+            "layers": [
+                "assets/tools/sword/blade/copper.png",
+                "assets/tools/sword/guard/iron.png",
+                "assets/tools/sword/pommel/lomium.png",
+                "assets/tools/sword/handle/oak.png"
+            ],
             "animated": false,
+            "img_path": "assets/error.png",
             "friction": 1.05,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "uuid": "6ffc194f-31ef-4d24-b754-b8356a487062",
-            "dragging_for": 0
-        },
-        {
-            "type": "slot_node",
-            "pos": [
-                200,
-                200
-            ],
-            "flags": [
-                "slot",
-                "invisible"
-            ],
-            "slot_accepts": [
-                "iron_ingot",
-                "rain_charm"
-            ],
-            "img_path": "assets/very_important/cat.png",
-            "animated": false,
-            "origin_screen": "testing",
-            "friction": 1.05,
-            "uuid": "5b106b7d-e877-4b3f-a88f-55f54dc9eeb3",
-            "contains": null
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                819.9999999999998,
-                97.25000000000001
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                820,
-                32
-            ],
-            "anchor": "charmboard",
-            "rotation": 0.0,
-            "rotational_velocity": -1.2171411704595975e-16,
-            "vx": 1.2812012320627342e-14,
-            "vy": -0.3000000000000027,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "uuid": "96cff3c0-9349-4865-b825-b4710aaff39a",
-            "show_nail": true,
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20,
-            "attached_to": null
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                329.0,
-                209
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": null,
-            "anchor": null,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "fb391d77-9995-4c6b-bfe4-55ddd7b9d8eb",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                820.0000000000001,
-                137.5
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                819.9999999999998,
-                819.9999999999998
-            ],
-            "anchor": "96cff3c0-9349-4865-b825-b4710aaff39a",
-            "rotation": 0.0,
-            "rotational_velocity": 1.8257117556893951e-16,
-            "vx": -1.9218018480941e-14,
-            "vy": -0.2999999999999982,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "e93f8a1a-da43-405a-96c0-0c5972618949",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                874.9999999999999,
-                103.25
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                875,
-                38
-            ],
-            "anchor": "charmboard",
-            "rotation": 0.0,
-            "rotational_velocity": -6.085705852297983e-17,
-            "vx": 6.406006160313666e-15,
-            "vy": -0.30000000000000004,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": true,
-            "uuid": "5f678573-fb86-4b30-81eb-fa98ef9c7552",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                874.999999999999,
-                143.5
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                874.9999999999999,
-                874.9999999999999
-            ],
-            "anchor": "5f678573-fb86-4b30-81eb-fa98ef9c7552",
-            "rotation": 0.0,
-            "rotational_velocity": -4.86856468183839e-16,
-            "vx": 5.1248049282509367e-14,
-            "vy": -0.29999999999999977,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "2635ad81-5a29-408f-b846-b584560410a2",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                874.9999999999986,
-                183.75
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                874.999999999999,
-                874.999999999999
-            ],
-            "anchor": "2635ad81-5a29-408f-b846-b584560410a2",
-            "rotation": 0.0,
-            "rotational_velocity": -1.825711755689396e-16,
-            "vx": 1.9218018480941013e-14,
-            "vy": -0.30000000000000004,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "da373d76-a370-4b60-a13d-61279007df31",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "rain_charm",
-            "pos": [
-                874.9999999999985,
-                224.0
-            ],
-            "img_path": "assets/gui/charm_board/rain_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "rain_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": [
-                874.9999999999986,
-                874.9999999999986
-            ],
-            "anchor": "da373d76-a370-4b60-a13d-61279007df31",
-            "rotation": 0.0,
-            "rotational_velocity": -6.085705852297987e-17,
-            "vx": 6.406006160313671e-15,
-            "vy": -0.30000000000000004,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "215d9280-b26b-4132-8b45-57505e0d8b71",
-            "dragging_for": 0,
-            "mass": 1,
-            "rope_length": 20
-        },
-        {
-            "type": "moon_charm",
-            "pos": [
-                473.1452697593431,
-                272
-            ],
-            "img_path": "assets/gui/charm_board/moon_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "moon_charm",
-            "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": null,
-            "anchor": null,
+            "quality_stars": 4,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 5e-324,
-            "vy": 0.3,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "59612b65-e302-4066-a192-da46ca216e92",
-            "dragging_for": 0
-        },
-        {
-            "type": "mana_charm",
-            "pos": [
-                191.51758957059377,
-                243
+            "squish": [
+                0.9999999999999996,
+                0.9999999999999996
             ],
-            "img_path": "assets/gui/charm_board/mana_charm/passive",
-            "animated": true,
-            "flags": [
-                "draggable",
-                "charm",
-                "hangable"
-            ],
-            "charmType": "mana_charm",
             "origin_screen": "testing",
-            "frameDuration": 100,
-            "friction": 1.05,
-            "anchor_pos": null,
-            "anchor": null,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "is_clicked": false,
-            "attached_to": null,
-            "show_nail": false,
-            "uuid": "14e18be7-a1a8-4953-8a64-21479c01620e",
+            "blade": "copper",
+            "guard": "iron",
+            "pommel": "lomium",
+            "handle": "oak",
+            "effect": null,
+            "uuid": "69944d7e-2f29-420f-ac0d-c1e090281e96",
             "dragging_for": 0
         }
     ]
