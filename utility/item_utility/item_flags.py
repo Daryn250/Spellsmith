@@ -1,5 +1,6 @@
 import pygame
 from utility.gui_utility.quicktrick import QuickMenu
+from utility.item_utility.trickAnimation import *
 
 class DraggableFlag:
     dragging_item = None
@@ -15,7 +16,7 @@ class DraggableFlag:
 
                     if hasattr(item, "type"):
                         rect = item.get_scaled_hitbox(virtual_size)
-                        colliding = rect.collide_point(mx,my)
+                        colliding = rect.collidepoint(mx,my)
                     elif hasattr(item, "tool_type"):
                         colliding = item.is_point_inside((mx,my), virtual_size)
 
@@ -268,22 +269,55 @@ class SlotFlag:
                     offset_outline = [(slot.pos[0] + x, slot.pos[1] + y) for x, y in outline]
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
 
-class TrickFlag: # allow performing of tricks when right clicked (tools only)
+class TrickFlag:
+    right_mouse_held = False
+    active_item = None
+
     @staticmethod
     def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
         mx, my = mouse_pos
 
+        # When RIGHT BUTTON is PRESSED
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            for item in reversed(item_list):  # Topmost items get priority
+            for item in reversed(item_list):  # Topmost first
                 if hasattr(item, "type"):
-                    continue # filter non-tool items
+                    continue  # Skip non-tools
                 if "tricks" in getattr(item, "flags", []):
-                    if item.is_point_inside((mx,my), virtual_size):
+                    if item.is_point_inside((mx, my), virtual_size):
+                        TrickFlag.right_mouse_held = True
+                        TrickFlag.active_item = item
                         gui_manager.quick_menu = QuickMenu(
-                        center=(240, 135),
-                        radius=60,
-                        divisions=1,
-                        images=f"assets/tools/{item.tool_type}/tricks"
-                    )
-                    else:
-                        gui_manager.quick_menu.hide()
+                            center=(mx, my), 
+                            radius=35*(virtual_size[0]/480), 
+                            total_slots=6, 
+                            unlocked_slots=3, 
+                            images_folder=f"assets/tools/{item.tool_type}/tricks")
+
+                        break
+
+        # When RIGHT BUTTON is RELEASED
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+            TrickFlag.right_mouse_held = False
+
+            # If a selection was made
+            if gui_manager.quick_menu and gui_manager.quick_menu.selected_index is not None:
+                chosen = gui_manager.quick_menu.selected_index
+                print(f"Selected trick index: {chosen}")
+
+                # You can now trigger animation, keyframe, etc., here.
+                TrickFlag.active_item.original_pos = TrickFlag.active_item.pos
+                TrickFlag.active_item.squish = [1.0, 1.0]  # if not already
+                TrickFlag.active_item.trick = TrickAnimation(kickflip, on_complete=lambda i: print("Kickflip done!"))
+
+                gui_manager.quick_menu = None
+            elif gui_manager.quick_menu:
+                gui_manager.quick_menu.hide()
+            TrickFlag.active_item = None
+
+        # Safety: If left mouse is clicked, cancel menu too
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if gui_manager.quick_menu:
+                gui_manager.quick_menu.hide()
+            TrickFlag.right_mouse_held = False
+            TrickFlag.active_item = None
+

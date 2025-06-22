@@ -49,7 +49,6 @@ class Tool:
                 self.currentGravity = 0.3
                 self.storedGravity = 0.3
 
-                self.squish = (1, 1) # 1 = no squish
 
             self.floor = pos[1]
             self.dragging = False
@@ -81,15 +80,6 @@ class Tool:
         ovy = getattr(self, "ovy", 0)
         rotation_scale = rotation_scale
 
-        # Target squish based on velocity
-        max_squish = 0.15
-        target_squish_x = 1.0 + max(-max_squish, min(max_squish, -abs(ovx * 0.05)))
-        target_squish_y = 1.0 + max(-max_squish, min(max_squish, -abs(ovy * 0.05)))
-
-        # Smooth easing
-        decay_rate = 0.1
-        self.squish[0] += (target_squish_x - self.squish[0]) * decay_rate
-        self.squish[1] += (target_squish_y - self.squish[1]) * decay_rate
 
         for path in self.layers:
             if path is None:
@@ -110,18 +100,26 @@ class Tool:
             # Step 2: Rotate the high-res image
             rotated_img = pygame.transform.rotate(highres_img, angle)
 
-            # Step 3: Downscale to screen resolution and squish
+           # Step 3: Downscale to screen resolution and squish
             base_scale_x = (VIRTUAL_SIZE[0] / 480) * 2
             base_scale_y = (VIRTUAL_SIZE[1] / 270) * 2
 
             scale_x = base_scale_x * self.squish[0] / rotation_scale
             scale_y = base_scale_y * self.squish[1] / rotation_scale
 
-            final_size = (
-                int(rotated_img.get_width() * scale_x),
-                int(rotated_img.get_height() * scale_y)
-            )
+            final_width = int(rotated_img.get_width() * abs(scale_x))
+            final_height = int(rotated_img.get_height() * abs(scale_y))
+            final_size = (final_width, final_height)
+
             scaled_img = pygame.transform.scale(rotated_img, final_size)
+
+            flip_x = scale_x < 0
+            flip_y = scale_y < 0
+
+            if flip_x or flip_y:
+                scaled_img = pygame.transform.flip(scaled_img, flip_x, flip_y)
+
+
 
             # Draw shadow first
             shadow_offset = (0, self.floor+10)
@@ -134,8 +132,6 @@ class Tool:
             surface.blit(scaled_img, (x, y))
 
 
-            # Blit to screen at top-left
-            surface.blit(scaled_img, (x, y))
 
 
 
@@ -146,13 +142,16 @@ class Tool:
 
     def update(self, screen, gui_manager, VIRTUAL_SIZE, dt):
         if "draggable" in self.flags:
-            self.rotation += self.rotational_velocity
-            self.rotational_velocity *= 0.85  # Friction decay
-            if abs(self.rotation) < 0.1:
-                self.rotation = 0.0
-                self.rotational_velocity = 0.0
-            else:
-                self.rotation *= 0.9
+            # Don't decay rotation if trick is active
+            if not hasattr(self, "trick") or getattr(self.trick, "finished", True):
+                self.rotation += self.rotational_velocity
+                self.rotational_velocity *= 0.85
+                if abs(self.rotation) < 0.1:
+                    self.rotation = 0.0
+                    self.rotational_velocity = 0.0
+                else:
+                    self.rotation *= 0.9
+
 
             # Physics & bounds
             screenW, screenH = screen.get_size()
@@ -291,5 +290,5 @@ class Tool:
 
 
 
-    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager"]):
+    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager", "layers","trick"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}

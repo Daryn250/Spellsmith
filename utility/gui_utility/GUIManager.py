@@ -12,10 +12,10 @@ class GUIManager:
         # Load charmboard image
         self.charmboard_img = pygame.image.load("assets/gui/charm_board/charm_board.png").convert_alpha()
 
-    def update(self, dt):
+    def update(self, dt, mouse):
         # Update quick menu animation if present
         if self.quick_menu:
-            self.quick_menu.update(dt)
+            self.quick_menu.update(dt, mouse)
 
     def draw(self, screen, screensize):
         screen_width, screen_height = screen.get_size()

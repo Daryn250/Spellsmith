@@ -1,0 +1,101 @@
+import pygame
+
+# here be dragons (I dont know what I'm doing here so I'm avoiding this)
+
+def lerp(a, b, t):
+    return a + (b - a) * t
+
+
+class TrickAnimation:
+    def __init__(self, keyframes, on_complete=None):
+        """
+        keyframes: list of dicts, each with:
+            - time: float (seconds)
+            - pos_offset: (x, y) tuple (optional)
+            - rot_offset: float (optional)
+            - scale: (sx, sy) tuple (optional)
+            - event: string or callable (optional)
+            - callback: function(item) (optional)
+        on_complete: optional callback when done
+        """
+        self.keyframes = sorted(keyframes, key=lambda f: f["time"])
+        self.time = 0.0
+        self.index = 0
+        self.finished = False
+        self.on_complete = on_complete
+        self.prev_frame = None
+
+    def update(self, dt, item, VIRTUAL_SIZE):
+        if self.finished:
+            return
+
+        self.time += dt
+
+        while self.index < len(self.keyframes) - 1 and self.time > self.keyframes[self.index + 1]["time"]:
+            self.index += 1
+
+        if self.index >= len(self.keyframes) - 1:
+            self.finished = True
+            if self.on_complete:
+                self.on_complete(item)
+            return
+
+        prev = self.keyframes[self.index]
+        next_ = self.keyframes[self.index + 1]
+
+        t0, t1 = prev["time"], next_["time"]
+        local_t = (self.time - t0) / (t1 - t0) if t1 > t0 else 0
+
+        # Interpolate rotation
+        if "rot_offset" in prev and "rot_offset" in next_:
+            item.rotation = lerp(prev["rot_offset"], next_["rot_offset"], local_t)
+
+        # Interpolate squish
+        if "scale" in prev and "scale" in next_:
+            sx0, sy0 = prev["scale"]
+            sx1, sy1 = next_["scale"]
+            item.squish = [lerp(sx0, sx1, local_t), lerp(sy0, sy1, local_t)]
+
+        # Interpolate position
+        if "pos_offset" in prev and "pos_offset" in next_:
+            px0, py0 = prev["pos_offset"]
+            px1, py1 = next_["pos_offset"]
+            interp_x = lerp(px0, px1, local_t)
+            interp_y = lerp(py0, py1, local_t)
+
+            # Apply screen scale
+            sx = (VIRTUAL_SIZE[0] / 480)
+            sy = (VIRTUAL_SIZE[1] / 270)
+
+            item.pos = (
+                item.original_pos[0] + interp_x * sx,
+                item.original_pos[1] + interp_y * sy
+            )
+
+        # Callbacks/events
+        if "event" in next_ and self.time >= next_["time"]:
+            if callable(next_["event"]):
+                next_["event"](item)
+            else:
+                print(f"[TrickEvent] {next_['event']}")
+
+        if "callback" in next_ and self.time >= next_["time"]:
+            next_["callback"](item)
+
+
+
+    def reset(self):
+        self.time = 0.0
+        self.index = 0
+        self.finished = False
+        self.prev_frame = None
+
+# Example usage:
+kickflip = [
+    {"time": 0.0, "rot_offset": 0, "pos_offset": (0, 0), "scale": (1.0, 1.0)},
+    {"time": 0.5, "rot_offset": -25, "pos_offset": (0, 0), "scale": (1, 1.0)},  # squished horizontally
+    {"time": 1, "rot_offset": -55, "pos_offset": (0, 0), "scale": (1.0, 1.0)},   # flipped horizontally
+    {"time": 1.5, "rot_offset": 1, "pos_offset": (0, 80), "scale": (1.0, 1.0)},
+    {"time": 2, "event": "landed"},
+]
+

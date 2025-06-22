@@ -3,19 +3,12 @@
         {
             "tool_type": "sword",
             "pos": [
-                1240.0155023641132,
-                424.70000000000147
+                261.30377821871537,
+                158.99999999999994
             ],
             "flags": [
                 "tool",
-                "draggable",
-                "tricks"
-            ],
-            "layers": [
-                "assets/tools/sword/blade/copper.png",
-                "assets/tools/sword/guard/iron.png",
-                "assets/tools/sword/pommel/lomium.png",
-                "assets/tools/sword/handle/oak.png"
+                "draggable"
             ],
             "animated": false,
             "img_path": "assets/error.png",
@@ -23,22 +16,26 @@
             "quality_stars": 4,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 5e-324,
-            "vy": 0,
+            "vx": -3.172755570350062e-07,
+            "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "squish": [
-                0.9999999999999996,
-                0.9999999999999996
+                1.0,
+                1.0
             ],
             "origin_screen": "testing",
-            "blade": "copper",
-            "guard": "iron",
-            "pommel": "lomium",
+            "blade": "silver",
+            "guard": "silver",
+            "pommel": "silver",
             "handle": "oak",
             "effect": null,
             "uuid": "69944d7e-2f29-420f-ac0d-c1e090281e96",
-            "dragging_for": 0
+            "dragging_for": 0,
+            "original_pos": [
+                453.2963348875521,
+                231.99999999999994
+            ]
         }
     ]
 }

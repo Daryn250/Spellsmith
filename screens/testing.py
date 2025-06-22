@@ -13,7 +13,7 @@ from utility.tool_utility.tool import Tool
 
 
 
-VIRTUAL_SIZE = (960*2, 540*2)
+VIRTUAL_SIZE = (960, 540)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 tile_size = 32
 FPS = 60
@@ -61,8 +61,14 @@ def testScreen(screen):
         background.update(dt)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
+            if hasattr(item, "trick") and item.trick:
+                item.trick.update(dt / 1000.0, item, VIRTUAL_SIZE)
+                if item.trick.finished:
+                    item.trick = None
             item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt)
-        gui_manager.update(dt/1000)
+
+            
+        gui_manager.update(dt/1000, virtual_mouse)
 
         
 
@@ -77,7 +83,7 @@ def testScreen(screen):
 
         # draw items
         for item in item_manager.items:
-            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager, 3)
+            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager, 10)
 
         # draw slot if available
         dragged = next((i for i in item_manager.items if getattr(i, "dragging", False)), None)
