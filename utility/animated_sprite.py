@@ -14,21 +14,23 @@ class AnimatedTile:
         self.timer = 0
 
     def _load_frames_from_folder(self, folder_path):
-        self.index = 0
         supported = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
-        files = sorted(f for f in os.listdir(folder_path) if f.lower().endswith(supported))
-        frames = []
+        if folder_path.lower().endswith(supported):
+            return [pygame.image.load(folder_path).convert_alpha()]
+        else:
+            files = sorted(f for f in os.listdir(folder_path) if f.lower().endswith(supported))
+            frames = []
 
-        for f in files:
-            try:
-                full_path = os.path.join(folder_path, f)
-                img = pygame.image.load(full_path).convert_alpha()
-                frames.append(img)
-            except Exception as e:
-                print(f"[AnimatedTile] Failed to load frame: {f} — {e}")
-                frames.append(self.error_frame)
+            for f in files:
+                try:
+                    full_path = os.path.join(folder_path, f)
+                    img = pygame.image.load(full_path).convert_alpha()
+                    frames.append(img)
+                except Exception as e:
+                    print(f"[AnimatedTile] Failed to load frame: {f} — {e}")
+                    frames.append(self.error_frame)
 
-        return frames
+            return frames
 
     def update(self, dt):
         self.timer += dt

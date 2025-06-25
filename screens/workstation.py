@@ -11,13 +11,11 @@ from utility.gui_utility.guiManager import GUIManager
 from utility.item_utility.itemMaker import makeItem
 from utility.tool_utility.tool import Tool
 
-
-
-VIRTUAL_SIZE = (960, 540)
+VIRTUAL_SIZE = (960*2, 540*2)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 FPS = 60
 
-def table(screen):
+def workstation(screen):
     switcher = ScreenSwitcher()
     clock = pygame.time.Clock()
     
@@ -30,12 +28,9 @@ def table(screen):
 
     
     # load sprites:
-    background = AnimatedTile("assets/screens/table/table1.png", frame_duration=150)
+    background = AnimatedTile("assets/screens/workstation/workstation.png", frame_duration=150)
 
-    item_manager.load_items("saves/save1.json", "table")
-
-    
-
+    item_manager.load_items("saves/save1.json", "workstation")
 
 
     # run table
@@ -62,13 +57,17 @@ def table(screen):
         background.update(dt)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
-            ''' trick currently disabled
             if hasattr(item, "trick") and item.trick:
                 item.trick.update(dt / 1000.0, item, VIRTUAL_SIZE)
                 if item.trick.finished:
                     item.trick = None
-            '''
             item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt)
+
+            for p in item.particles:
+                p.update()
+            item.particles = [p for p in item.particles if p.is_alive()]
+
+        
 
             
         gui_manager.update(dt/1000, virtual_mouse)
@@ -87,6 +86,10 @@ def table(screen):
         # draw items
         for item in item_manager.items:
             item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager, 10)
+
+            for p in item.particles:
+                p.draw(virtual_surface)
+
 
         # draw slot if available
         dragged = next((i for i in item_manager.items if getattr(i, "dragging", False)), None)

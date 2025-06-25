@@ -32,6 +32,7 @@ class defaultItem:
             if self.flags != []:
                 self.friction = 1.05
         
+        self.particles = []
         
         if not hasattr(self, "anchor_pos") and "hangable" in self.flags:
             self.anchor_pos = None
@@ -70,7 +71,7 @@ class defaultItem:
             self.show_nail = False
 
 
-    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE"]):
+    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
 
@@ -82,88 +83,82 @@ class defaultItem:
 
     def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
         if "invisible" in self.flags:
-            return # skip drawing logic :D its invisible 
-        if hasattr(self, "rotation"):
-            angle = -self.rotation  # Invert for natural lean direction
-        else:
-            angle = 0
+            return  # skip drawing logic :D it's invisible
+
+        angle = -getattr(self, "rotation", 0)  # Invert for natural lean direction
 
         # Compute scale based on screen resolution
-        x_scale = screensize[0] / 480
-        y_scale = screensize[1] / 270
-        scale = min(x_scale, y_scale)  # use uniform scaling to preserve aspect ratio
+        s = getattr(self, "scale", (1, 1))
+        x_scale = (screensize[0] / 480) * s[0]
+        y_scale = (screensize[1] / 270) * s[1]
+        scale = min(x_scale, y_scale)  # Use uniform scaling to preserve aspect ratio
 
         # Scale image
         original_img = self.image
-        scaled_size = (int(original_img.get_width() * scale), int(original_img.get_height() * scale))
+        scaled_size = (
+            int(original_img.get_width() * scale),
+            int(original_img.get_height() * scale)
+        )
         img = pygame.transform.scale(original_img, scaled_size)
 
-        # Draw shadow
-        shadow_width = img.get_width() * 0.8
-        shadow_height = img.get_height() * 0.2
-        shadow_alpha = 100 if getattr(self, "dragging", False) else 20
-        shadow_surface = pygame.Surface((shadow_width, shadow_height), pygame.SRCALPHA)
-        pygame.draw.ellipse(shadow_surface, (0, 0, 0, shadow_alpha), shadow_surface.get_rect())
+        # Compute center point
+        center_x, center_y = self.pos  # self.pos is now treated as the CENTER
 
-        shadow_x = self.pos[0] + (img.get_width() - shadow_width) / 2
-        if hasattr(self, "floor"):
-            shadow_y = self.floor + img.get_height() * 0.75  # Centered on floor
-        else:
-            shadow_y = self.pos[1]+img.get_height()*0.75
-        surface.blit(shadow_surface, (shadow_x, shadow_y))
-
-        # Rotate image
+        # Rotate image around its center
         rotated_img = pygame.transform.rotate(img, angle)
-        rect = rotated_img.get_rect(center=(self.pos[0] + img.get_width() // 2,
-                                            self.pos[1] + img.get_height() // 2))
+        rotated_rect = rotated_img.get_rect(center=(center_x, center_y))
 
-        if hasattr(self, "is_clicked"):
-            if self.is_clicked:
-                # Create a mask from the rotated image
-                mask = pygame.mask.from_surface(rotated_img)
+        # Draw shadow
+        if "no_shadow" not in self.flags:
+            shadow_width = img.get_width() * 0.8
+            shadow_height = img.get_height() * 0.2
+            shadow_alpha = 100 if getattr(self, "dragging", False) else 20
+            shadow_surface = pygame.Surface((shadow_width, shadow_height), pygame.SRCALPHA)
+            pygame.draw.ellipse(shadow_surface, (0, 0, 0, shadow_alpha), shadow_surface.get_rect())
 
-                # Convert mask outline to polygon points
-                outline_points = mask.outline()
+            shadow_x = center_x - shadow_width / 2
+            if hasattr(self, "floor"):
+                shadow_y = self.floor + img.get_height() * 0.75  # Centered on floor
+            else:
+                shadow_y = center_y + img.get_height() * 0.75 / 2
+            surface.blit(shadow_surface, (shadow_x, shadow_y))
 
-                if outline_points:
-                    # Offset all points by the top-left position where image is drawn
-                    offset_outline = [(point[0] + rect.left, point[1] + rect.top) for point in outline_points]
-
-                    # Draw the outline as a polygon
-                    pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
-
+        # Draw outline if clicked
+        if getattr(self, "is_clicked", False):
+            mask = pygame.mask.from_surface(rotated_img)
+            outline_points = mask.outline()
+            if outline_points:
+                offset_outline = [(x + rotated_rect.left, y + rotated_rect.top) for x, y in outline_points]
+                pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=3)
 
         # Draw rope if anchored
         if "hangable" in self.flags and hasattr(self, "anchor_pos") and self.anchor_pos:
-            # Define rope start and end
+            img_w, img_h = img.get_size()
+
             if self.anchor == "charmboard":
-                rope_start = self.anchor_pos[0]+ img.get_width()//2, self.anchor_pos[1]
+                rope_start = self.anchor_pos[0] + img_w // 2, self.anchor_pos[1]
             else:
                 anchor_item = item_manager.getItemByUUID(self.anchor)
-                rope_start = anchor_item.pos[0] + img.get_width()//2, anchor_item.pos[1]+ img.get_height()
+                rope_start = anchor_item.pos[0], anchor_item.pos[1]  # Assuming center-based too
 
-            rope_end = (self.pos[0] + img.get_width() // 2, self.pos[1] + img.get_height() // 6)
+            rope_end = (center_x, center_y - img_h // 2 + img_h // 6)
 
-            # Optionally add rope slack curvature (simple midpoint sag)
             mid_x = (rope_start[0] + rope_end[0]) / 2
-            mid_y = (rope_start[1] + rope_end[1]) / 2 + 2  # 10px sag, you can make this dynamic
+            mid_y = (rope_start[1] + rope_end[1]) / 2 + 2  # Sag
 
-            # Use quadratic Bézier-style curve approximation (3-point rope)
             pygame.draw.lines(surface, (34, 32, 52), False, [
                 rope_start,
                 (mid_x, mid_y),
                 rope_end
             ], width=2)
+
             if getattr(self, "show_nail", False):
                 x, y = rope_start
                 gui_manager.nails.append([self.NAIL_IMAGE, x, y])
 
+        # Finally draw the rotated image centered at self.pos
+        surface.blit(rotated_img, rotated_rect.topleft)
 
-
-
-        
-        # Draw rotated image
-        surface.blit(rotated_img, rect.topleft)
 
 
     def update(self, screen, gui_manager, virtual_size, dt=None):
@@ -323,14 +318,26 @@ class defaultItem:
 
     def get_scaled_hitbox(self, screensize):
         # Compute scale based on screen size
-        x_scale = screensize[0] / 480
-        y_scale = screensize[1] / 270
+        s = getattr(self, "scale", (1, 1))
+        x_scale = screensize[0] / 480 * s[0]
+        y_scale = screensize[1] / 270 * s[1]
         scale = min(x_scale, y_scale)
 
         # Scale dimensions
         width = int(self.image.get_width() * scale)
         height = int(self.image.get_height() * scale)
 
-        # Return rect with scaled size at position
-        return pygame.Rect(self.pos[0], self.pos[1], width, height)
+        # Center hitbox on self.pos (which is now the center of the item)
+        top_left_x = int(self.pos[0] - width // 2)
+        top_left_y = int(self.pos[1] - height // 2)
+
+        return pygame.Rect(top_left_x, top_left_y, width, height)
+
+
+    @property
+    def uniform_scale(self):
+        scale = getattr(self, "scale", 1)
+        if isinstance(scale, (int, float)):
+            return (scale, scale)
+        return scale
 

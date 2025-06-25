@@ -1,6 +1,7 @@
 import pygame
 import screens.main_menu as main_menu
 import screens.testing as test
+import screens.workstation as workstation
 
 def run_game():
     pygame.init()
@@ -10,6 +11,6 @@ def run_game():
     pygame.display.set_caption("SpellSmith")
 
     #main_menu.main_screen(screen) uncomment when done testing
-    test.testScreen(screen)
+    workstation.workstation(screen)
 
 run_game()

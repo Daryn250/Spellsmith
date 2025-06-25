@@ -13,6 +13,15 @@ ITEM_BASES = {
             "contains": None
         }
     },
+    "furnace": {
+        "type": "furnace",
+        "nbt": {
+            "flags": ["draggable", "screen_change"],
+            "img_path": "assets/screens/workstation/furnace.png",  # optional fallback
+            "animated": False,
+            "next_screen":"furnaceScreen"
+        }
+    },
     #### CHARMS ####
     "rain_charm": {
         "type": "charm",

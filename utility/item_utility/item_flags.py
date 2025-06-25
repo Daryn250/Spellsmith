@@ -224,8 +224,17 @@ class SlotFlag:
                     if slot_rect.collidepoint(mouse_pos):
                         accepted = getattr(slot, "slot_accepts", None)
                         if accepted is None or dragged.type in accepted:
-                            if slot.contains == None:
+                            if slot.contains is None:
+                                # Snap dragged item to slot's center
                                 dragged.set_position(slot.pos)
+
+                                # Assign bounce animation
+                                dragged.trick = TrickAnimation([
+                                    {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
+                                    {"time": 0.1, "scale": (0.95, 0.95)},
+                                    {"time": 0.2, "scale": (1.0, 1.0)}
+                                ])
+
                                 slot.contains = dragged.uuid
 
     @staticmethod
@@ -237,37 +246,38 @@ class SlotFlag:
             accepted = getattr(slot, "slot_accepts", None)
             if accepted is not None and dragged_item.type not in accepted:
                 continue
-
-            if slot.contains != None:
+            if slot.contains is not None:
                 continue
 
-            # --- Scale the ghost image correctly
+            # --- Prepare ghost image
             ghost_img = dragged_item.image.copy()
             ghost_img.set_alpha(100)
 
-            # Get uniform screen scale
-            x_scale = virtual_size[0] / 480
-            y_scale = virtual_size[1] / 270
-            scale = min(x_scale, y_scale)
-
-            # Scale image
-            scaled_size = (int(ghost_img.get_width() * scale), int(ghost_img.get_height() * scale))
+            # Uniform screen scale (dragged item always drawn at scale 1)
+            scale_x = virtual_size[0] / 480
+            scale_y = virtual_size[1] / 270
+            scaled_size = (
+                int(ghost_img.get_width() * scale_x),
+                int(ghost_img.get_height() * scale_y)
+            )
             ghost_img = pygame.transform.scale(ghost_img, scaled_size)
 
-            # Draw ghost image at slot's position
-            surface.blit(ghost_img, slot.pos)
+            # Draw ghost centered at slot.pos
+            ghost_rect = ghost_img.get_rect(center=slot.pos)
+            surface.blit(ghost_img, ghost_rect.topleft)
 
-            # --- If hovering, draw glowing outline using image mask
+            # --- Draw outline if hovered
             slot_rect = slot.get_scaled_hitbox(virtual_size)
             if slot_rect.collidepoint(mouse_pos):
-                # Create mask and outline from the ghost image
                 mask = pygame.mask.from_surface(ghost_img)
                 outline = mask.outline()
-
                 if outline:
-                    # Offset the outline by the image position
-                    offset_outline = [(slot.pos[0] + x, slot.pos[1] + y) for x, y in outline]
+                    offset_outline = [(ghost_rect.left + x, ghost_rect.top + y) for x, y in outline]
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
+
+
+
+
 
 class TrickFlag:
     right_mouse_held = False
