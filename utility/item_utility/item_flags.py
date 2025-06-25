@@ -222,29 +222,35 @@ class SlotFlag:
                 slot_rect = slot.get_scaled_hitbox(virtual_size)
                 for dragged in [j for j in items if getattr(j, "dragging", False)]:
                     if slot_rect.collidepoint(mouse_pos):
-                        accepted = getattr(slot, "slot_accepts", None)
-                        if accepted is None or dragged.type in accepted:
-                            if slot.contains is None:
-                                # Snap dragged item to slot's center
-                                dragged.set_position(slot.pos)
+                        dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
+                        accepted = getattr(slot, "slot_accepts", [])
 
-                                # Assign bounce animation
-                                dragged.trick = TrickAnimation([
-                                    {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
-                                    {"time": 0.1, "scale": (0.95, 0.95)},
-                                    {"time": 0.2, "scale": (1.0, 1.0)}
-                                ])
+                        if (not accepted or dragged_type in accepted) and slot.contains is None:
 
-                                slot.contains = dragged.uuid
+                            dragged.set_position(slot.pos)
+
+                            dragged.trick = TrickAnimation([
+                                {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
+                                {"time": 0.1, "scale": (0.95, 0.95)},
+                                {"time": 0.2, "scale": (1.0, 1.0)}
+                            ])
+
+                            slot.contains = dragged.uuid
+
 
     @staticmethod
     def draw_overlay(surface, items, dragged_item, mouse_pos, virtual_size):
         if not dragged_item:
             return
 
+        # Use same type fallback logic
+        dragged_type = getattr(dragged_item, "type", getattr(dragged_item, "tool_type", None))
+
         for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
-            accepted = getattr(slot, "slot_accepts", None)
-            if accepted is not None and dragged_item.type not in accepted:
+            accepted = getattr(slot, "slot_accepts", [])
+
+            # Skip if the dragged type is not accepted
+            if accepted and dragged_type not in accepted:
                 continue
             if slot.contains is not None:
                 continue
@@ -274,6 +280,7 @@ class SlotFlag:
                 if outline:
                     offset_outline = [(ghost_rect.left + x, ghost_rect.top + y) for x, y in outline]
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
+
 
 
 

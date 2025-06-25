@@ -4,6 +4,8 @@ import uuid
 import random
 from utility.animated_sprite import AnimatedTile
 from utility.item_utility.charmWindows import returnCharmWindow
+from utility.screen_utility.screenManager import *
+from utility.particle import make_scale
 
 
 class defaultItem:
@@ -71,7 +73,7 @@ class defaultItem:
             self.show_nail = False
 
 
-    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "next_screen"]):
+    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
 
@@ -155,6 +157,66 @@ class defaultItem:
             if getattr(self, "show_nail", False):
                 x, y = rope_start
                 gui_manager.nails.append([self.NAIL_IMAGE, x, y])
+
+        # Temperature-based overlay using alpha mask
+        if hasattr(self, "temperature"):
+            temp = self.temperature
+            max_temp = 1000
+            glow_strength = min(1.0, temp / max_temp)
+
+            if glow_strength > 0.01:
+                # Create a glow surface with the same size
+                glow_surface = pygame.Surface(rotated_img.get_size(), pygame.SRCALPHA)
+
+                # Create a mask from the rotated image
+                mask = pygame.mask.from_surface(rotated_img)
+                outline_surface = mask.to_surface(setcolor=(255, 255, 255, 255), unsetcolor=(0, 0, 0, 0))
+
+                # Tint the white surface red-orange based on temperature
+                tint_color = (int(255 * glow_strength), int(32 * glow_strength), 0, int(160 * glow_strength))
+                tint_surface = pygame.Surface(rotated_img.get_size(), pygame.SRCALPHA)
+                tint_surface.fill(tint_color)
+
+                # Use the mask to apply tint only where visible
+                outline_surface.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+                # Additive blend onto the rotated image
+                rotated_img.blit(outline_surface, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
+                # Add a smooth, color-shifting additive glow around hot items
+                if temp >= 200:
+                    glow_strength = min(1.0, (temp - 200) / 800)  # Scale from 0 to 1
+
+                    def lerp(a, b, t): return int(a + (b - a) * t)
+
+                    base_color = (
+                        lerp(255, 255, glow_strength),
+                        lerp(50, 255, glow_strength),
+                        lerp(0, 200, glow_strength)
+                    )
+
+                    for i in range(3):
+                        # Inverse square brightness falloff
+                        ring_strength = glow_strength / ((i + 1) ** 2)
+                        ring_radius = int(rotated_img.get_width() * (0.6 + 0.2 * i) * glow_strength)
+                        ring_color = tuple(int(c * ring_strength) for c in base_color)
+
+                        if ring_radius > 0:
+                            glow_surface = pygame.Surface((ring_radius * 2, ring_radius * 2), pygame.SRCALPHA)
+                            pygame.draw.circle(
+                                glow_surface,
+                                ring_color,
+                                (ring_radius, ring_radius),
+                                ring_radius
+                            )
+                            surface.blit(
+                                glow_surface,
+                                (center_x - ring_radius, center_y - ring_radius),
+                                special_flags=pygame.BLEND_RGB_ADD
+                            )
+
+
+
+
 
         # Finally draw the rotated image centered at self.pos
         surface.blit(rotated_img, rotated_rect.topleft)
@@ -302,8 +364,15 @@ class defaultItem:
             else:
                 self.show_nail = False # if not connected
 
+        if getattr(self, "temperature", 0) >= 500:
+            if random.random() < self.temperature/50000:  # Tune this spawn rate as needed
+                self.particles.extend(make_scale(self.pos, count=1))
+
+
         
     def start_screen_switch(self, screen, screenSwitcher):
+        if type(self.next_screen) == str:
+            self.next_screen = get_screen_function(self.next_screen)
         screenSwitcher.start(lambda: self.next_screen(screen))
         
     def set_position(self, pos):

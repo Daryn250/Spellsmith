@@ -1,1 +1,210 @@
-{}
+{
+    "workstation": [
+        {
+            "type": "furnace",
+            "pos": [
+                1362.3368624588163,
+                321.5976680384088
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "no_shadow"
+            ],
+            "img_path": "assets/screens/workstation/furnace.png",
+            "animated": false,
+            "next_screen": "furnaceScreen",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "workstation",
+            "friction": 1.05,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 5e-324,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "b5316c0c-8531-4afd-b992-9c458aacd679",
+            "dragging_for": 0
+        }
+    ],
+    "furnaceScreen": [
+        {
+            "type": "slot_node",
+            "pos": [
+                96.0,
+                69.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "1a0f485f-d192-41a4-b1e2-8018b7e80c94"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                168.0,
+                69.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "047a3cfa-d34d-4d2d-9fe6-aebf014199aa"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                240.0,
+                69.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_3",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "8d9a1f29-a81f-4920-a8d0-c75e0617907e"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                312.0,
+                69.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_4",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "6e3075f4-afb5-4adf-9a7e-6f526580feeb"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                384.0,
+                69.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_5",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "64d1566d-2118-4d72-9b2b-f2a752381d79"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                240.0,
+                225.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "fuel_input",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "d74c8f3d-2794-42d0-8a19-0ea7a57c99c7"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                126.0,
+                135.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "a41e1510-3103-4253-9367-d67b4eb54d62"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                360.0,
+                135.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "bbe7fb46-3c5a-411a-b9e3-a91102eaa0ec"
+        },
+        {
+            "type": "iron_ore",
+            "pos": [
+                245.0,
+                153.0
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 1788.8100000002353,
+            "origin_screen": "furnaceScreen",
+            "animated": false,
+            "friction": 1.05,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "437fdfdf-6d9d-4724-9da0-9f0e1c5b8ba3",
+            "dragging_for": 0
+        }
+    ]
+}

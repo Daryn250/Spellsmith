@@ -20,6 +20,9 @@ class ItemManager:
 
 
     def save_items(self, file_path):
+        import os
+        import json
+
         # Load existing data if it exists
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
@@ -34,10 +37,11 @@ class ItemManager:
         grouped = {}
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
+            
             if hasattr(item, "type"):
                 data = {
                     "type": item.type,
-                    "pos": list(item.pos),  # JSON doesn't support tuples
+                    "pos": list(item.pos),
                     **item.to_nbt()
                 }
             elif hasattr(item, "tool_type"):
@@ -46,6 +50,13 @@ class ItemManager:
                     "pos": list(item.pos),
                     **item.to_nbt()
                 }
+            else:
+                continue
+
+            # Convert next_screen function to its name
+            if "next_screen" in data and callable(data["next_screen"]):
+                data["next_screen"] = data["next_screen"].__name__
+
             grouped.setdefault(screen_name, []).append(data)
 
         # Update only the relevant screen section
@@ -62,6 +73,7 @@ class ItemManager:
 
 
 
+
     def load_items(self, file_path, current_screen):
         if not os.path.exists(file_path):
             print(f"[ItemManager] No save file found at {file_path}")
@@ -73,7 +85,7 @@ class ItemManager:
         screen_data = data.get(current_screen)
         if not screen_data:
             print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
-            return
+            return False
 
         # Remove existing items with matching UUIDs
         saved_uuids = {entry.get("uuid") for entry in screen_data if "uuid" in entry}
@@ -105,5 +117,12 @@ class ItemManager:
         for item in self.items:
             if item.uuid == uuid:
                 return item
+        return None
+    
+    def getSlotByName(self, name):
+        for item in self.items:
+            if "slot" in item.flags: 
+                if getattr(item, "slot_name", None) == name:
+                    return item
         return None
 

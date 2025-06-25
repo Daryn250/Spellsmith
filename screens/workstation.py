@@ -32,7 +32,6 @@ def workstation(screen):
 
     item_manager.load_items("saves/save1.json", "workstation")
     
-    makeItem(item_manager, "furnace", (200,200), "workstation")
 
 
     # run table

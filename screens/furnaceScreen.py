@@ -11,7 +11,8 @@ from utility.gui_utility.guiManager import GUIManager
 from utility.item_utility.itemMaker import makeItem
 from utility.tool_utility.tool import Tool
 
-VIRTUAL_SIZE = (960*2, 540*2)
+from utility.screen_utility.furnace_function import FurnaceHelper
+VIRTUAL_SIZE = (480, 270)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 FPS = 60
 
@@ -24,13 +25,30 @@ def furnaceScreen(screen):
 
     item_manager = ItemManager()
     cursor_manager = CursorManager(virtual_surface)
-    gui_manager = GUIManager()
+    gui_manager = GUIManager(charmboard = False)
 
     
     # load sprites:
-    background = AnimatedTile("assets/screens/workstation/workstation.png", frame_duration=150)
+    furnace = FurnaceHelper(item_manager) # make this into a furnace helper class
 
-    item_manager.load_items("saves/save1.json", "furnaceScreen")
+    if item_manager.load_items("saves/save1.json", "furnaceScreen") == False:
+        # Define named slot positions for future lookup
+        named_slots = [
+            ("furnace_input_1", (32, 23)),
+            ("furnace_input_2", (56, 23)),
+            ("furnace_input_3", (80, 23)),
+            ("furnace_input_4", (104, 23)),
+            ("furnace_input_5", (128, 23)),
+            ("fuel_input", (80, 75)),
+            ("weapon_slot1", (42, 45)),
+            ("weapon_slot2", (120, 45)),
+        ]
+        for name, pos in named_slots:
+            scaled = (pos[0] * (VIRTUAL_SIZE[0] / 160), pos[1] * (VIRTUAL_SIZE[1] / 90))
+            slot_item = makeItem(item_manager, "slot_node", scaled, "furnaceScreen", extra_nbt={"slot_name": name}).item
+
+
+    
 
 
     # run table
@@ -54,7 +72,7 @@ def furnaceScreen(screen):
             TrickFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager)
         # draw tiles
         #update
-        background.update(dt)
+        furnace.update(dt, item_manager)
         cursor_manager.update(dt, virtual_mouse)
         for item in item_manager.items:
             if hasattr(item, "trick") and item.trick:
@@ -81,7 +99,7 @@ def furnaceScreen(screen):
         virtual_surface.fill((0,0,0))
 
         # draw background and lights
-        background.draw(virtual_surface, (0, 0), scale_to = VIRTUAL_SIZE)
+        furnace.draw(virtual_surface, VIRTUAL_SIZE)
 
         # draw items
         for item in item_manager.items:

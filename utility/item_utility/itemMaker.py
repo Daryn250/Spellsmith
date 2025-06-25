@@ -57,6 +57,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/copper/copper1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "copper_ingot": {
@@ -64,6 +65,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/copper/copper2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "iron_ore": {
@@ -71,6 +73,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/iron/iron1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "iron_ingot": {
@@ -78,6 +81,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/iron/iron2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "lead_ore": {
@@ -85,6 +89,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/lead/lead1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "lead_ingot": {
@@ -92,6 +97,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/lead/lead2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "lomium_ore": {
@@ -99,6 +105,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/lomium/lomium1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "lomium_ingot": {
@@ -106,6 +113,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/lomium/lomium2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "silver_ore": {
@@ -113,6 +121,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/silver/silver1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "silver_ingot": {
@@ -120,6 +129,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/silver/silver2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "titanium_ore": {
@@ -127,6 +137,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/titanium/titanium1.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "titanium_ingot": {
@@ -134,6 +145,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/titanium/titanium2.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
     "anodized_titanium_ingot": {
@@ -141,6 +153,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/titanium/titanium3.png",
             "flags": ["draggable"],
+            "temperature":0
         }
     },
 }

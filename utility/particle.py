@@ -6,7 +6,7 @@ from utility.animated_sprite import AnimatedTile
 class Particle:
     def __init__(self, pos, color=(255, 255, 255), velocity=(0, 0), gravity=0.1,
                  lifetime=30, size=2, glow=False, glowtype=None, image=None,
-                 animated_tile=None, rotation=None, rotation_speed=0):
+                 animated_tile=None, rotation=None, rotation_speed=0, glowStrength = 20):
         self.x, self.y = pos
         self.base_color = color
         self.size = size
@@ -15,6 +15,7 @@ class Particle:
         self.vx, self.vy = velocity
         self.gravity = gravity
         self.glow = glow
+        self.glowstrength = glowStrength
         self.glowtype = glowtype or []
         self.image = image
         self.animated_tile = animated_tile
@@ -100,14 +101,15 @@ class Particle:
         else:
             # Optional: draw soft glow
             if self.glow:
-                max_glow_radius = self.size * 6
+                max_glow_radius = self.size * self.glowstrength
                 glow_surf = pygame.Surface((max_glow_radius * 2, max_glow_radius * 2), pygame.SRCALPHA)
-                glow_color = (alpha, alpha, alpha)
-                pygame.draw.circle(glow_surf, (*glow_color, int(alpha * 0.05)), (max_glow_radius, max_glow_radius), max_glow_radius)
+                dim_alpha = max(0, min(255, int(alpha * 0.5)))
+                glow_color = (dim_alpha, dim_alpha, dim_alpha)
+                pygame.draw.circle(glow_surf, (*glow_color, dim_alpha), (max_glow_radius, max_glow_radius), max_glow_radius)
                 surface.blit(glow_surf, (pos[0] - max_glow_radius, pos[1] - max_glow_radius), special_flags=pygame.BLEND_ADD)
 
             # Main particle
-            pygame.draw.circle(surface, (*self.base_color, alpha), pos, self.size)
+            pygame.draw.circle(surface, (*self.base_color, dim_alpha), pos, self.size)
 
     def _fade_in_out_alpha(self):
         t = 1 - (self.lifetime / self.max_lifetime)
@@ -194,10 +196,31 @@ def make_fire(pos, count=5):
         particles.append(p)
     return particles
 
+def make_scale(pos, count=1):
+    particles = []
+    for _ in range(count):
+        vx = random.uniform(-0.5, 0.5)
+        vy = random.uniform(-1.5, -0.5)
+        angle = random.uniform(0, 2 * math.pi)
+        lt = random.randint(40,100)
+        p = Particle(
+            pos=pos,
+            color=(255, 116, 4),
+            velocity=(vx, vy),
+            gravity=0.03,
+            rotation = angle,
+            lifetime=lt,
+            glow=True,
+            glowStrength=2
+        )
+        particles.append(p)
+    return particles
+
 make_particles_presets = {
     "sparkles": make_sparkles,
     "smoke": make_smoke,
     "stars": make_stars,
-    "fire": make_fire
+    "fire": make_fire,
+    "scale": make_scale
 }
 

@@ -16,7 +16,7 @@ class ScreenSwitcher:
         self.finished = False
         self.active = False
         self.next_screen_func = None
-        self.transition_speed = 1000  # pixels per second (adjust to control timing)
+        self.transition_speed = 2500  # pixels per second (adjust to control timing)
 
     def start(self, next_screen_func):
         surf = pygame.display.get_surface()

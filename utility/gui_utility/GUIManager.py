@@ -1,10 +1,10 @@
 import pygame
 
 class GUIManager:
-    def __init__(self):
+    def __init__(self, charmboard = True):
         self.windows = []  # List of GUI windows (only first one will be drawn)
         self.nails = []
-        self.drawCharmBoard = True
+        self.drawCharmBoard = charmboard
         self.charmboard_topright = None
 
         self.quick_menu = None  # Optional QuickMenu to draw
