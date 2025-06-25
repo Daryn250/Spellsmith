@@ -71,7 +71,7 @@ class defaultItem:
             self.show_nail = False
 
 
-    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles"]):
+    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "next_screen"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
 

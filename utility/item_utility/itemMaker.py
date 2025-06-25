@@ -16,10 +16,11 @@ ITEM_BASES = {
     "furnace": {
         "type": "furnace",
         "nbt": {
-            "flags": ["draggable", "screen_change"],
+            "flags": ["draggable", "screen_change", "no_shadow"],
             "img_path": "assets/screens/workstation/furnace.png",  # optional fallback
             "animated": False,
-            "next_screen":"furnaceScreen"
+            "next_screen":"furnaceScreen",
+            "scale":(2,2)
         }
     },
     #### CHARMS ####
@@ -154,13 +155,23 @@ class makeItem:
         if extra_nbt:
             nbt.update(extra_nbt)
 
-        # Inject origin_screen directly into the item's NBT :DDD thank you ai i praise you for doing what i sometimes cant
+        # Inject origin screen
         nbt["origin_screen"] = screen
 
+        # If there's a next_screen key, resolve it to an actual screen function
+        if "next_screen" in nbt and isinstance(nbt["next_screen"], str):
+            screen_name = nbt["next_screen"]
+            screen_func = get_screen_function(screen_name)
+            if screen_func:
+                nbt["next_screen"] = screen_func
+            else:
+                print(f"[makeItem] Warning: Could not resolve screen '{screen_name}' to a function.")
+
+        # Create the item
         new_item = defaultItem(item_manager, itemType, pos, nbt)
 
-        # Add to item manager
+        # Add it to the manager
         item_manager.add_item(new_item)
 
-        # Optionally store reference
+        # Save for external access
         self.item = new_item

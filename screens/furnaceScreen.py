@@ -15,7 +15,7 @@ VIRTUAL_SIZE = (960*2, 540*2)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 FPS = 60
 
-def workstation(screen):
+def furnaceScreen(screen):
     switcher = ScreenSwitcher()
     clock = pygame.time.Clock()
     
@@ -30,9 +30,7 @@ def workstation(screen):
     # load sprites:
     background = AnimatedTile("assets/screens/workstation/workstation.png", frame_duration=150)
 
-    item_manager.load_items("saves/save1.json", "workstation")
-    
-    makeItem(item_manager, "furnace", (200,200), "workstation")
+    item_manager.load_items("saves/save1.json", "furnaceScreen")
 
 
     # run table

@@ -18,9 +18,20 @@ class ItemManager:
     def remove_by_uuid(self, uuid_to_remove):
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
-    def save_items(self, file_path):
-        grouped = {}
 
+    def save_items(self, file_path):
+        # Load existing data if it exists
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    existing_data = json.load(f)
+                except json.JSONDecodeError:
+                    existing_data = {}
+        else:
+            existing_data = {}
+
+        # Build screen-specific group of current items
+        grouped = {}
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
             if hasattr(item, "type"):
@@ -37,9 +48,17 @@ class ItemManager:
                 }
             grouped.setdefault(screen_name, []).append(data)
 
+        # Update only the relevant screen section
+        for screen_name, items in grouped.items():
+            existing_data[screen_name] = items
+
+        # Ensure save directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Write merged result
         with open(file_path, "w") as f:
-            json.dump(grouped, f, indent=4)
+            json.dump(existing_data, f, indent=4)
+
 
 
 

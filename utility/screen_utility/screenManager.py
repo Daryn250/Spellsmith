@@ -11,6 +11,9 @@ def get_screen_function(name):
     elif name == "workstation":
         from screens.workstation import workstation
         return workstation
+    elif name == "furnaceScreen":
+        from screens.furnaceScreen import furnaceScreen
+        return furnaceScreen
     else:
         raise ValueError(f"Unknown screen function: {name}")
 
