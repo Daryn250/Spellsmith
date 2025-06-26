@@ -220,4 +220,9 @@ class WandCursor(BaseCursor):
         for _ in range(4):
             self.particles.append(Particle((wand_x, wand_y), color, lifetime=50))
 
-
+class TongsCursor(BaseCursor):
+    def get_wand_tip_position(self, mouse):
+        return 0, 0
+    
+    def click_effect(self, mouse):
+        pass

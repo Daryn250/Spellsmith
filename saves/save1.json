@@ -186,20 +186,20 @@
         {
             "type": "iron_ore",
             "pos": [
-                245.0,
-                153.0
+                156.5198782440284,
+                127.0
             ],
             "img_path": "assets/items/iron/iron1.png",
             "flags": [
                 "draggable"
             ],
-            "temperature": 1788.8100000002353,
+            "temperature": 1894.9000000002825,
             "origin_screen": "furnaceScreen",
             "animated": false,
             "friction": 1.05,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 0.0,
+            "vx": -0.0004634054225091349,
             "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,

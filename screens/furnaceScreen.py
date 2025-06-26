@@ -67,6 +67,11 @@ def furnaceScreen(screen):
                     cursor_manager.click()
                     # Check for input on buttons here:
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
+            if DraggableFlag.dragging_item != None:
+                if getattr(DraggableFlag.dragging_item, "temperature", 0) > 200:
+                    cursor_manager.set_cursor("tongs", virtual_surface, "assets/cursor/tongs")
+            else:
+                cursor_manager.set_cursor("base", virtual_surface, "assets/cursor/defaultCursor")
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
             TrickFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager)
