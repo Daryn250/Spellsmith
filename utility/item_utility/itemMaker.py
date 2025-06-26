@@ -156,6 +156,39 @@ ITEM_BASES = {
             "temperature":0
         }
     },
+    ### FUEL TYPES ###
+    "large_coal": {
+        "type": "fuel",
+        "nbt": {
+            "img_path": "assets/items/fuel/large_coal.png",
+            "flags": ["draggable"],
+            "fuel":0.4
+        }
+    },
+    "medium_coal": {
+        "type": "fuel",
+        "nbt": {
+            "img_path": "assets/items/fuel/med_coal.png",
+            "flags": ["draggable"],
+            "fuel":0.3
+        }
+    },
+    "small_coal": {
+        "type": "fuel",
+        "nbt": {
+            "img_path": "assets/items/fuel/small_coal.png",
+            "flags": ["draggable"],
+            "fuel":0.2
+        }
+    },
+    "log": {
+        "type": "fuel",
+        "nbt": {
+            "img_path": "assets/items/fuel/log.png",
+            "flags": ["draggable"],
+            "fuel":0.05
+        }
+    },
 }
 
 class makeItem:

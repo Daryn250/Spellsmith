@@ -19,9 +19,7 @@ class ItemManager:
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
 
-    def save_items(self, file_path):
-        import os
-        import json
+    def save_items(self, file_path, extra_screen_data=None):
 
         # Load existing data if it exists
         if os.path.exists(file_path):
@@ -37,7 +35,7 @@ class ItemManager:
         grouped = {}
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
-            
+
             if hasattr(item, "type"):
                 data = {
                     "type": item.type,
@@ -63,12 +61,15 @@ class ItemManager:
         for screen_name, items in grouped.items():
             existing_data[screen_name] = items
 
-        # Ensure save directory exists
+        # Save per-screen extra data
+        if extra_screen_data:
+            existing_data["_screen_data"] = extra_screen_data
+
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        # Write merged result
         with open(file_path, "w") as f:
             json.dump(existing_data, f, indent=4)
+
 
 
 
@@ -111,6 +112,22 @@ class ItemManager:
 
             except Exception as e:
                 print(f"[ItemManager] Failed to load item: {entry.get('uuid', 'unknown')} - {e}")
+
+        # Return extra screen metadata if available
+        screen_meta = data.get("_screen_data", {}).get(current_screen)
+        return screen_meta or {}
+
+        
+
+    def remove_item(self, uuid):
+        # Remove items that match the UUID
+        self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid]
+
+        # Clear any references in slots or containers
+        for item in self.items:
+            if getattr(item, "contains", None) == uuid:
+                item.contains = None
+
 
 
     def getItemByUUID(self, uuid):

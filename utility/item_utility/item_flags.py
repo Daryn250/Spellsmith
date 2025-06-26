@@ -222,9 +222,8 @@ class SlotFlag:
                 slot_rect = slot.get_scaled_hitbox(virtual_size)
                 for dragged in [j for j in items if getattr(j, "dragging", False)]:
                     if slot_rect.collidepoint(mouse_pos):
-                        dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
                         accepted = getattr(slot, "slot_accepts", [])
-
+                        dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
                         if (not accepted or dragged_type in accepted) and slot.contains is None:
 
                             dragged.set_position(slot.pos)
@@ -243,14 +242,8 @@ class SlotFlag:
         if not dragged_item:
             return
 
-        # Use same type fallback logic
-        dragged_type = getattr(dragged_item, "type", getattr(dragged_item, "tool_type", None))
-
         for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
-            accepted = getattr(slot, "slot_accepts", [])
-
-            # Skip if the dragged type is not accepted
-            if accepted and dragged_type not in accepted:
+            if not is_valid_for_slot(slot, dragged_item):
                 continue
             if slot.contains is not None:
                 continue
@@ -282,6 +275,25 @@ class SlotFlag:
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
 
 
+def is_valid_for_slot(slot, item):
+    slot_name = getattr(slot, "slot_name", None)
+    accepted = getattr(slot, "slot_accepts", [])
+
+    item_type = getattr(item, "type", getattr(item, "tool_type", None))
+
+    # Fuel slot restriction
+    if slot_name == "fuel_input" and item_type != "fuel":
+        return False
+
+    # If slot_accepts is empty, accept anything (unless blocked by above)
+    if not accepted:
+        return True
+
+    # If slot_accepts is defined, item_type must be in it
+    return item_type in accepted
+
+
+####### NEEDS A REMOVE ITEM FUNCTION AND NEEDS TO CHANGE TO REVERSE GHOST ITEM RENDERING!!!!!!!
 
 
 

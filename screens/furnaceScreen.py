@@ -29,10 +29,14 @@ def furnaceScreen(screen):
 
     
     # load sprites:
-    furnace = FurnaceHelper(item_manager) # make this into a furnace helper class
+    # Load furnace helper
+    furnace = FurnaceHelper(item_manager)
 
-    if item_manager.load_items("saves/save1.json", "furnaceScreen") == False:
-        # Define named slot positions for future lookup
+    # Attempt to load items and metadata for the screen
+    furnace_data = item_manager.load_items("saves/save1.json", "furnaceScreen")
+
+    # If loading failed, manually create slots
+    if furnace_data is False:
         named_slots = [
             ("furnace_input_1", (32, 23)),
             ("furnace_input_2", (56, 23)),
@@ -47,6 +51,9 @@ def furnaceScreen(screen):
             scaled = (pos[0] * (VIRTUAL_SIZE[0] / 160), pos[1] * (VIRTUAL_SIZE[1] / 90))
             slot_item = makeItem(item_manager, "slot_node", scaled, "furnaceScreen", extra_nbt={"slot_name": name}).item
 
+    # Restore furnace state if metadata is available
+    elif furnace_data:
+        furnace.fuel_level = furnace_data.get("fuel_level", 1.0)
 
     
 
@@ -58,6 +65,7 @@ def furnaceScreen(screen):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
@@ -98,7 +106,8 @@ def furnaceScreen(screen):
         
 
         # save
-        item_manager.save_items("saves/save1.json")
+        item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
+
 
         #clear screen and draw
         virtual_surface.fill((0,0,0))

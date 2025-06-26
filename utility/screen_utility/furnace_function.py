@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class FurnaceHelper:
     def __init__(self, item_manager):
@@ -17,16 +18,43 @@ class FurnaceHelper:
         self.glow_alpha = 0  # Current alpha of glow image
         self.glow_speed = 300  # milliseconds it takes to fully fade in or out
 
+        self.coal_shake_timer = 0
+        self.coal_shake_amount = 1  # pixels of shake intensity
+        self.coal_lerp_offset = 0   # easing offset when fuel is added
+        self.coal_lerp_speed = 0.005  # lower is slower easing
+
+
 
     def update(self, dt, item_manager):
-        # Calculate fuel burn time decay
+        MAX_FUEL = 1.0  # Maximum stored fuel level
+
+        # Burn fuel if furnace is active
         if self.fuel_level > 0 and self.heat_active:
-            self.fuel_level -= dt / 300000  # adjust rate if needed
+            self.fuel_level -= dt / 100000  # adjust rate if needed
             self.fuel_level = max(0.0, self.fuel_level)
 
-        self.heat_active = False  # Reset, will turn True if any slot is heating
+        self.heat_active = False  # Reset; will be set True if anything gets heated
 
-        # List of all slot names to heat
+        # ----- HANDLE FUEL INPUT -----
+        fuel_slot = item_manager.getSlotByName("fuel_input")
+        if fuel_slot and fuel_slot.contains:
+            fuel_item = item_manager.getItemByUUID(fuel_slot.contains)
+            if fuel_item and getattr(fuel_item, "fuel", 0) > 0:
+                available_space = MAX_FUEL - self.fuel_level
+                if fuel_item.fuel <= available_space:
+                    self.fuel_level += fuel_item.fuel
+                    self.fuel_level = min(MAX_FUEL, self.fuel_level)
+
+                    item_manager.remove_item(fuel_item.uuid)
+                    fuel_slot.contains = None
+                    print(f"[Furnace] Consumed fuel item for {fuel_item.fuel} energy. New level: {self.fuel_level:.2f}")
+
+                    # Trigger coal shake and ease-up effect
+                    self.coal_shake_timer = 200  # ms
+                    self.coal_lerp_offset = 1.0
+
+
+        # ----- HANDLE HEATING ITEMS -----
         heat_slots = [
             "furnace_input_1", "furnace_input_2", "furnace_input_3",
             "furnace_input_4", "furnace_input_5",
@@ -42,24 +70,34 @@ class FurnaceHelper:
             if not item:
                 continue
 
-            # Check if item can be heated (either tool or regular item)
             if hasattr(item, "temperature"):
                 if self.fuel_level > 0:
                     if item.temperature > getattr(item, "melting_point", 99999):
-                        # play melting animation and delete item
+                        # TODO: handle melting behavior
                         pass
                     else:
-                        item.temperature += dt / 100  # adjust heating rate here
-                        print(item.temperature)
+                        item.temperature += dt / 100  # heating rate
                         self.heat_active = True
-                
+
+        # ----- Handle glow alpha fade -----
         target_alpha = 255 if self.heat_active else 0
         alpha_diff = target_alpha - self.glow_alpha
         if abs(alpha_diff) > 0:
-            # Change rate is proportional to time
             delta = (dt / self.glow_speed) * 255
             self.glow_alpha += delta if alpha_diff > 0 else -delta
             self.glow_alpha = max(0, min(255, self.glow_alpha))
+
+        # Handle coal shake timer
+        if self.coal_shake_timer > 0:
+            self.coal_shake_timer -= dt
+            if self.coal_shake_timer < 0:
+                self.coal_shake_timer = 0
+
+        # Ease up offset
+        if self.coal_lerp_offset > 0:
+            self.coal_lerp_offset -= dt * self.coal_lerp_speed
+            self.coal_lerp_offset = max(0, self.coal_lerp_offset)
+
 
 
 
@@ -81,24 +119,42 @@ class FurnaceHelper:
             surface.blit(glow, (0, 0))
 
 
-        # ----- COAL DRAW -----
-        coal_start_y = 62  # virtual pixels
+        # ----- COAL DRAW (coal lowers as fuel lowers) -----
+        coal_img_scaled = pygame.transform.scale(self.img_coal, virtual_size)
+
+        # Total vertical travel range of coal (in virtual pixels)
+        coal_start_y = 62
         max_offset = coal_start_y
 
+        # Compute vertical offset from full (0) to empty (max_offset)
         offset_y_virtual = int((1 - self.fuel_level) * max_offset)
-        coal_img_scaled = pygame.transform.scale(self.img_coal, virtual_size)
-        screen_offset_y = int(offset_y_virtual * sy)
 
-        clip_start_y = int(coal_start_y * sy)
-        clip_height = virtual_size[1] - clip_start_y
-        clip_rect = pygame.Rect(0, clip_start_y, virtual_size[0], clip_height)
+        # Add easing (coal shifts slightly upward after adding fuel)
+        eased_offset = int(-10 * (1 - (self.coal_lerp_offset ** 2)))  # smooth ease up
 
-        prev_clip = surface.get_clip()
-        surface.set_clip(clip_rect)
-        surface.blit(coal_img_scaled, (0, screen_offset_y))
-        surface.set_clip(prev_clip)
+        # Add jitter if shaking
+        shake_x = shake_y = 0
+        if self.coal_shake_timer > 0:
+            shake_x = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
+            shake_y = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
+
+        # Convert to screen offset
+        screen_offset_y = int((offset_y_virtual + eased_offset) * sy)
+
+        # Draw the entire coal image, just offset down based on fuel level
+        surface.blit(coal_img_scaled, (shake_x, screen_offset_y + shake_y))
+
+
+
 
         draw_scaled(self.img_border)
 
+    def get_save_data(self):
+        return {"furnaceScreen": {
+        "fuel_level": self.fuel_level
+        }
+    }
+    def load_from_data(self, data):
+        self.fuel_level = data.get("fuel_level", 1.0)
 
 
