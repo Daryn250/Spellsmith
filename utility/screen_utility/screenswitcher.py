@@ -16,7 +16,7 @@ class ScreenSwitcher:
         self.finished = False
         self.active = False
         self.next_screen_func = None
-        self.transition_speed = 2500  # pixels per second (adjust to control timing)
+        self.transition_speed = 1  # pixels per second (adjust to control timing)
 
     def start(self, next_screen_func):
         surf = pygame.display.get_surface()
@@ -31,9 +31,9 @@ class ScreenSwitcher:
         self.finished = False
         self.next_screen_func = next_screen_func
 
-    def update_and_draw(self, target_surface, item_manager):
-        dt = pygame.time.get_ticks() / 1000  # seconds since start
-        speed = self.transition_speed / 60  # pixels per frame assuming 60 FPS
+    def update_and_draw(self, target_surface, item_manager, dt):
+        speed = self.transition_speed * dt  # pixels per second scaled by real dt
+
 
         self.overlay.fill((0, 0, 0, 0))  # Clear overlay
 

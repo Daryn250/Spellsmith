@@ -32,77 +32,74 @@ class TrickAnimation:
 
         self.time += dt
 
-        # Advance index based on time
-        while self.index < len(self.keyframes) - 1 and self.time > self.keyframes[self.index + 1]["time"]:
-            # Before advancing index, check if we should spawn particles on current keyframe
-            current_frame = self.keyframes[self.index]
-            # Before increasing index
-            if "particles" in current_frame:
-                preset_name = current_frame["particles"]
-                if preset_name in make_particles_presets:
-                    item.particles.extend(make_particles_presets[preset_name](item.pos, count=6))
+        # Ensure we have a valid pair of keyframes
+        if self.index >= len(self.keyframes) - 1:
+            self.finished = True
+            if self.on_complete:
+                self.on_complete(item)
+            return
 
+        prev = self.keyframes[self.index]
+        next_ = self.keyframes[self.index + 1]
+
+        t0 = prev["time"]
+        t1 = next_["time"]
+        local_t = (self.time - t0) / (t1 - t0) if t1 > t0 else 0
+        local_t = max(0.0, min(1.0, local_t))  # Clamp just in case
+
+
+        # Interpolate rotation
+        if "rot_offset" in prev and "rot_offset" in next_:
+            item.rotation = lerp(prev["rot_offset"], next_["rot_offset"], local_t)
+
+        # Interpolate scale
+        if "scale" in prev and "scale" in next_:
+            sx0, sy0 = prev["scale"]
+            sx1, sy1 = next_["scale"]
+            if hasattr(item, "squish"):
+                item.squish = [lerp(sx0, sx1, local_t), lerp(sy0, sy1, local_t)]
+            elif hasattr(item, "scale"):
+                item.scale = [lerp(sx0, sx1, local_t), lerp(sy0, sy1, local_t)]
+
+        # Interpolate position
+        if "pos_offset" in prev and "pos_offset" in next_:
+            px0, py0 = prev["pos_offset"]
+            px1, py1 = next_["pos_offset"]
+            interp_x = lerp(px0, px1, local_t)
+            interp_y = lerp(py0, py1, local_t)
+
+            sx = (VIRTUAL_SIZE[0] / 480)
+            sy = (VIRTUAL_SIZE[1] / 270)
+
+            item.pos = (
+                item.original_pos[0] + interp_x * sx,
+                item.original_pos[1] + interp_y * sy
+            )
+
+        # Trigger particles or events at the right time
+        if "particles" in next_ and self.time >= t1:
+            preset_name = next_["particles"]
+            if preset_name in make_particles_presets:
+                new_particles = make_particles_presets[preset_name](item.pos, count=6)
+                item.particles.extend(new_particles)
+
+        if "event" in next_ and self.time >= t1:
+            if callable(next_["event"]):
+                next_["event"](item)
+            else:
+                print(f"[TrickEvent] {next_['event']}")
+
+        if "callback" in next_ and self.time >= t1:
+            next_["callback"](item)
+
+        # Advance index if needed
+        if self.time >= t1:
             self.index += 1
-
             if self.index >= len(self.keyframes) - 1:
                 self.finished = True
                 if self.on_complete:
                     self.on_complete(item)
-                return
 
-            prev = self.keyframes[self.index]
-            next_ = self.keyframes[self.index + 1]
-
-            t0, t1 = prev["time"], next_["time"]
-            local_t = (self.time - t0) / (t1 - t0) if t1 > t0 else 0
-
-            # Trigger particle preset if keyframe time hit
-            if "particles" in next_ and self.time >= next_["time"]:
-                preset_name = next_["particles"]
-                if preset_name in make_particles_presets:
-                    new_particles = make_particles_presets[preset_name](item.pos, count=6)
-                    print(f"[TrickAnimation] Spawning {len(new_particles)} '{preset_name}' particles at {item.pos}")
-                    item.particles.extend(new_particles)
-
-
-            # Interpolate rotation
-            if "rot_offset" in prev and "rot_offset" in next_:
-                item.rotation = lerp(prev["rot_offset"], next_["rot_offset"], local_t)
-
-            # Interpolate squish
-            if "scale" in prev and "scale" in next_:
-                sx0, sy0 = prev["scale"]
-                sx1, sy1 = next_["scale"]
-                if hasattr(item, "squish"):
-                    item.squish = [lerp(sx0, sx1, local_t), lerp(sy0, sy1, local_t)]
-                elif hasattr(item, "scale"):
-                    item.scale = [lerp(sx0, sx1, local_t), lerp(sy0, sy1, local_t)]
-
-            # Interpolate position
-            if "pos_offset" in prev and "pos_offset" in next_:
-                px0, py0 = prev["pos_offset"]
-                px1, py1 = next_["pos_offset"]
-                interp_x = lerp(px0, px1, local_t)
-                interp_y = lerp(py0, py1, local_t)
-
-                # Apply screen scale
-                sx = (VIRTUAL_SIZE[0] / 480)
-                sy = (VIRTUAL_SIZE[1] / 270)
-
-                item.pos = (
-                    item.original_pos[0] + interp_x * sx,
-                    item.original_pos[1] + interp_y * sy
-                )
-
-            # Callbacks/events
-            if "event" in next_ and self.time >= next_["time"]:
-                if callable(next_["event"]):
-                    next_["event"](item)
-                else:
-                    print(f"[TrickEvent] {next_['event']}")
-
-            if "callback" in next_ and self.time >= next_["time"]:
-                next_["callback"](item)
 
 
 

@@ -12,7 +12,7 @@ from utility.item_utility.itemMaker import makeItem
 from utility.tool_utility.tool import Tool
 
 from utility.screen_utility.furnace_function import FurnaceHelper
-VIRTUAL_SIZE = (480, 270)
+VIRTUAL_SIZE = (480*2, 270*2)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 FPS = 60
 
@@ -74,6 +74,12 @@ def furnaceScreen(screen):
                 if event.button == 1:  # Left mouse click
                     cursor_manager.click()
                     # Check for input on buttons here:
+            # exit screen and go back
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    from screens.workstation import workstation
+                    switcher.start(lambda: workstation(screen))
+
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             if DraggableFlag.dragging_item != None:
                 if getattr(DraggableFlag.dragging_item, "temperature", 0) > 200:
@@ -83,6 +89,7 @@ def furnaceScreen(screen):
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)
             TrickFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager)
+            gui_manager.handleEvent(event, virtual_mouse)
         # draw tiles
         #update
         furnace.update(dt, item_manager)
@@ -101,7 +108,7 @@ def furnaceScreen(screen):
         
 
             
-        gui_manager.update(dt/1000, virtual_mouse)
+        gui_manager.update(dt/1000, virtual_mouse, VIRTUAL_SIZE)
 
         
 
@@ -129,7 +136,7 @@ def furnaceScreen(screen):
 
 
         # draw guis
-        gui_manager.draw(virtual_surface, VIRTUAL_SIZE)
+        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse)
 
         # draw screenswitcher
         
@@ -137,7 +144,7 @@ def furnaceScreen(screen):
         cursor_manager.draw(virtual_surface, virtual_mouse)
 
         vscreen.draw_to_screen(screen)
-        switcher.update_and_draw(screen, item_manager)
+        switcher.update_and_draw(screen, item_manager, dt)
 
         
         pygame.display.flip()

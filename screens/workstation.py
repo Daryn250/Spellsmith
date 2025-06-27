@@ -71,7 +71,7 @@ def workstation(screen):
         
 
             
-        gui_manager.update(dt/1000, virtual_mouse)
+        gui_manager.update(dt/1000, virtual_mouse, VIRTUAL_SIZE)
 
         
 
@@ -98,7 +98,7 @@ def workstation(screen):
 
 
         # draw guis
-        gui_manager.draw(virtual_surface, VIRTUAL_SIZE)
+        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse)
 
         # draw screenswitcher
         
@@ -106,7 +106,7 @@ def workstation(screen):
         cursor_manager.draw(virtual_surface, virtual_mouse)
 
         vscreen.draw_to_screen(screen)
-        switcher.update_and_draw(screen, item_manager)
+        switcher.update_and_draw(screen, item_manager, dt)
 
         
         pygame.display.flip()
