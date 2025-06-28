@@ -186,8 +186,8 @@
         {
             "type": "iron_ore",
             "pos": [
-                441.9851159615154,
-                363.0
+                446.224095434041,
+                380.0
             ],
             "img_path": "assets/items/iron/iron1.png",
             "flags": [
@@ -199,7 +199,7 @@
             "friction": 1.05,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 1.2259677294324356e-10,
+            "vx": 1.1399998945818294e-08,
             "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
@@ -209,8 +209,8 @@
         {
             "tool_type": "sword",
             "pos": [
-                541.482410429406,
-                348.0
+                805.482410429406,
+                350.0
             ],
             "flags": [
                 "tool",
@@ -226,9 +226,10 @@
             "img_path": "assets/error.png",
             "friction": 1.05,
             "quality_stars": 2,
+            "temperature": 491.6600000000239,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 2.4101034111847207e-26,
+            "vx": 3.619290840196371e-237,
             "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
@@ -243,8 +244,7 @@
                 0.4
             ],
             "uuid": "ddbfe213-3931-479e-927f-cff3caee428d",
-            "dragging_for": 0,
-            "temperature": 491.6600000000239
+            "dragging_for": 0
         }
     ],
     "_screen_data": {

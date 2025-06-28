@@ -27,7 +27,7 @@ class FurnaceHelper:
 
     def update(self, dt, item_manager):
         MAX_FUEL = 1.0  # Maximum stored fuel level
-        BASE_DRAIN_RATE = dt / 100000  # base drain rate for 1 item
+        BASE_DRAIN_RATE = dt / 300000  # base drain rate for 1 item
 
         self.heat_active = False  # Reset; will be set True if anything gets heated
         active_heating_items = 0

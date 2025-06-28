@@ -37,6 +37,9 @@ class Tool:
         if not hasattr(self, "quality_stars"):
             # compute quality in the future
             self.quality_stars = random.randint(1,6)
+        if not hasattr(self, "temperature"):
+            # compute quality in the future
+            self.temperature = 0
 
         # Check required fields
         if "origin_screen" not in self.nbt:
