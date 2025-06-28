@@ -41,6 +41,7 @@ def workstation(screen):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                item_manager.save_items("saves/save1.json", "workstation")
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
@@ -52,7 +53,7 @@ def workstation(screen):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     from screens.table import table
-                    item_manager.save_items("saves/save1.json")
+                    item_manager.save_items("saves/save1.json", "workstation")
                     switcher.start(lambda: table(screen))
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
@@ -81,7 +82,7 @@ def workstation(screen):
         
 
         # save
-        item_manager.save_items("saves/save1.json")
+        
 
         #clear screen and draw
         virtual_surface.fill((0,0,0))

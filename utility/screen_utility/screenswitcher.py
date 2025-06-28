@@ -46,8 +46,6 @@ class ScreenSwitcher:
                 self.finished = True
                 self.active = False
                 if self.next_screen_func:
-                    # save data and switch screens
-                    item_manager.save_items("saves/save1.json")
                     self.next_screen_func()
 
         elif self.screenStart:

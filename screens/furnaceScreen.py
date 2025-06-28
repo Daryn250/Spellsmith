@@ -54,14 +54,8 @@ def furnaceScreen(screen):
     # Restore furnace state if metadata is available
     elif furnace_data:
         furnace.fuel_level = furnace_data.get("fuel_level", 1.0)
-    makeItem(item_manager, "iron_ore", (200,200), "furnaceScreen")
-    Tool(item_manager, "sword", (300, 200), {
-        "blade":"copper",
-        "guard":"titanium",
-        "pommel":"lomium",
-        "handle":"blue",
-        "origin_screen":"furnaceScreen"
-    })
+
+
     
 
 
@@ -72,7 +66,7 @@ def furnaceScreen(screen):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
+                item_manager.save_items("saves/save1.json", "furnaceScreen", extra_screen_data=furnace.get_save_data())
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
@@ -85,7 +79,7 @@ def furnaceScreen(screen):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     from screens.workstation import workstation
-                    item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
+                    item_manager.save_items("saves/save1.json","furnaceScreen", extra_screen_data=furnace.get_save_data())
                     switcher.start(lambda: workstation(screen))
 
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
@@ -120,10 +114,6 @@ def furnaceScreen(screen):
 
         
 
-        # save
-        
-
-
         #clear screen and draw
         virtual_surface.fill((0,0,0))
 
@@ -146,7 +136,6 @@ def furnaceScreen(screen):
         # draw guis
         gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse)
 
-        # draw screenswitcher
         
         # draw cursor
         cursor_manager.draw(virtual_surface, virtual_mouse)

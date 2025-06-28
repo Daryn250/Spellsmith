@@ -29,5 +29,226 @@
             "uuid": "b5316c0c-8531-4afd-b992-9c458aacd679",
             "dragging_for": 0
         }
-    ]
+    ],
+    "furnaceScreen": [
+        {
+            "type": "slot_node",
+            "pos": [
+                192.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "f36153b7-bb43-4e8f-9125-1844322b5f63"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                336.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "c170b8c4-4377-4136-879c-11659de78f13"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                480.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_3",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "471f5972-8d86-4979-b21d-67e1d3a113af"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                624.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_4",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "e48ce9ef-d418-4c74-b4b3-461b843ed77b"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                768.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_5",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "48b388f5-1bc0-493c-aec6-e3d5ef9945d1"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                480.0,
+                450.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "fuel_input",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "c6bf9a7f-0cbd-469d-817c-be74e30dce01"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                252.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "29d7698f-6ba4-4847-8d35-631123dba09a"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                720.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "uuid": "4bef74b4-29cb-4db2-bc5c-a36d294d50c5"
+        },
+        {
+            "type": "iron_ore",
+            "pos": [
+                418.9587837848623,
+                240.0
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 10.330000000000002,
+            "origin_screen": "furnaceScreen",
+            "animated": false,
+            "friction": 1.05,
+            "rotation": 0.26949896745165597,
+            "rotational_velocity": 0.0009701296049495412,
+            "vx": 0.0014597270809037749,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "60422663-6249-4bb5-a1d7-e6ffbca8240a",
+            "dragging_for": 0
+        },
+        {
+            "tool_type": "sword",
+            "pos": [
+                631.2073194330109,
+                158.0
+            ],
+            "flags": [
+                "tool",
+                "draggable",
+                "tricks"
+            ],
+            "particles": [],
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "animated": false,
+            "img_path": "assets/error.png",
+            "friction": 1.05,
+            "quality_stars": 2,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 4.095085210669859e-36,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "blade": "copper",
+            "guard": "titanium",
+            "pommel": "lomium",
+            "handle": "blue",
+            "origin_screen": "furnaceScreen",
+            "_cached_rotation": -0.0,
+            "_cached_scale": [
+                0.4,
+                0.4
+            ],
+            "uuid": "ddbfe213-3931-479e-927f-cff3caee428d",
+            "dragging_for": 0
+        }
+    ],
+    "_screen_data": {
+        "furnaceScreen": {
+            "fuel_level": 0.989669999999998
+        }
+    }
 }

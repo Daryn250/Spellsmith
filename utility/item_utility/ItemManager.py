@@ -20,8 +20,8 @@ class ItemManager:
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
 
-    def save_items(self, file_path, extra_screen_data=None):
 
+    def save_items(self, file_path, current_screen, extra_screen_data=None):
         # Load existing data if it exists
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
@@ -32,10 +32,12 @@ class ItemManager:
         else:
             existing_data = {}
 
-        # Build screen-specific group of current items
-        grouped = {}
+        # Build list of items only for the current screen
+        screen_items = []
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
+            if screen_name != current_screen:
+                continue  # Skip items from other screens
 
             if hasattr(item, "type"):
                 data = {
@@ -50,29 +52,27 @@ class ItemManager:
                     **item.to_nbt()
                 }
             else:
-                continue
+                continue  # Skip unknown item types
 
-            # Convert next_screen function to its name
+            # Convert callable next_screen to its name (if used)
             if "next_screen" in data and callable(data["next_screen"]):
                 data["next_screen"] = data["next_screen"].__name__
 
-            grouped.setdefault(screen_name, []).append(data)
+            screen_items.append(data)
 
-        # Update only the relevant screen section
-        for screen_name, items in grouped.items():
-            existing_data[screen_name] = items
+        # Update just the current screen's items
+        existing_data[current_screen] = screen_items
 
-        # Save per-screen extra data
+        # Update or add per-screen extra data
         if extra_screen_data:
             existing_data["_screen_data"] = extra_screen_data
 
+        # Ensure directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
+        # Write updated data
         with open(file_path, "w") as f:
             json.dump(existing_data, f, indent=4)
-
-
-
 
 
 
@@ -101,7 +101,6 @@ class ItemManager:
                 if "tool_type" in entry:
                     tool_type = entry["tool_type"]
                     item = Tool(self, tool_type, pos, nbt)
-                    self.items.append(item)
 
                 elif "type" in entry:
                     item_type = entry["type"]

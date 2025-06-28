@@ -224,7 +224,7 @@ class SlotFlag:
                     if slot_rect.collidepoint(mouse_pos):
                         accepted = getattr(slot, "slot_accepts", [])
                         dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
-                        if (not accepted or dragged_type in accepted) and slot.contains is None:
+                        if is_valid_for_slot(slot, dragged) and slot.contains is None:
 
                             dragged.set_position(slot.pos)
 
@@ -308,8 +308,6 @@ def is_valid_for_slot(slot, item):
     # If slot_accepts is defined, item_type must be in it
     return item_type in accepted
 
-
-####### NEEDS TO CHANGE TO REVERSE GHOST ITEM RENDERING!!!!!!!
 
 
 
