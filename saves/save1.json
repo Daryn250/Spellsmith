@@ -186,20 +186,20 @@
         {
             "type": "iron_ore",
             "pos": [
-                418.9587837848623,
-                240.0
+                441.9851159615154,
+                363.0
             ],
             "img_path": "assets/items/iron/iron1.png",
             "flags": [
                 "draggable"
             ],
-            "temperature": 10.330000000000002,
+            "temperature": 508.60000000002645,
             "origin_screen": "furnaceScreen",
             "animated": false,
             "friction": 1.05,
-            "rotation": 0.26949896745165597,
-            "rotational_velocity": 0.0009701296049495412,
-            "vx": 0.0014597270809037749,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 1.2259677294324356e-10,
             "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
@@ -209,8 +209,8 @@
         {
             "tool_type": "sword",
             "pos": [
-                631.2073194330109,
-                158.0
+                541.482410429406,
+                348.0
             ],
             "flags": [
                 "tool",
@@ -228,13 +228,13 @@
             "quality_stars": 2,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 4.095085210669859e-36,
-            "vy": 0.3,
+            "vx": 2.4101034111847207e-26,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "blade": "copper",
-            "guard": "titanium",
-            "pommel": "lomium",
+            "blade": "silver",
+            "guard": "silver",
+            "pommel": "silver",
             "handle": "blue",
             "origin_screen": "furnaceScreen",
             "_cached_rotation": -0.0,
@@ -243,12 +243,13 @@
                 0.4
             ],
             "uuid": "ddbfe213-3931-479e-927f-cff3caee428d",
-            "dragging_for": 0
+            "dragging_for": 0,
+            "temperature": 491.6600000000239
         }
     ],
     "_screen_data": {
         "furnaceScreen": {
-            "fuel_level": 0.989669999999998
+            "fuel_level": 0.0
         }
     }
 }

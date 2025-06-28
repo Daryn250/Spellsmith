@@ -1,30 +1,17 @@
 import pygame
 from utility.particle import make_particles_presets
 
-
-
 def lerp(a, b, t):
     return a + (b - a) * t
 
-
 class TrickAnimation:
     def __init__(self, keyframes, on_complete=None):
-        """
-        keyframes: list of dicts, each with:
-            - time: float (seconds)
-            - pos_offset: (x, y) tuple (optional)
-            - rot_offset: float (optional)
-            - scale: (sx, sy) tuple (optional)
-            - event: string or callable (optional)
-            - callback: function(item) (optional)
-        on_complete: optional callback when done
-        """
         self.keyframes = sorted(keyframes, key=lambda f: f["time"])
         self.time = 0.0
         self.index = 0
         self.finished = False
         self.on_complete = on_complete
-        self.prev_frame = None
+        self.prev_frame = None  # used to prevent re-triggering per keyframe
 
     def update(self, dt, item, VIRTUAL_SIZE):
         if self.finished:
@@ -47,6 +34,19 @@ class TrickAnimation:
         local_t = (self.time - t0) / (t1 - t0) if t1 > t0 else 0
         local_t = max(0.0, min(1.0, local_t))  # Clamp just in case
 
+        # ✅ Trigger "particles" from prev (once per frame)
+        if "particles" in prev and self.time >= t0 and (self.prev_frame != self.index):
+            preset_name = prev["particles"]
+            if preset_name in make_particles_presets:
+                new_particles = make_particles_presets[preset_name](item.pos, count=6)
+                item.particles.extend(new_particles)
+
+        # ✅ Trigger "particles" from next if time reaches t1
+        if "particles" in next_ and self.time >= t1:
+            preset_name = next_["particles"]
+            if preset_name in make_particles_presets:
+                new_particles = make_particles_presets[preset_name](item.pos, count=6)
+                item.particles.extend(new_particles)
 
         # Interpolate rotation
         if "rot_offset" in prev and "rot_offset" in next_:
@@ -76,13 +76,7 @@ class TrickAnimation:
                 item.original_pos[1] + interp_y * sy
             )
 
-        # Trigger particles or events at the right time
-        if "particles" in next_ and self.time >= t1:
-            preset_name = next_["particles"]
-            if preset_name in make_particles_presets:
-                new_particles = make_particles_presets[preset_name](item.pos, count=6)
-                item.particles.extend(new_particles)
-
+        # Trigger event or callback from next_ when time >= t1
         if "event" in next_ and self.time >= t1:
             if callable(next_["event"]):
                 next_["event"](item)
@@ -92,7 +86,7 @@ class TrickAnimation:
         if "callback" in next_ and self.time >= t1:
             next_["callback"](item)
 
-        # Advance index if needed
+        # Advance keyframe if needed
         if self.time >= t1:
             self.index += 1
             if self.index >= len(self.keyframes) - 1:
@@ -100,14 +94,15 @@ class TrickAnimation:
                 if self.on_complete:
                     self.on_complete(item)
 
-
-
+        # Store this index to avoid retriggering prev-frame particles
+        self.prev_frame = self.index
 
     def reset(self):
         self.time = 0.0
         self.index = 0
         self.finished = False
         self.prev_frame = None
+
 
 # Example usage:
 kickflip = [

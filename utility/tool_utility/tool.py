@@ -157,8 +157,68 @@ class Tool:
         shadow_img.fill((0, 0, 0, shadow_alpha), special_flags=pygame.BLEND_RGBA_MULT)
         surface.blit(shadow_img, (draw_x, draw_y + 10))
 
+        if hasattr(self, "temperature"):
+            temp = self.temperature
+            max_temp = 1000
+            glow_strength = min(1.0, temp / max_temp)
+
+            if glow_strength > 0.01:
+                # Create a glow surface with the same size
+                glow_surface = pygame.Surface(self._cached_image.get_size(), pygame.SRCALPHA)
+
+                # Create a mask from the rotated image
+                mask = pygame.mask.from_surface(self._cached_image)
+                outline_surface = mask.to_surface(setcolor=(255, 255, 255, 255), unsetcolor=(0, 0, 0, 0))
+
+                # Tint the white surface red-orange based on temperature
+                tint_color = (int(255 * glow_strength), int(32 * glow_strength), 0, int(160 * glow_strength))
+                tint_surface = pygame.Surface(self._cached_image.get_size(), pygame.SRCALPHA)
+                tint_surface.fill(tint_color)
+
+                # Use the mask to apply tint only where visible
+                outline_surface.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+                # Additive blend onto the rotated image
+                # Create a temp copy to draw the glow onto
+                tool_image = self._cached_image.copy()
+                tool_image.blit(outline_surface, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
+
+                # Add a smooth, color-shifting additive glow around hot items
+                if temp >= 200:
+                    glow_strength = min(1.0, (temp - 200) / 800)  # Scale from 0 to 1
+
+                    def lerp(a, b, t): return int(a + (b - a) * t)
+
+                    base_color = (
+                        lerp(255, 255, glow_strength),
+                        lerp(50, 255, glow_strength),
+                        lerp(0, 200, glow_strength)
+                    )
+
+                    for i in range(3):
+                        # Inverse square brightness falloff
+                        ring_strength = glow_strength / ((i + 1) ** 2)
+                        ring_radius = int(self._cached_image.get_width() * (0.6 + 0.2 * i) * glow_strength)
+                        ring_color = tuple(int(c * ring_strength) for c in base_color)
+
+                        if ring_radius > 0:
+                            glow_surface = pygame.Surface((ring_radius * 2, ring_radius * 2), pygame.SRCALPHA)
+                            pygame.draw.circle(
+                                glow_surface,
+                                ring_color,
+                                (ring_radius, ring_radius),
+                                ring_radius
+                            )
+                            surface.blit(
+                                glow_surface,
+                                (self.pos[0] - ring_radius, self.pos[1] - ring_radius),
+                                special_flags=pygame.BLEND_RGB_ADD
+                            )
+
         # Draw actual tool
-        surface.blit(self._cached_image, (draw_x, draw_y))
+        # surface.blit(self._cached_image, (draw_x, draw_y))
+        surface.blit(tool_image, (draw_x, draw_y))
+
 
 
     def set_position(self, pos):

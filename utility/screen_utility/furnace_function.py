@@ -27,13 +27,10 @@ class FurnaceHelper:
 
     def update(self, dt, item_manager):
         MAX_FUEL = 1.0  # Maximum stored fuel level
-
-        # Burn fuel if furnace is active
-        if self.fuel_level > 0 and self.heat_active:
-            self.fuel_level -= dt / 100000  # adjust rate if needed
-            self.fuel_level = max(0.0, self.fuel_level)
+        BASE_DRAIN_RATE = dt / 100000  # base drain rate for 1 item
 
         self.heat_active = False  # Reset; will be set True if anything gets heated
+        active_heating_items = 0
 
         # ----- HANDLE FUEL INPUT -----
         fuel_slot = item_manager.getSlotByName("fuel_input")
@@ -52,7 +49,6 @@ class FurnaceHelper:
                     # Trigger coal shake and ease-up effect
                     self.coal_shake_timer = 200  # ms
                     self.coal_lerp_offset = 1.0
-
 
         # ----- HANDLE HEATING ITEMS -----
         heat_slots = [
@@ -77,7 +73,14 @@ class FurnaceHelper:
                         pass
                     else:
                         item.temperature += dt / 100  # heating rate
+                        active_heating_items += 1
                         self.heat_active = True
+
+        # ----- DRAIN FUEL BASED ON ACTIVE HEATED SLOTS -----
+        if self.fuel_level > 0 and active_heating_items > 0:
+            drain_amount = BASE_DRAIN_RATE * active_heating_items
+            self.fuel_level -= drain_amount
+            self.fuel_level = max(0.0, self.fuel_level)
 
         # ----- Handle glow alpha fade -----
         target_alpha = 255 if self.heat_active else 0
@@ -97,6 +100,7 @@ class FurnaceHelper:
         if self.coal_lerp_offset > 0:
             self.coal_lerp_offset -= dt * self.coal_lerp_speed
             self.coal_lerp_offset = max(0, self.coal_lerp_offset)
+
 
 
 
