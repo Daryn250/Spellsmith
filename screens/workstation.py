@@ -11,7 +11,7 @@ from utility.gui_utility.guiManager import GUIManager
 from utility.item_utility.itemMaker import makeItem
 from utility.tool_utility.tool import Tool
 
-VIRTUAL_SIZE = (960*2, 540*2)
+VIRTUAL_SIZE = (960, 540)
 vscreen = VirtualScreen(VIRTUAL_SIZE)
 FPS = 60
 
@@ -22,7 +22,7 @@ def workstation(screen):
 
     virtual_surface = vscreen.get_surface()
 
-    item_manager = ItemManager()
+    item_manager = ItemManager(VIRTUAL_SIZE)
     cursor_manager = CursorManager(virtual_surface)
     gui_manager = GUIManager()
 
@@ -49,6 +49,11 @@ def workstation(screen):
                 if event.button == 1:  # Left mouse click
                     cursor_manager.click()
                     # Check for input on buttons here:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    from screens.table import table
+                    item_manager.save_items("saves/save1.json")
+                    switcher.start(lambda: table(screen))
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
             ScreenChangeFlag.handle_event(event, item_manager.items, virtual_mouse, screen, switcher, VIRTUAL_SIZE) # rio de janero 2 handle screen change boogaloo
             CharmFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE)

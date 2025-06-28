@@ -249,12 +249,19 @@ class SlotFlag:
                 continue
 
             # --- Prepare ghost image
-            ghost_img = dragged_item.image.copy()
+            if hasattr(dragged_item, "type"):
+                ghost_img = dragged_item.image.copy()
+            else:
+                ghost_img = dragged_item.get_image(virtual_size)
             ghost_img.set_alpha(100)
 
             # Uniform screen scale (dragged item always drawn at scale 1)
-            scale_x = virtual_size[0] / 480
-            scale_y = virtual_size[1] / 270
+            if hasattr(dragged_item, "type"):
+                scale_x = virtual_size[0] / 480
+                scale_y = virtual_size[1] / 270
+            else:
+                scale_x = dragged_item.scale[0]/2
+                scale_y = dragged_item.scale[1]/2
             scaled_size = (
                 int(ghost_img.get_width() * scale_x),
                 int(ghost_img.get_height() * scale_y)
@@ -284,6 +291,15 @@ def is_valid_for_slot(slot, item):
     # Fuel slot restriction
     if slot_name == "fuel_input" and item_type != "fuel":
         return False
+    
+    if slot_name == "weapon_slot1" or slot_name == "weapon_slot2":
+        if hasattr(item, "type"):
+            return False
+    
+    if slot_name in ["furnace_input_1","furnace_input_2","furnace_input_3","furnace_input_4","furnace_input_5"]:
+        if hasattr(item, "tool_type"):
+            return False
+        
 
     # If slot_accepts is empty, accept anything (unless blocked by above)
     if not accepted:
@@ -293,7 +309,7 @@ def is_valid_for_slot(slot, item):
     return item_type in accepted
 
 
-####### NEEDS A REMOVE ITEM FUNCTION AND NEEDS TO CHANGE TO REVERSE GHOST ITEM RENDERING!!!!!!!
+####### NEEDS TO CHANGE TO REVERSE GHOST ITEM RENDERING!!!!!!!
 
 
 

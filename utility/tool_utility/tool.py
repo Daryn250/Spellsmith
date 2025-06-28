@@ -18,6 +18,8 @@ class Tool:
         self.flags = ["tool", "draggable", "tricks"]
         self.pos = pos
         self.layers = []  # now stores file paths instead of surfaces
+        self.particles = []
+        self.scale = [1,1]
 
         if not hasattr(self, "flags"):
             self.flags = []
@@ -30,6 +32,8 @@ class Tool:
         if not hasattr(self, "friction"):
             if self.flags != []:
                 self.friction = 1.05
+        if not hasattr(self, "layer_surfaces"):
+            self.layer_surfaces = []
         if not hasattr(self, "quality_stars"):
             # compute quality in the future
             self.quality_stars = random.randint(1,6)
@@ -59,79 +63,113 @@ class Tool:
 
         self.load_layers()
 
+        manager.add_item(self)
+
     def load_layers(self):
-        """Populates self.layers with ordered image paths."""
+        """Load and cache surfaces for all layers (avoid repeated disk loads)."""
         self.layers.clear()
+        self.layer_surfaces = []
+
         for part in Tool.LAYER_ORDER:
             material = self.nbt.get(part)
             if material:
                 path = f"assets/tools/{self.tool_type}/{part}/{material}.png"
                 if os.path.exists(path):
-                    self.layers.append(path)
+                    try:
+                        surf = pygame.image.load(path).convert_alpha()
+                        self.layer_surfaces.append(surf)
+                    except Exception as e:
+                        print(f"[Tool] Failed to load image: {path} - {e}")
                 else:
                     print(f"[Tool] Missing asset: {path}")
 
+        # ✅ Combine and generate mask *after* layer surfaces are loaded
+        self._base_combined_surface = self._combine_layers()
+        if self._base_combined_surface is not None:
+            x_scale = (self.manager.VIRTUAL_SIZE[0] / 480) * 2
+            y_scale = (self.manager.VIRTUAL_SIZE[1] / 270) * 2
+            scale = min(x_scale, y_scale)
+
+            scaled_surface = pygame.transform.scale(
+                self._base_combined_surface,
+                (
+                    int(self._base_combined_surface.get_width() * scale),
+                    int(self._base_combined_surface.get_height() * scale),
+                )
+            )
+            self._collision_mask = pygame.mask.from_surface(scaled_surface)
+        else:
+            self._collision_mask = None
+
+
+        # Cache for transformed surface
+        self._cached_image = None
+        self._cached_rotation = None
+        self._cached_scale = None
+
+
+    def _combine_layers(self):
+        """Combine layer_surfaces into one surface at original size."""
+        if not self.layer_surfaces:
+            return None
+        max_width = max(s.get_width() for s in self.layer_surfaces)
+        max_height = max(s.get_height() for s in self.layer_surfaces)
+        combined = pygame.Surface((max_width, max_height), pygame.SRCALPHA)
+        for surf in self.layer_surfaces:
+            combined.blit(surf, (0, 0))
+        return combined
 
     def draw(self, surface, VIRTUAL_SIZE, gui_manager, item_manager, rotation_scale):
-        """Draws the full tool with smooth squish, top-left anchoring, and improved rotation."""
         angle = -getattr(self, "rotation", 0)
-        x, y = self.pos
-        ovx = getattr(self, "ovx", 0)
-        ovy = getattr(self, "ovy", 0)
-        rotation_scale = rotation_scale
+        scale_x = (VIRTUAL_SIZE[0] / 480) * 2 * self.scale[0] / rotation_scale
+        scale_y = (VIRTUAL_SIZE[1] / 270) * 2 * self.scale[1] / rotation_scale
 
+        if (self._cached_image is None or
+            self._cached_rotation != angle or
+            self._cached_scale != (scale_x, scale_y)):
 
-        for path in self.layers:
-            if path is None:
-                continue
-            try:
-                base_img = pygame.image.load(path).convert_alpha()
-            except pygame.error:
-                print(f"[Tool] Failed to load image: {path}")
-                continue
+            if self._base_combined_surface is None:
+                return
 
-            # Step 1: Temporarily upscale image to improve rotation smoothness
             upscaled_size = (
-                int(base_img.get_width() * rotation_scale),
-                int(base_img.get_height() * rotation_scale)
+                int(self._base_combined_surface.get_width() * rotation_scale),
+                int(self._base_combined_surface.get_height() * rotation_scale),
             )
-            highres_img = pygame.transform.scale(base_img, upscaled_size)
-
-            # Step 2: Rotate the high-res image
+            highres_img = pygame.transform.scale(self._base_combined_surface, upscaled_size)
             rotated_img = pygame.transform.rotate(highres_img, angle)
-
-           # Step 3: Downscale to screen resolution and squish
-            base_scale_x = (VIRTUAL_SIZE[0] / 480) * 2
-            base_scale_y = (VIRTUAL_SIZE[1] / 270) * 2
-
-            scale_x = base_scale_x * self.squish[0] / rotation_scale
-            scale_y = base_scale_y * self.squish[1] / rotation_scale
-
             final_width = int(rotated_img.get_width() * abs(scale_x))
             final_height = int(rotated_img.get_height() * abs(scale_y))
-            final_size = (final_width, final_height)
+            scaled_img = pygame.transform.scale(rotated_img, (final_width, final_height))
 
-            scaled_img = pygame.transform.scale(rotated_img, final_size)
+            if scale_x < 0 or scale_y < 0:
+                scaled_img = pygame.transform.flip(scaled_img, scale_x < 0, scale_y < 0)
 
-            flip_x = scale_x < 0
-            flip_y = scale_y < 0
+            self._cached_image = scaled_img
+            self._cached_rotation = angle
+            self._cached_scale = (scale_x, scale_y)
 
-            if flip_x or flip_y:
-                scaled_img = pygame.transform.flip(scaled_img, flip_x, flip_y)
+        draw_x = self.pos[0] - self._cached_image.get_width() // 2
+        draw_y = self.pos[1] - self._cached_image.get_height() // 2
 
+        # Draw shadow
+        shadow_img = self._cached_image.copy()
+        shadow_alpha = 100
+        shadow_img.fill((0, 0, 0, shadow_alpha), special_flags=pygame.BLEND_RGBA_MULT)
+        surface.blit(shadow_img, (draw_x, draw_y + 10))
 
-
-            # Draw shadow first
-            shadow_offset = (0, self.floor+10)
-            shadow_img = scaled_img.copy()
-            shadow_alpha = 100
-            shadow_img.fill((0, 0, 0, shadow_alpha), special_flags=pygame.BLEND_RGBA_MULT)
-            surface.blit(shadow_img, (x + shadow_offset[0], shadow_offset[1]))
-
-            # Draw actual item
-            surface.blit(scaled_img, (x, y))
+        # Draw actual tool
+        surface.blit(self._cached_image, (draw_x, draw_y))
 
 
+    def set_position(self, pos):
+        self.pos = pos
+        if "draggable" in self.flags:
+            self.vx = 0
+            self.vy = 0
+            self.floor = pos[1]
+            self.ovx = 0
+            self.ovy = 0
+            self.rotation = 0
 
 
 
@@ -179,49 +217,50 @@ class Tool:
                     self.vy = 0
                     self.vx /= 1.5
 
+            half_width = item_width // 2
+            half_height = item_height // 2
+
             # Left bound
-            if currentX < 0:
-                currentX = 0
+            if currentX - half_width < 0:
+                currentX = half_width
                 self.vx = abs(self.vx) / 1.1
 
-            # Right bound   
-            if currentX + item_width > screenW:   
-                currentX = screenW - item_width   
-                self.vx = -abs(self.vx) / 1.1   
-            # Ceiling   
-            if currentY < 0:   
-                currentY = 0 
-                self.vy = abs(self.vy) / 1.1   
-            # Bottom bound   
-            if currentY + item_height > screenH:   
-                currentY = screenH - item_height   
-                self.vy = abs(self.vy) / 1.1   
+            # Right bound
+            if currentX + half_width > screenW:
+                currentX = screenW - half_width
+                self.vx = -abs(self.vx) / 1.1
+
+            # Top
+            if currentY - half_height < 0:
+                currentY = half_height
+                self.vy = abs(self.vy) / 1.1
+
+            # Bottom
+            if currentY + half_height > screenH:
+                currentY = screenH - half_height
+                self.vy = abs(self.vy) / 1.1
+
    
             self.pos = currentX, currentY   
         pass   
    
     def get_scaled_size(self, screensize):   
         """Returns the pixel-accurate bounding box (width, height) after scaling."""   
-        x_scale = screensize[0] / 480
-        y_scale = screensize[1] / 270
-        scale = min(x_scale*2, y_scale*2)
+        x_scale = (screensize[0] / 480) * 2
+        y_scale = (screensize[1] / 270) * 2
+        scale = min(x_scale, y_scale)
 
         left, top, right, bottom = None, None, None, None
 
-        for path in self.layers:
-            if not path:
-                continue
-            try:
-                img = pygame.image.load(path).convert_alpha()
-            except:
+        for surf in self.layer_surfaces:
+            if not surf:
                 continue
 
-            mask = pygame.mask.from_surface(img)
+            mask = pygame.mask.from_surface(surf)
             rects = mask.get_bounding_rects()
             if not rects:
                 continue  # fully transparent
 
-            # Use union of all bounding rects
             for bbox in rects:
                 if left is None:
                     left, top, right, bottom = bbox.left, bbox.top, bbox.right, bbox.bottom
@@ -238,57 +277,53 @@ class Tool:
         unscaled_height = bottom - top
         return (int(unscaled_width * scale), int(unscaled_height * scale))
 
-
-
-
     def get_combined_surface(self, screensize):
-        # Calculate scale
+        """Returns a combined surface of all layers scaled to the screen size."""
         x_scale = (screensize[0] / 480) * 2
         y_scale = (screensize[1] / 270) * 2
         scale = min(x_scale, y_scale)
 
-        # Determine max width/height of the tool
-        max_width, max_height = 0, 0
         surfaces = []
+        max_width, max_height = 0, 0
 
-        for path in self.layers:
-            if not path:
-                continue
-            try:
-                img = pygame.image.load(path).convert_alpha()
-            except:
-                continue
-
+        for surf in self.layer_surfaces:
             scaled = pygame.transform.scale(
-                img,
-                (int(img.get_width() * scale), int(img.get_height() * scale))
+                surf,
+                (int(surf.get_width() * scale), int(surf.get_height() * scale))
             )
-
             surfaces.append(scaled)
             max_width = max(max_width, scaled.get_width())
             max_height = max(max_height, scaled.get_height())
 
-        # Create blank transparent surface
         combined = pygame.Surface((max_width, max_height), pygame.SRCALPHA)
-        for surf in surfaces:
-            combined.blit(surf, (0, 0))  # Stack layers at (0, 0) offset
+        for s in surfaces:
+            combined.blit(s, (0, 0))
 
         return combined
+
     
     def get_collision_mask(self, screensize):
-        combined_surface = self.get_combined_surface(screensize)
-        return pygame.mask.from_surface(combined_surface)
+        return self._collision_mask
     
     def is_point_inside(self, point, screensize):
         mask = self.get_collision_mask(screensize)
-        rel_x = int(point[0] - self.pos[0])
-        rel_y = int(point[1] - self.pos[1])
+        if mask is None:
+            return False
+
+        rel_x = int(point[0] - (self.pos[0] - mask.get_size()[0] // 2))
+        rel_y = int(point[1] - (self.pos[1] - mask.get_size()[1] // 2))
+
         if 0 <= rel_x < mask.get_size()[0] and 0 <= rel_y < mask.get_size()[1]:
             return mask.get_at((rel_x, rel_y)) == 1
         return False
 
 
+    def get_image(self, screensize):
+        return self.get_combined_surface(screensize)
 
 
-    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager", "layers","trick"]):
+
+
+    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager", "layers", "trick", "layer_surfaces", "_cached_image",
+                              "_base_combined_surface", "_collision_mask"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}

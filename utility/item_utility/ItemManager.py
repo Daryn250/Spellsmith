@@ -7,7 +7,8 @@ from utility.tool_utility.tool import Tool
 from utility.screen_utility.screenManager import *
 
 class ItemManager:
-    def __init__(self):
+    def __init__(self, virtual_size):
+        self.VIRTUAL_SIZE = virtual_size
         self.items = []
 
     def add_item(self, item):

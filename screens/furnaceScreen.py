@@ -23,7 +23,7 @@ def furnaceScreen(screen):
 
     virtual_surface = vscreen.get_surface()
 
-    item_manager = ItemManager()
+    item_manager = ItemManager(VIRTUAL_SIZE)
     cursor_manager = CursorManager(virtual_surface)
     gui_manager = GUIManager(charmboard = False)
 
@@ -54,7 +54,14 @@ def furnaceScreen(screen):
     # Restore furnace state if metadata is available
     elif furnace_data:
         furnace.fuel_level = furnace_data.get("fuel_level", 1.0)
-
+    makeItem(item_manager, "iron_ore", (200,200), "furnaceScreen")
+    Tool(item_manager, "sword", (300, 200), {
+        "blade":"copper",
+        "guard":"titanium",
+        "pommel":"lomium",
+        "handle":"blue",
+        "origin_screen":"furnaceScreen"
+    })
     
 
 
@@ -78,6 +85,7 @@ def furnaceScreen(screen):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     from screens.workstation import workstation
+                    item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
                     switcher.start(lambda: workstation(screen))
 
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
@@ -113,7 +121,7 @@ def furnaceScreen(screen):
         
 
         # save
-        item_manager.save_items("saves/save1.json", extra_screen_data=furnace.get_save_data())
+        
 
 
         #clear screen and draw
