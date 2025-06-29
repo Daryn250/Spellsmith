@@ -34,6 +34,8 @@ def furnaceScreen(screen):
 
     # Attempt to load items and metadata for the screen
     furnace_data = item_manager.load_items("saves/save1.json", "furnaceScreen")
+    # attempt to load the bag
+    gui_manager.bag_manager.load_bag("saves/save1.json", item_manager)
 
     # If loading failed, manually create slots
     if furnace_data is False:
@@ -67,6 +69,7 @@ def furnaceScreen(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 item_manager.save_items("saves/save1.json", "furnaceScreen", extra_screen_data=furnace.get_save_data())
+                gui_manager.save_bag("saves/save1.json")
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
@@ -80,6 +83,7 @@ def furnaceScreen(screen):
                 if event.key == pygame.K_ESCAPE:
                     from screens.workstation import workstation
                     item_manager.save_items("saves/save1.json","furnaceScreen", extra_screen_data=furnace.get_save_data())
+                    gui_manager.save_bag("saves/save1.json")
                     switcher.start(lambda: workstation(screen))
 
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
@@ -121,11 +125,7 @@ def furnaceScreen(screen):
         furnace.draw(virtual_surface, VIRTUAL_SIZE)
 
         # draw items
-        for item in item_manager.items:
-            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, item_manager, 10)
-
-            for p in item.particles:
-                p.draw(virtual_surface)
+        item_manager.draw_with_z_respect(virtual_surface, VIRTUAL_SIZE, gui_manager, 5)
 
 
         # draw slot if available
@@ -134,7 +134,8 @@ def furnaceScreen(screen):
 
 
         # draw guis
-        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse)
+        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse, item_manager)
+        item_manager.draw_dragged_item(virtual_surface, VIRTUAL_SIZE, gui_manager, 5)
 
         
         # draw cursor

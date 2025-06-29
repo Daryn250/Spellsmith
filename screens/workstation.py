@@ -104,9 +104,8 @@ def workstation(screen):
 
 
         # draw guis
-        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse)
+        gui_manager.draw(virtual_surface, VIRTUAL_SIZE, virtual_mouse, item_manager)
 
-        # draw screenswitcher
         
         # draw cursor
         cursor_manager.draw(virtual_surface, virtual_mouse)

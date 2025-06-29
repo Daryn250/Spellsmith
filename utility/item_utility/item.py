@@ -33,6 +33,8 @@ class defaultItem:
         if not hasattr(self, "friction"):
             if self.flags != []:
                 self.friction = 1.05
+        if not hasattr(self, "scale"):
+            self.scale = [0,0]
         
         self.particles = []
         
@@ -76,6 +78,26 @@ class defaultItem:
     def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
+    def draw_at(self, surface, pos, size=None):
+        if self.image is None:
+            return
+
+        # Use base size if not provided
+        if size is None:
+            size = (self.image.get_width(), self.image.get_height())
+
+        # Scale image
+        image = pygame.transform.scale(self.image, size)
+
+        # Optional: draw shadow
+        shadow = image.copy()
+        shadow.fill((0, 0, 0, 100), special_flags=pygame.BLEND_RGBA_MULT)
+        surface.blit(shadow, (pos[0], pos[1] + 10))
+
+        # Draw image centered at pos
+        draw_x = pos[0] - image.get_width() // 2
+        draw_y = pos[1] - image.get_height() // 2
+        surface.blit(image, (draw_x, draw_y))
 
     @property
     def image(self):
@@ -232,6 +254,7 @@ class defaultItem:
             else:
                 print("dt not defined, exiting pygame")
                 pygame.quit()
+        
 
         # Handle rotation logic
         if "draggable" in self.flags:

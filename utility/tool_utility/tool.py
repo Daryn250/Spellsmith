@@ -164,7 +164,7 @@ class Tool:
             temp = self.temperature
             max_temp = 1000
             glow_strength = min(1.0, temp / max_temp)
-
+            tool_image = self._cached_image.copy()
             if glow_strength > 0.01:
                 # Create a glow surface with the same size
                 glow_surface = pygame.Surface(self._cached_image.get_size(), pygame.SRCALPHA)
@@ -183,7 +183,7 @@ class Tool:
 
                 # Additive blend onto the rotated image
                 # Create a temp copy to draw the glow onto
-                tool_image = self._cached_image.copy()
+                
                 tool_image.blit(outline_surface, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
 
                 # Add a smooth, color-shifting additive glow around hot items
@@ -221,6 +221,28 @@ class Tool:
         # Draw actual tool
         # surface.blit(self._cached_image, (draw_x, draw_y))
         surface.blit(tool_image, (draw_x, draw_y))
+
+    def draw_at(self, surface, pos, size=None):
+        if self._base_combined_surface is None:
+            return
+
+        # Use base size if not provided
+        if size is None:
+            size = (self._base_combined_surface.get_width(), self._base_combined_surface.get_height())
+
+        # Scale image
+        image = pygame.transform.scale(self._base_combined_surface, size)
+
+        # Optional: draw shadow
+        shadow = image.copy()
+        shadow.fill((0, 0, 0, 100), special_flags=pygame.BLEND_RGBA_MULT)
+        surface.blit(shadow, (pos[0], pos[1] + 10))
+
+        # Draw image centered at pos
+        draw_x = pos[0] - image.get_width() // 2
+        draw_y = pos[1] - image.get_height() // 2
+        surface.blit(image, (draw_x, draw_y))
+
 
 
 
@@ -305,7 +327,7 @@ class Tool:
 
    
             self.pos = currentX, currentY   
-        pass   
+
    
     def get_scaled_size(self, screensize):   
         """Returns the pixel-accurate bounding box (width, height) after scaling."""   
@@ -387,6 +409,7 @@ class Tool:
 
 
 
-    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager", "layers", "trick", "layer_surfaces", "_cached_image",
-                              "_base_combined_surface", "_collision_mask"]):
+    def to_nbt(self, exclude=["pos", "type", "is_hovered", "ovx", "ovy", "floor", "dragging", "nbt", "manager", "layers", "trick", "layer_surfaces", "_cached_image", "_cached_rotation",
+                              "_cached_scale",
+                              "_base_combined_surface", "_collision_mask", "animation"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}

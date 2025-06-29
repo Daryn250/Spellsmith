@@ -33,27 +33,42 @@ class DraggableFlag:
                         break
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if DraggableFlag.dragging_item != None:
+            if DraggableFlag.dragging_item is not None:
                 item = DraggableFlag.dragging_item
-                
+
+                # 🔻 Try putting it in the bag (if bag window is active)
+                if gui_manager.bag_window:
+                    success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
+                    if success:
+                        # item was added to bag, cancel rest of release logic
+                        DraggableFlag.dragging_item = None
+                        DraggableFlag.last_pos = None
+                        return
+
+                # 🔻 Otherwise, continue with normal item drop logic
                 item.floor = item.pos[1] + 30
                 item.currentGravity = item.storedGravity
+
                 if hasattr(item, "ovx"):
-                    if item.dragging_for>1:
+                    if item.dragging_for > 1:
                         item.vx = item.ovx
                         item.vy = item.ovy
+
                 item.dragging_for = 0
 
-                if hasattr(item, "anchor_pos"):
-                    if item.anchor_pos==None:
-                        HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager, item_manager)
-                if hasattr(item, "anchor"):
-                    if item.anchor == None:
-                        detatch_connected(item, item_list, item_manager)
+                if hasattr(item, "anchor_pos") and item.anchor_pos is None:
+                    HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager, item_manager)
+
+                if hasattr(item, "anchor") and item.anchor is None:
+                    detatch_connected(item, item_list, item_manager)
+
                 SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
+
                 item.dragging = False
+
             DraggableFlag.dragging_item = None
             DraggableFlag.last_pos = None
+
 
         elif event.type == pygame.MOUSEMOTION:
             if DraggableFlag.dragging_item:

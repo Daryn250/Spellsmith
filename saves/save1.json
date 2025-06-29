@@ -48,7 +48,12 @@
             "slot_name": "furnace_input_1",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "f36153b7-bb43-4e8f-9125-1844322b5f63"
+            "uuid": "f36153b7-bb43-4e8f-9125-1844322b5f63",
+            "z": 138.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -67,7 +72,12 @@
             "slot_name": "furnace_input_2",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "c170b8c4-4377-4136-879c-11659de78f13"
+            "uuid": "c170b8c4-4377-4136-879c-11659de78f13",
+            "z": 138.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -86,7 +96,12 @@
             "slot_name": "furnace_input_3",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "471f5972-8d86-4979-b21d-67e1d3a113af"
+            "uuid": "471f5972-8d86-4979-b21d-67e1d3a113af",
+            "z": 138.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -105,7 +120,12 @@
             "slot_name": "furnace_input_4",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "e48ce9ef-d418-4c74-b4b3-461b843ed77b"
+            "uuid": "e48ce9ef-d418-4c74-b4b3-461b843ed77b",
+            "z": 138.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -124,7 +144,12 @@
             "slot_name": "furnace_input_5",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "48b388f5-1bc0-493c-aec6-e3d5ef9945d1"
+            "uuid": "48b388f5-1bc0-493c-aec6-e3d5ef9945d1",
+            "z": 138.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -143,7 +168,12 @@
             "slot_name": "fuel_input",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "c6bf9a7f-0cbd-469d-817c-be74e30dce01"
+            "uuid": "c6bf9a7f-0cbd-469d-817c-be74e30dce01",
+            "z": 450.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -162,7 +192,12 @@
             "slot_name": "weapon_slot1",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "29d7698f-6ba4-4847-8d35-631123dba09a"
+            "uuid": "29d7698f-6ba4-4847-8d35-631123dba09a",
+            "z": 270.0,
+            "scale": [
+                0,
+                0
+            ]
         },
         {
             "type": "slot_node",
@@ -181,37 +216,22 @@
             "slot_name": "weapon_slot2",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
-            "uuid": "4bef74b4-29cb-4db2-bc5c-a36d294d50c5"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                446.224095434041,
-                380.0
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 508.60000000002645,
-            "origin_screen": "furnaceScreen",
-            "animated": false,
-            "friction": 1.05,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 1.1399998945818294e-08,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "uuid": "60422663-6249-4bb5-a1d7-e6ffbca8240a",
-            "dragging_for": 0
-        },
+            "uuid": "4bef74b4-29cb-4db2-bc5c-a36d294d50c5",
+            "z": 270.0,
+            "scale": [
+                0,
+                0
+            ]
+        }
+    ],
+    "_screen_data": {
+        "furnaceScreen": {
+            "fuel_level": 0.6259799999998857
+        }
+    },
+    "bag_contents": [
         {
             "tool_type": "sword",
-            "pos": [
-                805.482410429406,
-                350.0
-            ],
             "flags": [
                 "tool",
                 "draggable",
@@ -226,12 +246,12 @@
             "img_path": "assets/error.png",
             "friction": 1.05,
             "quality_stars": 2,
-            "temperature": 491.6600000000239,
+            "temperature": 0,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 3.619290840196371e-237,
+            "vx": -9.627409071106844e-05,
             "vy": 0,
-            "currentGravity": 0.3,
+            "currentGravity": 0,
             "storedGravity": 0.3,
             "blade": "silver",
             "guard": "silver",
@@ -240,16 +260,45 @@
             "origin_screen": "furnaceScreen",
             "_cached_rotation": -0.0,
             "_cached_scale": [
-                0.4,
-                0.4
+                0.010666666666666557,
+                0.010666666666666557
             ],
             "uuid": "ddbfe213-3931-479e-927f-cff3caee428d",
-            "dragging_for": 0
+            "dragging_for": 25,
+            "state": "free",
+            "pos": [
+                218.0440527034437,
+                382.0
+            ]
+        },
+        {
+            "type": "iron_ore",
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 1094.1499999999498,
+            "origin_screen": "furnaceScreen",
+            "animated": false,
+            "friction": 1.05,
+            "rotation": -16.95734943063303,
+            "rotational_velocity": -0.3196396441019823,
+            "vx": -9.903594816685163e-167,
+            "vy": 0.3,
+            "currentGravity": 0,
+            "storedGravity": 0.3,
+            "uuid": "60422663-6249-4bb5-a1d7-e6ffbca8240a",
+            "dragging_for": 25,
+            "z": 330.3,
+            "state": "free",
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "pos": [
+                209.44723128821886,
+                334.0
+            ]
         }
-    ],
-    "_screen_data": {
-        "furnaceScreen": {
-            "fuel_level": 0.0
-        }
-    }
+    ]
 }

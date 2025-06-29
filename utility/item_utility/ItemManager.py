@@ -128,11 +128,53 @@ class ItemManager:
             if getattr(item, "contains", None) == uuid:
                 item.contains = None
 
+    def draw_with_z_respect(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
+        dragged_item = None
+        items_to_draw = []
+
+        for item in self.items:
+            is_dragged = getattr(item, "dragging", False)
+            is_animating = hasattr(item, "animation") and not item.animation.finished
+
+            if is_dragged:
+                dragged_item = item  # Save for draw_dragged_item
+            elif is_animating:
+                continue  # Skip for now, will be drawn later
+            else:
+                items_to_draw.append(item)
+
+        # Sort by Y position
+        items_to_draw.sort(key=lambda item: item.pos[1])
+
+        for item in items_to_draw:
+            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
+            for p in item.particles:
+                p.draw(virtual_surface)
+
+
+    def draw_dragged_item(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
+        for item in self.items:
+            is_dragged = getattr(item, "dragging", False)
+            is_animating = hasattr(item, "animation") and not item.animation.finished
+
+            if is_dragged or is_animating:
+                item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
+                for p in item.particles:
+                    p.draw(virtual_surface)
+
+
+
 
 
     def getItemByUUID(self, uuid):
         for item in self.items:
             if item.uuid == uuid:
+                return item
+        return None
+    
+    def get_dragged(self):
+        for item in self.items:
+            if getattr(item, "dragging", False) == True:
                 return item
         return None
     

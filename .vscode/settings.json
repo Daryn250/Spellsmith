@@ -1,0 +1,33 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "spellsmithAgain\\screens\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\",
+            "color": "foldercolorizer.color_00cc00"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\cursor_utility\\",
+            "color": "foldercolorizer.color_6600cc",
+            "badge": "CS"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\gui_utility\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\item_utility\\",
+            "color": "foldercolorizer.color_3366ff"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\screen_utility\\",
+            "color": "foldercolorizer.color_66ccff"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\tool_utility\\",
+            "color": "foldercolorizer.color_cc0066"
+        }
+    ]
+}

@@ -99,7 +99,7 @@ class BagManager:
 
         for entry in bag_data:
             try:
-                item_type = entry.get("type")
+                item_type = entry.get("type") or entry.get("tool_type")
                 pos = tuple(entry.get("pos", (0, 0)))
                 extra_nbt = {k: v for k, v in entry.items() if k not in {"type", "pos"}}
 
@@ -111,3 +111,4 @@ class BagManager:
 
         return True
 
+#### modify this to work similar to the load data in item_manager

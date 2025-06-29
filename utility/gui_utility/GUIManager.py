@@ -62,56 +62,68 @@ class GUIManager:
 
         self.bag_manager.hover_info = None
 
-    def draw(self, screen, screensize, mouse_pos):
+    def draw(self, screen, screensize, mouse_pos, item_manager):
         screen_width, screen_height = screen.get_size()
+        dragged_item = item_manager.get_dragged()
 
-        # Draw charmboard
+        # ---- Charmboard ----
         if self.drawCharmBoard:
             img_width, img_height = self.charmboard_img.get_size()
-            scaled = (img_width * (screensize[0] / 480), img_height * (screensize[1] / 270))
-            new_img = pygame.transform.scale(self.charmboard_img, scaled)
+            scale_x = screensize[0] / 480
+            scale_y = screensize[1] / 270
+            scaled_size = (int(img_width * scale_x), int(img_height * scale_y))
 
-            top_right_pos = (screen_width - scaled[0] * 1.25, 25)
+            new_img = pygame.transform.scale(self.charmboard_img, scaled_size)
+            top_right_pos = (screen_width - scaled_size[0] * 1.25, 25)
             screen.blit(new_img, top_right_pos)
             self.charmboard_topright = top_right_pos
 
-        # Draw bag icon
+        # ---- Bag Icon ----
         if self.drawBag:
             bag_width, bag_height = self.bag_img.get_size()
-            bag_scaled = (
-                bag_width * (screensize[0] / 480),
-                bag_height * (screensize[1] / 270)
-            )
-            bag_img_scaled = pygame.transform.scale(self.bag_img, bag_scaled)
+            scale_x = screensize[0] / 480
+            scale_y = screensize[1] / 270
+            bag_scaled = (int(bag_width * scale_x), int(bag_height * scale_y))
 
+            bag_img_scaled = pygame.transform.scale(self.bag_img, bag_scaled)
             bottom_left_pos = (25, screen_height - bag_scaled[1] - 25)
             screen.blit(bag_img_scaled, bottom_left_pos)
 
+            # Update bag hover rect
             self.bag_manager.bag_rect = pygame.Rect(bottom_left_pos, bag_scaled)
             self.bag_manager.update(mouse_pos)
 
+            # Optional hover info
             if self.bag_manager.hover_info:
                 font = pygame.font.SysFont(None, 20)
                 info_pos = (bottom_left_pos[0] + bag_scaled[0] + 10, bottom_left_pos[1])
                 self.bag_manager.hover_info.draw(screen, info_pos, font)
 
-        # Draw nails
+        # ---- Draw Charm Nails ----
         for img, x, y in self.nails:
             screen.blit(img, (x, y))
         self.nails.clear()
 
-        # Draw the top window (bag window)
+        # ---- Draw Top-Level Windows (like the Bag) ----
         if self.windows:
             window = self.windows[0]
+
+            # Allow window to update its position if animating
             if hasattr(window, "update_position"):
                 window.update_position()
-            # Draw using current animated position (window.pos)
-            window.draw(screen, window.pos, mouse_pos)
 
-        # Draw quick menu if any
+            # Special-case for BagWindow: pass dragged item for interaction
+            if window == self.bag_window:
+                window.draw(screen, window.pos, mouse_pos, dragged_item)
+            else:
+                window.draw(screen, window.pos, mouse_pos)
+
+        # ---- Draw Quick Menu ----
         if self.quick_menu:
             self.quick_menu.draw(screen)
 
+    def save_bag(self, filepath):
+        self.bag_manager.save_bag(filepath)
 
 open_animation = [
     {"time": 0.0, "scale": (0.0, 0.0)},
