@@ -72,11 +72,15 @@ class BaseScreen:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.save_items("saves/save1.json")
+                self.gui_manager.bag_manager.save_bag("saves/save1.json")
                 pygame.quit()
                 sys.exit()
 
             if event.type == pygame.VIDEORESIZE:
                 self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+
+            if hasattr(self.helper, "handleEvents"):
+                self.helper.handleEvents(event, virtual_mouse)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.cursor_manager.click()
@@ -144,7 +148,15 @@ class BaseScreen:
         SlotFlag.draw_overlay(self.virtual_surface, self.item_manager.items, dragged, virtual_mouse, self.virtual_size)
 
         if self.draw_bag or self.draw_charmboard:
-            self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
+            if self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui:
+                pass  # Skip drawing GUI when hammering
+            else:
+                if self.draw_bag or self.draw_charmboard:
+                    self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
+
+        if self.helper and hasattr(self.helper, "draw_after_gui"):
+            self.helper.draw_after_gui(self.virtual_surface, self.virtual_size)
+
 
         self.item_manager.draw_dragged_item(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
         self.cursor_manager.draw(self.virtual_surface, virtual_mouse)

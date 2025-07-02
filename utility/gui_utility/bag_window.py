@@ -27,11 +27,12 @@ class BagWindow:
             self.animation.update(dt, self, virtual_size)
 
         # Add physics/logic update for bag contents
-        for item in self.bag.contents:
-            item.update(None, gui_manager, virtual_size, bounds=self.get_bounds_rect(), dt=dt)
-            for p in item.particles:
-                p.update()
-            item.particles = [p for p in item.particles if p.is_alive()]
+        if self.animation.finished:
+            for item in self.bag.contents:
+                item.update(None, gui_manager, virtual_size, bounds=self.get_bounds_rect(), dt=dt)
+                for p in item.particles:
+                    p.update()
+                item.particles = [p for p in item.particles if p.is_alive()]
 
     def get_bounds_rect(self):
         x, y = self.pos
