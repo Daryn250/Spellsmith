@@ -6,6 +6,9 @@ from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.item_utility.itemMaker import makeItem
 from screens.table import table  # Import early to support previous_screen lambda
 
+def formattedScreenName():
+    return "Workstation"
+
 def default_items_func(item_manager):
     makeItem(item_manager, "furnace", (200, 300), "workstation")
     makeItem(item_manager, "anvil", (400, 300), "workstation")

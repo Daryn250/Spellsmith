@@ -39,7 +39,7 @@ class BaseScreen:
 
         self.item_manager = ItemManager(virtual_size)
         self.cursor_manager = CursorManager(self.virtual_surface)
-        self.gui_manager = GUIManager(charmboard=draw_charmboard)
+        self.gui_manager = GUIManager(self, charmboard=draw_charmboard)
         self.clock = pygame.time.Clock()
 
     def load_items(self, save_path):

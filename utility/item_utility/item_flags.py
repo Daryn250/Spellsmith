@@ -378,9 +378,10 @@ class TrickFlag:
             TrickFlag.active_item = None
 
         # Safety: If left mouse is clicked, cancel menu too
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if gui_manager.quick_menu:
-                gui_manager.quick_menu.hide()
-            TrickFlag.right_mouse_held = False
-            TrickFlag.active_item = None
+        if False: #### never get to here yet.
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if gui_manager.quick_menu:
+                    gui_manager.quick_menu.hide()
+                TrickFlag.right_mouse_held = False
+                TrickFlag.active_item = None
 

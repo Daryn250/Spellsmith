@@ -3,6 +3,9 @@ from utility.screen_utility.furnace_function import FurnaceHelper
 from utility.item_utility.itemMaker import makeItem
 from screens.workstation import workstation
 
+def formattedScreenName():
+    return "Furnace"
+
 def furnace_default_items(manager):
     named_slots = [
         ("furnace_input_1", (32, 23)),

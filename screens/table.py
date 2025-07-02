@@ -5,6 +5,8 @@ from utility.screen_utility.baseScreen import BaseScreen
 from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.item_utility.itemMaker import makeItem
 
+def formattedScreenName():
+    return "Table"
 
 def default_items_func(item_manager):
     return # none for now :)

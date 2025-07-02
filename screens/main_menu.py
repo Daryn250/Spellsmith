@@ -9,6 +9,9 @@ from utility.button import Button
 
 from screens.table import table  # next screen
 
+def formattedScreenName():
+    return "Main Menu"
+
 class MainMenuHelper:
     def __init__(self, screen_size):
         self.bg_tile = AnimatedTile("assets/ocean", frame_duration=150)

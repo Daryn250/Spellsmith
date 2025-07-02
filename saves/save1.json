@@ -24,7 +24,7 @@
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
-            "vy": 0,
+            "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "uuid": "ad67f256-f069-4147-aec6-baf07f776bd9",
@@ -54,7 +54,7 @@
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
-            "vy": 0.3,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "uuid": "0c33290b-0962-414a-9c8e-cbe466235db2",
@@ -251,7 +251,7 @@
     ],
     "_screen_data": {
         "furnaceScreen": {
-            "fuel_level": 1
+            "fuel_level": 1.0
         }
     }
 }
