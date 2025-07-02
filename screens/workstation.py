@@ -68,7 +68,7 @@ def workstation(screen):
                 item.trick.update(dt / 1000.0, item, VIRTUAL_SIZE)
                 if item.trick.finished:
                     item.trick = None
-            item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt)
+            item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt=dt)
 
             for p in item.particles:
                 p.update()

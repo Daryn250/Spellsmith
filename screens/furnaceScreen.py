@@ -58,8 +58,6 @@ def furnaceScreen(screen):
         furnace.fuel_level = furnace_data.get("fuel_level", 1.0)
 
 
-    
-
 
     # run table
     while True:
@@ -87,6 +85,7 @@ def furnaceScreen(screen):
                     switcher.start(lambda: workstation(screen))
 
             DraggableFlag.handle_event(event, item_manager.items, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager) # rio de janero handle draggable items
+            DraggableFlag.handle_event(event, gui_manager.bag_manager.contents, virtual_mouse, VIRTUAL_SIZE, gui_manager, item_manager)
             if DraggableFlag.dragging_item != None:
                 if getattr(DraggableFlag.dragging_item, "temperature", 0) > 200:
                     cursor_manager.set_cursor("tongs", virtual_surface, "assets/cursor/tongs")
@@ -105,7 +104,7 @@ def furnaceScreen(screen):
                 item.trick.update(dt / 1000.0, item, VIRTUAL_SIZE)
                 if item.trick.finished:
                     item.trick = None
-            item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt)
+            item.update(virtual_surface, gui_manager, VIRTUAL_SIZE, dt=dt)
 
             for p in item.particles:
                 p.update()

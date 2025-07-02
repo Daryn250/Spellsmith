@@ -41,9 +41,14 @@ class DraggableFlag:
                     success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
                     if success:
                         # item was added to bag, cancel rest of release logic
+                        item.dragging = False #### this line is needed but when added causes items to drop at the borders even when not placed there
                         DraggableFlag.dragging_item = None
                         DraggableFlag.last_pos = None
+                        item.floor = item.pos[1] + 15
+                        item.currentGravity = item.storedGravity/2
+                        
                         return
+                        
 
                 # 🔻 Otherwise, continue with normal item drop logic
                 item.floor = item.pos[1] + 30

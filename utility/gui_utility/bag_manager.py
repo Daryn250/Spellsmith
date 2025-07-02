@@ -1,7 +1,9 @@
 import os
 import json
+import random
 from .hoverWindow import *
-from utility.item_utility.itemMaker import makeItem
+from utility.item_utility.item import defaultItem
+from utility.tool_utility.tool import Tool
 
 class BagManager:
     def __init__(self, capacity=10):
@@ -99,16 +101,23 @@ class BagManager:
 
         for entry in bag_data:
             try:
-                item_type = entry.get("type") or entry.get("tool_type")
-                pos = tuple(entry.get("pos", (0, 0)))
-                extra_nbt = {k: v for k, v in entry.items() if k not in {"type", "pos"}}
+                pos = tuple(entry["pos"])
+                nbt = {k: v for k, v in entry.items() if k not in {"type", "tool_type", "pos"}}
 
-                # makeItem adds the item to item_manager automatically
-                new_item_obj = makeItem(item_manager, item_type, pos, screen_name, extra_nbt)
-                self.contents.append(new_item_obj.item)
+                if "tool_type" in entry:
+                    tool_type = entry["tool_type"]
+                    item = Tool(item_manager, tool_type, pos, nbt)
+                    self.contents.append(item)
+
+                elif "type" in entry:
+                    item_type = entry["type"]
+                    item = defaultItem(item_manager, item_type, pos, nbt)
+                    self.contents.append(item)
+
+                else:
+                    raise ValueError("Item entry missing both 'type' and 'tool_type' fields")
+
             except Exception as e:
-                print(f"[BagManager] Failed to load item: {entry} - {e}")
+                print(f"[ItemManager] Failed to load item: {entry.get('uuid', 'unknown')} - {e}")
 
         return True
-
-#### modify this to work similar to the load data in item_manager

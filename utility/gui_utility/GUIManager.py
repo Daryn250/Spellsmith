@@ -26,7 +26,7 @@ class GUIManager:
             self.quick_menu.update(dt, mouse)
         
         if self.bag_window in self.windows:
-            self.bag_window.update(virtual_size, dt)
+            self.bag_window.update(virtual_size, dt, self)
 
     def handleEvent(self, event, mouse):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:  # Right-click on bag icon
@@ -114,9 +114,9 @@ class GUIManager:
 
             # Special-case for BagWindow: pass dragged item for interaction
             if window == self.bag_window:
-                window.draw(screen, window.pos, mouse_pos, dragged_item)
+                window.draw(screen, window.pos, mouse_pos, screensize, dragged_item)
             else:
-                window.draw(screen, window.pos, mouse_pos)
+                window.draw(screen, window.pos, mouse_pos, screensize)
 
         # ---- Draw Quick Menu ----
         if self.quick_menu:

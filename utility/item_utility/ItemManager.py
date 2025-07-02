@@ -101,6 +101,7 @@ class ItemManager:
                 if "tool_type" in entry:
                     tool_type = entry["tool_type"]
                     item = Tool(self, tool_type, pos, nbt)
+                    self.items.append(item)
 
                 elif "type" in entry:
                     item_type = entry["type"]

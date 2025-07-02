@@ -34,7 +34,7 @@ class defaultItem:
             if self.flags != []:
                 self.friction = 1.05
         if not hasattr(self, "scale"):
-            self.scale = [0,0]
+            self.scale = [1,1]
         
         self.particles = []
         
@@ -235,81 +235,85 @@ class defaultItem:
                                 (center_x - ring_radius, center_y - ring_radius),
                                 special_flags=pygame.BLEND_RGB_ADD
                             )
-
-
-
-
-
         # Finally draw the rotated image centered at self.pos
         surface.blit(rotated_img, rotated_rect.topleft)
 
 
 
-    def update(self, screen, gui_manager, virtual_size, dt=None):
+    def update(self, screen, gui_manager, virtual_size, bounds=None, dt=None):
         """Update physics, animation, and rotation for the item."""
-
         if self.animated:
             if dt:
                 self.img.update(dt)
             else:
                 print("dt not defined, exiting pygame")
                 pygame.quit()
-        
 
-        # Handle rotation logic
         if "draggable" in self.flags:
             self.rotation += self.rotational_velocity
-            self.rotational_velocity *= 0.85  # Friction decay
+            self.rotational_velocity *= 0.85
             if abs(self.rotation) < 0.1:
                 self.rotation = 0.0
                 self.rotational_velocity = 0.0
             else:
                 self.rotation *= 0.9
 
+            # 📦 Use bounded area if provided (like for BagWindow), otherwise screen
+            if bounds is not None and self in gui_manager.bag_manager.contents and getattr(self, "state", None) == "bagged":
+                screenX, screenY, screenW, screenH = bounds
+            elif screen is not None:
+                screenX, screenY, screenW, screenH = 0, 0, screen.get_width(), screen.get_height()
+            else:
+                screenX, screenY, screenW, screenH = 0, 0, 480, 270  # fallback
 
-            # Physics & bounds
-            screenW, screenH = screen.get_size()
+
             currentX, currentY = self.pos
 
-            # Apply velocity
-            if self.dragging!=True:
+            # Apply velocity if not being dragged
+            if not self.dragging:
                 currentX += self.vx
                 currentY += self.vy
 
-            # Apply friction (to gradually reduce movement)
             self.vx /= self.friction
-
-            # Gravity
             self.vy += self.currentGravity
 
-            # Bounds and bounce
-            item_width, item_height = self.image.get_size()
+            # Bounds — use scaled image if possible
+            if hasattr(self, "get_scaled_size"):
+                item_width, item_height = self.get_scaled_size(virtual_size)
+            else:
+                item_width, item_height = self.image.get_size()
+
+            half_width = item_width // 2
+            half_height = item_height // 2
 
             # Floor bounce
-            if not self.dragging:
+            if not self.dragging and self.vy > 0:
                 if currentY > self.floor:
                     currentY = self.floor
                     self.vy = 0
-                    self.vx /=1.5
-            # Left bound
-            if currentX < 0:
-                currentX = 0
-                self.vx = abs(self.vx) / 1.1
+                    self.vx /= 1.5
+            
+            if not self.dragging:
 
-            # Right bound
-            if currentX + item_width > screenW:
-                currentX = screenW - item_width
-                self.vx = -abs(self.vx) / 1.1
-            # Ceiling
-            if currentY < 0:
-                currentY = 0
-                self.vy = abs(self.vy) / 1.1
-            # Bottom bound
-            if currentY + item_height > screenH:
-                currentY = screenH - item_height
-                self.vy = abs(self.vy) / 1.1
+            # Edge bounds
+                if currentX - half_width < screenX:
+                    currentX = screenX + half_width
+                    self.vx = abs(self.vx) / 1.1
 
-            self.pos = currentX, currentY
+                if currentX + half_width > screenX + screenW:
+                    currentX = screenX + screenW - half_width
+                    self.vx = -abs(self.vx) / 1.1
+
+                if currentY - half_height < screenY:
+                    currentY = screenY + half_height
+                    self.vy = abs(self.vy) / 1.1
+
+                if currentY + half_height > screenY + screenH:
+                    currentY = screenY + screenH - half_height
+                    self.vy = abs(self.vy) / 1.1
+
+
+            self.pos = (currentX, currentY)
 
         if "charm" in self.flags:
             if self.is_clicked:

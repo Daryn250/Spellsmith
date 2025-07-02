@@ -66,7 +66,7 @@ class Tool:
 
         self.load_layers()
 
-        manager.add_item(self)
+        
 
     def load_layers(self):
         """Load and cache surfaces for all layers (avoid repeated disk loads)."""
@@ -219,29 +219,7 @@ class Tool:
                             )
 
         # Draw actual tool
-        # surface.blit(self._cached_image, (draw_x, draw_y))
         surface.blit(tool_image, (draw_x, draw_y))
-
-    def draw_at(self, surface, pos, size=None):
-        if self._base_combined_surface is None:
-            return
-
-        # Use base size if not provided
-        if size is None:
-            size = (self._base_combined_surface.get_width(), self._base_combined_surface.get_height())
-
-        # Scale image
-        image = pygame.transform.scale(self._base_combined_surface, size)
-
-        # Optional: draw shadow
-        shadow = image.copy()
-        shadow.fill((0, 0, 0, 100), special_flags=pygame.BLEND_RGBA_MULT)
-        surface.blit(shadow, (pos[0], pos[1] + 10))
-
-        # Draw image centered at pos
-        draw_x = pos[0] - image.get_width() // 2
-        draw_y = pos[1] - image.get_height() // 2
-        surface.blit(image, (draw_x, draw_y))
 
 
 
@@ -258,14 +236,8 @@ class Tool:
 
 
 
-
-
-    
-
-
-    def update(self, screen, gui_manager, VIRTUAL_SIZE, dt):
+    def update(self, screen, gui_manager, VIRTUAL_SIZE, bounds=None, dt = None):
         if "draggable" in self.flags:
-            # Don't decay rotation if trick is active
             if not hasattr(self, "trick") or getattr(self.trick, "finished", True):
                 self.rotation += self.rotational_velocity
                 self.rotational_velocity *= 0.85
@@ -275,58 +247,58 @@ class Tool:
                 else:
                     self.rotation *= 0.9
 
+            # Only use bounds if item is still considered inside the bag
+            if bounds is not None and self in gui_manager.bag_manager.contents and getattr(self, "state", None) == "bagged":
+                screenX, screenY, screenW, screenH = bounds
+            elif screen is not None:
+                screenX, screenY, screenW, screenH = 0, 0, screen.get_width(), screen.get_height()
+            else:
+                screenX, screenY, screenW, screenH = 0, 0, 480, 270  # fallback
 
-            # Physics & bounds
-            screenW, screenH = screen.get_size()
+
             currentX, currentY = self.pos
 
-            # Apply velocity
-            if self.dragging!=True:
+            if not self.dragging:
                 currentX += self.vx
                 currentY += self.vy
 
-            # Apply friction (to gradually reduce movement)
             self.vx /= self.friction
-
-            # Gravity
             self.vy += self.currentGravity
 
-            # Bounds and bounce
             item_width, item_height = self.get_scaled_size(VIRTUAL_SIZE)
+            half_width = item_width // 2
+            half_height = item_height // 2
 
-
-            # Floor bounce — only if not dragging and falling down
+            # Floor bounce
             if not self.dragging and self.vy > 0:
                 if currentY > self.floor:
                     currentY = self.floor
                     self.vy = 0
                     self.vx /= 1.5
 
-            half_width = item_width // 2
-            half_height = item_height // 2
+                # Left bound
+            if not self.dragging:
+                if currentX - half_width < screenX:
+                    currentX = screenX + half_width
+                    self.vx = abs(self.vx) / 1.1
 
-            # Left bound
-            if currentX - half_width < 0:
-                currentX = half_width
-                self.vx = abs(self.vx) / 1.1
+                # Right bound
+                if currentX + half_width > screenX + screenW:
+                    currentX = screenX + screenW - half_width
+                    self.vx = -abs(self.vx) / 1.1
 
-            # Right bound
-            if currentX + half_width > screenW:
-                currentX = screenW - half_width
-                self.vx = -abs(self.vx) / 1.1
+                # Top
+                if currentY - half_height < screenY:
+                    currentY = screenY + half_height
+                    self.vy = abs(self.vy) / 1.1
 
-            # Top
-            if currentY - half_height < 0:
-                currentY = half_height
-                self.vy = abs(self.vy) / 1.1
+                # Bottom
+                if currentY + half_height > screenY + screenH:
+                    currentY = screenY + screenH - half_height
+                    self.vy = abs(self.vy) / 1.1
 
-            # Bottom
-            if currentY + half_height > screenH:
-                currentY = screenH - half_height
-                self.vy = abs(self.vy) / 1.1
+            self.pos = currentX, currentY
 
-   
-            self.pos = currentX, currentY   
 
    
     def get_scaled_size(self, screensize):   
