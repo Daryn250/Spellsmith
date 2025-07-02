@@ -1,7 +1,7 @@
 import pygame
 import screens.main_menu as main_menu
-import screens.testing as test
 import screens.workstation as workstation
+import screens.furnaceScreen as furnaceScreen
 
 def run_game():
     pygame.init()

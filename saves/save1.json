@@ -3,14 +3,14 @@
         {
             "type": "furnace",
             "pos": [
-                687.0,
-                163.5976680384088
+                690.0,
+                162
             ],
             "flags": [
                 "draggable",
                 "screen_change",
                 "no_shadow",
-                "nonbaggable"
+                "unbaggable"
             ],
             "img_path": "assets/screens/workstation/furnace.png",
             "animated": false,
@@ -24,17 +24,234 @@
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "ad67f256-f069-4147-aec6-baf07f776bd9",
+            "dragging_for": 0
+        },
+        {
+            "type": "anvil",
+            "pos": [
+                323.0,
+                354
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "no_shadow",
+                "unbaggable"
+            ],
+            "img_path": "assets/screens/workstation/anvil.png",
+            "animated": false,
+            "next_screen": "anvilScreen",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "workstation",
+            "friction": 1.05,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
             "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "uuid": "b5316c0c-8531-4afd-b992-9c458aacd679",
+            "uuid": "0c33290b-0962-414a-9c8e-cbe466235db2",
             "dragging_for": 0
+        }
+    ],
+    "bag_contents": [],
+    "table": [],
+    "furnaceScreen": [
+        {
+            "type": "slot_node",
+            "pos": [
+                192.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "1a735e60-d5d2-4d1f-9ace-37bfde5ae9ae"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                336.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "f4592705-17b6-411f-9322-722a4b6dbf11"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                480.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_3",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "9e066bb5-6f1f-4c03-812e-37a9396efff8"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                624.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_4",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "7348841f-3007-4348-93e7-513ee2d1e66c"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                768.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_5",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "44c5de7d-0b4d-4b38-b792-acd4eca21803"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                480.0,
+                450.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "fuel_input",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "4e8f26c9-3779-43b5-af0c-69025299407e"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                252.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot1",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "c6bb8120-5c02-4a95-8b77-3b629c34c063"
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                720.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot2",
+            "origin_screen": "furnaceScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "d5ee97f4-b1d6-4b63-889d-c6542353ae8f"
         }
     ],
     "_screen_data": {
         "furnaceScreen": {
-            "fuel_level": 1.6259799999998857
+            "fuel_level": 1
         }
-    },
-    "bag_contents": []
+    }
 }

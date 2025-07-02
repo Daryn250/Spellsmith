@@ -100,6 +100,7 @@ class Particle:
         # --- Static fallback (no animated tile)
         else:
             # Optional: draw soft glow
+            dim_alpha = 255
             if self.glow:
                 max_glow_radius = self.size * self.glowstrength
                 glow_surf = pygame.Surface((max_glow_radius * 2, max_glow_radius * 2), pygame.SRCALPHA)

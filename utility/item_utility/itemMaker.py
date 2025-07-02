@@ -16,10 +16,20 @@ ITEM_BASES = {
     "furnace": {
         "type": "furnace",
         "nbt": {
-            "flags": ["draggable", "screen_change", "no_shadow"],
+            "flags": ["draggable", "screen_change", "no_shadow", "unbaggable"],
             "img_path": "assets/screens/workstation/furnace.png",  # optional fallback
             "animated": False,
             "next_screen":"furnaceScreen",
+            "scale":(2,2)
+        }
+    },
+    "anvil": {
+        "type": "anvil",
+        "nbt": {
+            "flags": ["draggable", "screen_change", "no_shadow", "unbaggable"],
+            "img_path": "assets/screens/workstation/anvil.png",  # optional fallback
+            "animated": False,
+            "next_screen":"anvilScreen",
             "scale":(2,2)
         }
     },

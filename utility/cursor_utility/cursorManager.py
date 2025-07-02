@@ -11,6 +11,8 @@ class CursorManager:
                 self.current_cursor = TongsCursor(screen, filepath)
             elif cursor == "base":
                 self.current_cursor = BaseCursor(screen, filepath)
+            elif cursor == "hammer":
+                self.current_cursor = HammerCursor(screen, filepath)
         else:
             self.current_cursor = cursor
 
