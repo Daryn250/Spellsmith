@@ -30,14 +30,14 @@ class GravityTarget:
         self.vx *=0.95
         self.vy *=0.95
         return int(self.x), int(self.y)
-
+from utility.settingsManager import get_font
 class HammerMiniGame:
     def __init__(self, virtual_size, difficulty, clip_rect, screen, on_finish = None):
-        self.font = pygame.font.Font("assets/GothicByte.ttf", 15)
+        self.font = pygame.font.Font(get_font(), 15)
         self.virtual_size = virtual_size
         self.clip_rect = clip_rect
 
-        self.difficulty = max(1, difficulty)
+        self.difficulty = round(max(1, difficulty/1.1))
 
         self.target_radius = 40
         self.target_timer = 0
@@ -98,7 +98,7 @@ class HammerMiniGame:
                 self.targets.append((cx, cy))
 
         self.target_timer = self.time_per_target
-        self.max_score = self.target_count * 1.5
+        self.max_score = self.target_count * 1.25
 
 
 
@@ -242,7 +242,7 @@ class HammerMiniGame:
         surface.blit(score_surface, (bar_x, bar_y + 18))
         surface.blit(target_surface, (bar_x, bar_y + 50))
 
-        self.draw_debug_paths(surface)
+        #self.draw_debug_paths(surface)
 
 
         surface.set_clip(prev_clip)

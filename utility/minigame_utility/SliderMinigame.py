@@ -2,12 +2,12 @@ import pygame
 import random
 import math
 from utility.particle import make_particles_presets  # if not already imported
-
+from utility.settingsManager import get_font
 
 
 class SliderMinigame:
     def __init__(self, virtual_size, difficulty, clip_rect, screen, on_finish=None):
-        self.font = pygame.font.Font("assets/GothicByte.ttf", 16)
+        self.font = pygame.font.Font(get_font(), 16)
         self.clip_rect = clip_rect
         self.screen = screen
         self.on_finish_callback = on_finish
@@ -22,30 +22,25 @@ class SliderMinigame:
         self.particles = []
         self.locked = False
 
-
         self.rough = 0
-        self.coarse = 0
         self.fine = 0
 
         self.slider_width = 240
         self.slider_height = 30
-        self.slider_spacing = 50
+        self.slider_spacing = 60  # increased spacing
         self.slider_bar_color = (120, 120, 120)
         self.slider_fill_color = (0, 200, 255)
 
         cx = clip_rect.centerx
-        bottom = clip_rect.bottom - 100
+        bottom = clip_rect.bottom - 60  # moved down
 
         self.slider_rects = [
-            pygame.Rect(cx - self.slider_width // 2, bottom - self.slider_spacing * 2, self.slider_width, self.slider_height),
-            pygame.Rect(cx - self.slider_width // 2, bottom - self.slider_spacing, self.slider_width, self.slider_height),
-            pygame.Rect(cx - self.slider_width // 2, bottom, self.slider_width, self.slider_height),
+            pygame.Rect(cx - self.slider_width // 2, bottom - self.slider_spacing, self.slider_width, self.slider_height),  # Rough
+            pygame.Rect(cx - self.slider_width // 2, bottom, self.slider_width, self.slider_height),                        # Fine
         ]
 
         self.hitboxes = [r.inflate(0, 10) for r in self.slider_rects]
-        self.dragging = [False, False, False]
-
-        self.particles = []
+        self.dragging = [False, False]
 
     def update(self, dt, virtual_mouse):
         if self.finished:
@@ -61,10 +56,9 @@ class SliderMinigame:
         self.particles = [p for p in self.particles if p.is_alive()]
 
         # Auto-lock if correct number hit
-        if not self.locked and (self.rough + self.coarse + self.fine) == self.target:
+        if not self.locked and self.total_value() == self.target:
             self.locked = True
             self.spawn_stars()
-
 
     def handle_event(self, event, virtual_mouse):
         if self.finished or self.locked:
@@ -78,17 +72,15 @@ class SliderMinigame:
                     self.dragging[i] = True
 
         if event.type == pygame.MOUSEBUTTONUP:
-            self.dragging = [False, False, False]
+            self.dragging = [False, False]
 
         if event.type == pygame.MOUSEMOTION:
-            for i in range(3):
+            for i in range(2):
                 if self.dragging[i]:
                     ratio = (mx - self.slider_rects[i].left) / self.slider_width
                     ratio = max(0, min(1, ratio))
                     if i == 0:
                         self.rough = round(ratio * 10) * 10
-                    elif i == 1:
-                        self.coarse = round(ratio * 10) * 5
                     else:
                         self.fine = round(ratio * 10)
 
@@ -122,11 +114,11 @@ class SliderMinigame:
         surface.blit(label, (clip_rect.centerx - label.get_width() // 2, clip_rect.top + 10))
 
         # Sliders
-        labels = ["Rough", "Coarse", "Fine"]
-        values = [self.rough, self.coarse, self.fine]
-        maxes = [100, 50, 10]
+        labels = ["Rough", "Fine"]
+        values = [self.rough, self.fine]
+        maxes = [100, 10]
 
-        for i in range(3):
+        for i in range(2):
             rect = self.slider_rects[i]
             max_val = maxes[i]
             pygame.draw.rect(surface, self.slider_bar_color, rect)
@@ -151,7 +143,7 @@ class SliderMinigame:
         surface.set_clip(None)
 
     def total_value(self):
-        return self.rough + self.coarse + self.fine
+        return self.rough + self.fine
 
     def finish(self):
         self.finished = True
@@ -174,7 +166,7 @@ class SliderMinigame:
         return {"success": self.success, "target": self.target, "value": total, "grade": grade, "hits": [grade]}
 
     def spawn_stars(self):
-        total = self.rough + self.coarse + self.fine
+        total = self.total_value()
         text = self.font.render(f"Total: {total}", True, (255, 255, 255))
         text_x = self.clip_rect.centerx - text.get_width() // 2
         text_y = self.clip_rect.bottom - 30

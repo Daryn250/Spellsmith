@@ -2,9 +2,10 @@ import pygame
 import random
 import math
 from utility.particle import make_particles_presets
+from utility.settingsManager import get_font
 class HeatTreatMinigame:
     def __init__(self, virtual_size, difficulty, clip_rect, screen, on_finish=None):
-        self.font = pygame.font.Font("assets/GothicByte.ttf", 15)
+        self.font = pygame.font.Font(get_font(), 15)
         self.virtual_size = virtual_size
         self.clip_rect = clip_rect
         self.screen = screen

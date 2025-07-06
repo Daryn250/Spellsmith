@@ -1,8 +1,9 @@
 import pygame
 import os
+from utility.settingsManager import get_font
 
 class CountdownMiniGame:
-    def __init__(self, virtual_size, duration=3000, on_finish_callback=None, font_path="assets/GothicByte.ttf", font_size=48, item = {}):
+    def __init__(self, virtual_size, duration=3000, on_finish_callback=None, font_path=get_font(), font_size=48, item = {}):
         self.virtual_size = virtual_size
         self.duration = duration
         self.timer = duration

@@ -7,6 +7,8 @@ from utility.minigame_utility.heattreatminigame import HeatTreatMinigame
 from utility.minigame_utility.quenchMinigame import QuenchMinigame
 from utility.minigame_utility.SliderMinigame import SliderMinigame
 
+from utility.tool_utility.temperatureHandler import get_temp_range
+
 class MiniGameManager:
     def __init__(self, virtual_size, helper):
         self.item = None
@@ -33,8 +35,10 @@ class MiniGameManager:
 
         material = getattr(self.anvil_item, "material", "unexplicible error with material please consult the minigame manager")
         temp = getattr(self.anvil_item, "temperature", "how you do this")
+        max_temp = get_temp_range(material).get("max")
         rarity = item.get("rarity")
         key = item.get("key")
+        part = item.get("part")
         mass = item.get("mass")
 
         rarity_map = {
@@ -43,19 +47,25 @@ class MiniGameManager:
         }
         rarity_scale = rarity_map.get(item.get("rarity", "common"), 0.1)
 
-        game_count = None
-        difficulty = 6
+        difficulty = round(((max_temp+1)/temp)+(mass/2)+(rarity_scale*10))
 
-
-        #self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen, on_finish = None))
-        self.game_queue.append(
-            SliderMinigame(
-                self.virtual_size,
-                difficulty,
-                self.clip,
-                self.base_screen
-            )
-        )
+        if part == "pommel":
+            self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+        
+        if part == "guard":
+            self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+        
+        if part == "blade":
+            self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
 
 
 

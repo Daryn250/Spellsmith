@@ -3,14 +3,15 @@ from pygame import Surface
 from utility.item_utility.item_flags import SlotFlag
 from utility.button import Button
 from utility.minigame_utility.minigameManager import MiniGameManager
+from utility.tool_utility.temperatureHandler import get_temp_range
 
 class AnvilHelper:
     def __init__(self, item_manager):
         self.background = pygame.image.load("assets/screens/anvil/anvil.png").convert_alpha()
-        self.slot_rect = pygame.Rect(100, 100, 50, 50)  # Replace later with dynamic slot logic
 
         # --- Hammer Button ---
         self.hammer_button_img = pygame.image.load("assets/screens/anvil/hammer_button.png").convert_alpha()
+        self.hammer_button_img = pygame.transform.scale(self.hammer_button_img, (self.hammer_button_img.get_width()*2, self.hammer_button_img.get_height()*2))
         self.hammer_button = Button(
             image=self.hammer_button_img,
             pos=(0, 0),  # will be repositioned dynamically
@@ -35,7 +36,7 @@ class AnvilHelper:
 
         self.minigame_manager = None
 
-
+    
     def update(self, dt, item_manager, virtual_mouse = None):
         self.hammer_button_visible = False
 
@@ -45,7 +46,9 @@ class AnvilHelper:
             item = item_manager.getItemByUUID(slot.contains)
             if item and not item.dragging:
                 temp = getattr(item, "temperature", 0)
-                if 400 <= temp <= 800:
+                minTemp = get_temp_range(item.material).get("min")
+                maxTemp = get_temp_range(item.material).get("max")
+                if minTemp <= temp <= maxTemp:
                     self.hammer_button_visible = True
                     # Center button under the item
                     button_x = item.pos[0]

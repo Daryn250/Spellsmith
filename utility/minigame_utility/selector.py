@@ -2,6 +2,8 @@ import pygame
 import math
 import random
 from utility.button import Button
+from utility.settingsManager import get_font
+from utility.tool_utility.temperatureHandler import get_temp_range
 
 class WeaponSelector:
     def __init__(self, virtual_size, item_on_anvil):
@@ -11,8 +13,8 @@ class WeaponSelector:
         self.scroll_easing = 0.15
         self.items = []
         self.selected_index = 0
-        self.font_title = pygame.font.Font("assets/GothicByte.ttf", 24)
-        self.font_desc = pygame.font.Font("assets/GothicByte.ttf", 18)
+        self.font_title = pygame.font.Font(get_font(), 18)
+        self.font_desc = pygame.font.Font(get_font(), 14)
 
 
         self.item_on_anvil = item_on_anvil
@@ -62,6 +64,11 @@ class WeaponSelector:
 
         self.previewing_item = None  # Stores selected item for preview
 
+        self.error_message = None
+        self.error_timer = 0
+        self.font_error = pygame.font.Font(get_font(), 20)
+
+
 
         self.animate_cards()
 
@@ -92,15 +99,15 @@ class WeaponSelector:
                 "Blades": {"key": "blade", "preview_path": "assets/previews/blade.png"},
             },
             "pommel": {
-                "Rounded Pommel": {"key": "rounded_pommel", "type": "item", "rarity": "common", "preview_path": "assets/previews/pommel.png", "mass":1},
-                "Spiked Pommel": {"key": "spiked_pommel", "type": "item", "rarity": "uncommon", "preview_path": "assets/previews/pommel.png", "mass":2.5},
-                "Blunt Pommel": {"key": "blunt_pommel", "type": "item", "rarity": "rare", "preview_path": "assets/previews/pommel.png", "mass":3},
-                "Crystal Pommel": {"key": "crystal_pommel", "type": "item", "rarity": "rare+", "preview_path": "assets/previews/pommel.png", "mass":4},
-                "Dagger Pommel": {"key": "dagger_pommel", "type": "item", "rarity": "unique", "preview_path": "assets/previews/pommel.png", "mass":4.5},
-                "Orb Pommel": {"key": "orb_pommel", "type": "item", "rarity": "elite", "preview_path": "assets/previews/pommel.png", "mass":5},
-                "Medallion Pommel": {"key": "medallion_pommel", "type": "item", "rarity": "legendary", "preview_path": "assets/previews/pommel.png", "mass":6},
-                "Horned Pommel": {"key": "horned_pommel", "type": "item", "rarity": "mythic", "preview_path": "assets/previews/pommel.png", "mass":8},
-                "Dragonslayer Pommel": {"key": "dragonslayer_pommel", "type": "item", "rarity": "fabled", "preview_path": "assets/previews/pommel.png", "mass":10},
+                "Rounded Pommel": {"key": "rounded_pommel", "type": "item", "rarity": "common", "preview_path": "assets/previews/pommel.png", "mass":1, "part":"pommel"},
+                "Spiked Pommel": {"key": "spiked_pommel", "type": "item", "rarity": "uncommon", "preview_path": "assets/previews/pommel.png", "mass":2.5, "part":"pommel"},
+                "Blunt Pommel": {"key": "blunt_pommel", "type": "item", "rarity": "rare", "preview_path": "assets/previews/pommel.png", "mass":3, "part":"pommel"},
+                "Crystal Pommel": {"key": "crystal_pommel", "type": "item", "rarity": "rare+", "preview_path": "assets/previews/pommel.png", "mass":4, "part":"pommel"},
+                "Dagger Pommel": {"key": "dagger_pommel", "type": "item", "rarity": "unique", "preview_path": "assets/previews/pommel.png", "mass":4.5, "part":"pommel"},
+                "Orb Pommel": {"key": "orb_pommel", "type": "item", "rarity": "elite", "preview_path": "assets/previews/pommel.png", "mass":5, "part":"pommel"},
+                "Medallion Pommel": {"key": "medallion_pommel", "type": "item", "rarity": "legendary", "preview_path": "assets/previews/pommel.png", "mass":6, "part":"pommel"},
+                "Horned Pommel": {"key": "horned_pommel", "type": "item", "rarity": "mythic", "preview_path": "assets/previews/pommel.png", "mass":8, "part":"pommel"},
+                "Dragonslayer Pommel": {"key": "dragonslayer_pommel", "type": "item", "rarity": "fabled", "preview_path": "assets/previews/pommel.png", "mass":10, "part":"pommel"},
                 },
 
             "dagger": {
@@ -190,7 +197,8 @@ class WeaponSelector:
                     "preview": preview_img,
                     "rarity": rarity,
                     "rarity_img": rarity_img,
-                    "mass": info.get("mass", 0)
+                    "mass": info.get("mass", 0),
+                    "part": info.get("part", None)
                 })
         return expanded
 
@@ -264,6 +272,10 @@ class WeaponSelector:
         # Hover
         if self.allow_hover:
             self._update_hover(virtual_mouse)
+        if self.error_timer > 0:
+            self.error_timer -= dt
+            if self.error_timer <= 0:
+                self.error_message = None
 
 
 
@@ -335,13 +347,26 @@ class WeaponSelector:
             text = self.font_desc.render(label, False, (255, 255, 255))
             surface.blit(text, (center_x - max_width // 2, center_y + y_offset - 22))
 
+        # Item name above bars
+        title_y = center_y + 10  # Slightly above the first bar
+        name_surf = self.font_title.render(item["name"], False, (255, 255, 255))
+        name_rect = name_surf.get_rect(center=(center_x, title_y))
+        surface.blit(name_surf, name_rect)
+
+
         # Mock values for now
         rarity_map = {
             "common": 0.1, "uncommon": 0.2, "rare": 0.4, "rare+": 0.5,
             "unique": 0.6, "elite": 0.7, "legendary": 0.85, "mythic": 0.95, "fabled": 1.0
         }
         rarity_val = rarity_map.get(item.get("rarity", "common"), 0.1)
-        difficulty = 1
+
+        material = getattr(self.item_on_anvil, "material", "unexplicible error with material please consult the selector")
+        temp = getattr(self.item_on_anvil, "temperature", "how you do this")
+        max_temp = get_temp_range(material).get("max")
+        mass = item.get("mass")
+
+        difficulty = min(round(((max_temp+1)/temp)+(mass/2)+(rarity_val*10)), 15)/15
         power = min(1.0, float(item.get("mass", 1)) / 100000)
 
         draw_bar("Rarity", rarity_val, 40, (90, 150, 255))
@@ -352,13 +377,21 @@ class WeaponSelector:
         confirm_txt = self.font_desc.render("[Enter] Confirm    [Backspace] Cancel", False, (180, 180, 180))
         surface.blit(confirm_txt, confirm_txt.get_rect(center=(center_x, center_y + 200)))
 
+        if self.error_message:
+            error_surf = self.font_error.render(self.error_message, False, (255, 0, 0))
+            bg_rect = pygame.Rect(0, 0, error_surf.get_width() + 20, error_surf.get_height() + 10)
+            bg_rect.center = (center_x, center_y + 200)
+            pygame.draw.rect(surface, (30, 0, 0), bg_rect, border_radius=6)
+            surface.blit(error_surf, error_surf.get_rect(center=bg_rect.center))
+
+
 
 
     def handle_event(self, event, mouse_pos):
         if self.previewing_item:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    self.finished = True
+                    self.tryFinish()
                 elif event.key == pygame.K_BACKSPACE:
                     self.previewing_item = None
 
@@ -473,13 +506,15 @@ class WeaponSelector:
 
             # Name text
             name = self.font_title.render(item["name"], False, (255, 255, 255))
-            name_rect = name.get_rect(center=(rect.centerx, y + 130))
+            name_rect = name.get_rect(center=(rect.centerx, y + 150))
+            name = pygame.transform.rotate(name, angle)
             surface.blit(name, name_rect)
 
             # Description
             desc = "Folder" if item["type"] == "folder" else "Minimum Mass: " + str(item["mass"])
             desc_surf = self.font_desc.render(desc, False, (180, 180, 180))
             desc_rect = desc_surf.get_rect(center=(rect.centerx, y + 170))
+            desc_surf = pygame.transform.rotate(desc_surf, angle)
             surface.blit(desc_surf, desc_rect)
     
     def draw(self, surface, clip_rect=None):
@@ -495,6 +530,10 @@ class WeaponSelector:
         i2 = self.previewing_item
         if getattr(i, "mass", 1) >= i2.get("mass"):
             self.finished = True
+        else:
+            self.error_message = "Not enough mass"
+            self.error_timer = 2000  # show for 2 seconds
+
 
     def get_selected_type(self):
         # {'type': 'item', 

@@ -2,10 +2,6 @@ this is version 1.1.0
 
 needed currently:
 
-a bag that can be used to switch items between screens ###### NEEDS WORKED ON
-
-bag currently has adding items. needs to render items correctly and also load items correctly (easy fix i hope) bag needs internal physics :D
-
 make it so that the handle burns off if it's made of wood (maybe? maybe just set it as it as a low max heat and then I can make every part of the sword dynamically heat)
 
 day/night cycle
@@ -19,7 +15,7 @@ functionality for the charms as in they actually do something and aren't fancy p
 rarity mapping
 common, uncommon, rare, rare+, unique, elite, legendary, mythic, fabled
 
-# targets are going offscreen and I don't know why
+# switch font to custom spellsmith.ttf
 
 # story
 you were young and left on a boat, in a world with many oceans and water. you make swords for the two (?) factions, the regal knights, a band of knights seperated by hierarchy. you also make swords for the dungeon keepers, people or monsters who run dungeons and their ecosystems. helping out either side boosts your reputation with them and lowers your reputation with the other side.
