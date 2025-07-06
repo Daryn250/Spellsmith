@@ -1,5 +1,3 @@
-# helps wrap during resizing of the screen
-
 import pygame
 import random
 
@@ -11,6 +9,7 @@ class VirtualScreen:
         self.shake_timer = 0
         self.shake_duration = 0
         self.shake_magnitude = 0
+        self.shake_offset = (0, 0)
 
     def get_surface(self):
         """Get the surface to draw your game onto."""
@@ -19,7 +18,7 @@ class VirtualScreen:
     def draw_to_screen(self, target_screen):
         window_width, window_height = target_screen.get_size()
 
-        # Calculate scale factor that fills screen (cropping excess)
+        # Calculate scale factor to fill screen (crop excess)
         scale = max(
             window_width / self.virtual_width,
             window_height / self.virtual_height
@@ -29,31 +28,36 @@ class VirtualScreen:
         scaled_width = int(self.virtual_width * scale)
         scaled_height = int(self.virtual_height * scale)
 
-        # Scale virtual surface
-        scaled_surface = pygame.transform.scale(self.surface, (scaled_width, scaled_height))
+        # ✅ Apply screen shake BEFORE scaling
+        if self.shake_timer > 0:
+            self.shake_timer -= 1
+            offset_x = random.randint(-self.shake_magnitude, self.shake_magnitude)
+            offset_y = random.randint(-self.shake_magnitude, self.shake_magnitude)
+            self.shake_offset = (offset_x, offset_y)
+        else:
+            self.shake_offset = (0, 0)
 
-        # Default crop offset (centered)
+        # Create a temporary surface for shaking
+        temp_surface = pygame.Surface((self.virtual_width, self.virtual_height))
+        temp_surface.fill((0, 0, 0))  # Black border padding for shake
+
+        ox, oy = self.shake_offset
+        temp_surface.blit(self.surface, (ox, oy))
+
+        # Scale the temp surface
+        scaled_surface = pygame.transform.scale(temp_surface, (scaled_width, scaled_height))
+
+        # Center-crop to screen size
         offset_x = (scaled_width - window_width) // 2
         offset_y = (scaled_height - window_height) // 2
 
-        # Shake offsets
-        if self.shake_timer > 0:
-            self.shake_timer -= 1
-            offset_x += random.randint(-self.shake_magnitude, self.shake_magnitude)
-            offset_y += random.randint(-self.shake_magnitude, self.shake_magnitude)
-
-        # Clamp offset to keep subsurface in bounds
-        offset_x = max(0, min(offset_x, scaled_width - window_width))
-        offset_y = max(0, min(offset_y, scaled_height - window_height))
-
-        # Safe subsurface crop
+        # Crop the center region to match window size
         cropped_surface = scaled_surface.subsurface(
             (offset_x, offset_y, window_width, window_height)
         )
 
-        # Blit final result
+        # Blit to screen
         target_screen.blit(cropped_surface, (0, 0))
-
 
     def get_virtual_mouse(self, window_size):
         """Map real mouse position to virtual resolution (cropping version)."""
@@ -76,16 +80,17 @@ class VirtualScreen:
         virt_x = (mouse_x + offset_x) / scale
         virt_y = (mouse_y + offset_y) / scale
 
+        # ✅ Account for shake offset if needed
+        shake_x, shake_y = self.shake_offset
+        virt_x -= shake_x
+        virt_y -= shake_y
+
         return int(virt_x), int(virt_y)
-    
+
     def get_virtual_mouse_now(self):
         return self.get_virtual_mouse(pygame.display.get_surface().get_size())
-    
+
     def start_shake(self, duration, magnitude):
         self.shake_timer = duration
         self.shake_duration = duration
         self.shake_magnitude = magnitude
-
-
-
-

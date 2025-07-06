@@ -80,7 +80,7 @@ class BaseScreen:
                 self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
 
             if hasattr(self.helper, "handleEvents"):
-                self.helper.handleEvents(event, virtual_mouse)
+                self.helper.handleEvents(event, virtual_mouse, self.virtual_size)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.cursor_manager.click()
@@ -117,7 +117,7 @@ class BaseScreen:
 
     def update(self, dt, virtual_mouse):
         if self.helper:
-            self.helper.update(dt, self.item_manager)
+            self.helper.update(dt, self.item_manager, virtual_mouse)
 
         self.cursor_manager.update(dt, virtual_mouse)
 
@@ -175,3 +175,7 @@ class BaseScreen:
             self.handle_events(virtual_mouse)
             self.update(dt, virtual_mouse)
             self.draw(virtual_mouse)
+    
+    def start_shake(self, duration, magnitude):
+        self.vscreen.start_shake(duration, magnitude)
+

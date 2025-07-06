@@ -1,10 +1,67 @@
 {
+    "anvilScreen": [
+        {
+            "type": "iron_ore",
+            "pos": [
+                396.0,
+                102.0
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 500,
+            "origin_screen": "anvilScreen",
+            "material": "iron",
+            "animated": false,
+            "friction": 1.05,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "uuid": "537939b8-0f68-466a-aca4-3a0bc3da7ab2",
+            "dragging_for": 0
+        },
+        {
+            "type": "slot_node",
+            "pos": [
+                396.0,
+                102.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": "537939b8-0f68-466a-aca4-3a0bc3da7ab2",
+            "slot_name": "anvil_input_1",
+            "origin_screen": "anvilScreen",
+            "friction": 1.05,
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "07f7ff99-c533-4c79-a55a-4e641062cbb6"
+        }
+    ],
+    "_screen_data": {
+        "anvilScreen": {}
+    },
+    "bag_contents": [],
     "workstation": [
         {
             "type": "furnace",
             "pos": [
-                690.0,
-                162
+                688.0,
+                158
             ],
             "flags": [
                 "draggable",
@@ -27,14 +84,14 @@
             "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "uuid": "ad67f256-f069-4147-aec6-baf07f776bd9",
+            "uuid": "db80e43d-44b2-4277-828d-1efcb4840e3a",
             "dragging_for": 0
         },
         {
             "type": "anvil",
             "pos": [
-                323.0,
-                354
+                325.0,
+                344
             ],
             "flags": [
                 "draggable",
@@ -57,12 +114,10 @@
             "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
-            "uuid": "0c33290b-0962-414a-9c8e-cbe466235db2",
+            "uuid": "8df44343-0f28-43be-8f84-44faad8283b8",
             "dragging_for": 0
         }
     ],
-    "bag_contents": [],
-    "table": [],
     "furnaceScreen": [
         {
             "type": "slot_node",
@@ -85,7 +140,7 @@
                 1,
                 1
             ],
-            "uuid": "1a735e60-d5d2-4d1f-9ace-37bfde5ae9ae"
+            "uuid": "afb283ab-f811-43e4-ba93-0dd6fdecc34e"
         },
         {
             "type": "slot_node",
@@ -100,7 +155,7 @@
             "slot_accepts": [],
             "img_path": "assets/very_important/cat.png",
             "animated": false,
-            "contains": "ed0dac40-e1dc-45e8-b5f7-ffe22391e78e",
+            "contains": null,
             "slot_name": "furnace_input_2",
             "origin_screen": "furnaceScreen",
             "friction": 1.05,
@@ -108,7 +163,7 @@
                 1,
                 1
             ],
-            "uuid": "f4592705-17b6-411f-9322-722a4b6dbf11"
+            "uuid": "f0623fc7-0a66-4e55-825a-562f024e803b"
         },
         {
             "type": "slot_node",
@@ -131,7 +186,7 @@
                 1,
                 1
             ],
-            "uuid": "9e066bb5-6f1f-4c03-812e-37a9396efff8"
+            "uuid": "f95065c0-fa12-42b5-9a2f-f466c7c39915"
         },
         {
             "type": "slot_node",
@@ -154,7 +209,7 @@
                 1,
                 1
             ],
-            "uuid": "7348841f-3007-4348-93e7-513ee2d1e66c"
+            "uuid": "11809002-c4d9-42a8-bae1-e998590d8711"
         },
         {
             "type": "slot_node",
@@ -177,7 +232,7 @@
                 1,
                 1
             ],
-            "uuid": "44c5de7d-0b4d-4b38-b792-acd4eca21803"
+            "uuid": "494e05bc-172a-4264-bdd4-dda55bc0489a"
         },
         {
             "type": "slot_node",
@@ -200,7 +255,7 @@
                 1,
                 1
             ],
-            "uuid": "4e8f26c9-3779-43b5-af0c-69025299407e"
+            "uuid": "dfc6f23c-4c79-45a3-bb32-1a5efac6e32e"
         },
         {
             "type": "slot_node",
@@ -223,7 +278,7 @@
                 1,
                 1
             ],
-            "uuid": "c6bb8120-5c02-4a95-8b77-3b629c34c063"
+            "uuid": "2423a688-a4c9-437f-8d0e-9967260be19f"
         },
         {
             "type": "slot_node",
@@ -246,202 +301,8 @@
                 1,
                 1
             ],
-            "uuid": "d5ee97f4-b1d6-4b63-889d-c6542353ae8f"
+            "uuid": "fa4631d7-2336-499a-8405-b3d41e553769"
         }
     ],
-    "_screen_data": {
-        "anvilScreen": {}
-    },
-    "anvilScreen": [
-        {
-            "type": "iron_ore",
-            "pos": [
-                202.0,
-                288
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1,
-                1
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "uuid": "2891ee31-642f-4ff6-8e69-f2b016144f23",
-            "dragging_for": 0
-        },
-        {
-            "type": "slot_node",
-            "pos": [
-                396.0,
-                102.0
-            ],
-            "flags": [
-                "slot",
-                "invisible"
-            ],
-            "slot_accepts": [],
-            "img_path": "assets/very_important/cat.png",
-            "animated": false,
-            "contains": "fa705337-a67f-48d2-a977-7f4428d633ee",
-            "slot_name": "anvil_input_1",
-            "origin_screen": "anvilScreen",
-            "friction": 1.05,
-            "scale": [
-                1,
-                1
-            ],
-            "uuid": "4754a2c8-3384-4ee0-a48d-1dc92a7d9d70"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                382.0,
-                232.0
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1.0,
-                1.0
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0,
-            "currentGravity": 0.15,
-            "storedGravity": 0.3,
-            "uuid": "365cb882-344b-4cd3-aa6d-cbff4592a23b",
-            "dragging_for": 50,
-            "state": "free"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                472.0,
-                288
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1.0,
-                1.0
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -0.0,
-            "vy": 0.15,
-            "currentGravity": 0.15,
-            "storedGravity": 0.3,
-            "uuid": "2dc11d6a-e571-4172-b462-87e1745eab69",
-            "dragging_for": 50,
-            "state": "free"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                396.0,
-                102.0
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1.0,
-                1.0
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "uuid": "fa705337-a67f-48d2-a977-7f4428d633ee",
-            "dragging_for": 0,
-            "state": "free"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                400.0,
-                335
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1.0,
-                1.0
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0.15,
-            "currentGravity": 0.15,
-            "storedGravity": 0.3,
-            "uuid": "7d89487e-4c11-41bc-a840-fc955bb6bb70",
-            "dragging_for": 56,
-            "state": "free"
-        },
-        {
-            "type": "iron_ore",
-            "pos": [
-                382.0,
-                287
-            ],
-            "img_path": "assets/items/iron/iron1.png",
-            "flags": [
-                "draggable"
-            ],
-            "temperature": 500,
-            "origin_screen": "anvilScreen",
-            "animated": false,
-            "friction": 1.05,
-            "scale": [
-                1.0,
-                1.0
-            ],
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0.15,
-            "currentGravity": 0.15,
-            "storedGravity": 0.3,
-            "uuid": "61f852dd-6b85-472f-a146-cc893a26fd8c",
-            "dragging_for": 68,
-            "state": "free"
-        }
-    ]
+    "table": []
 }

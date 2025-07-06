@@ -36,8 +36,7 @@ def anvilScreen(screen, previous_screen=None):
         default_items_func=anvilDefaultItems,
         previous_screen=workstation
     )
-
-    makeItem(screen_instance.item_manager, "iron_ore", (200,200), "anvilScreen", {"temperature":500})
+    helper.base_screen = screen_instance
     # Inject the shared item manager
     screen_instance.run()
 

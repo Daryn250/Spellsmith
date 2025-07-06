@@ -2,6 +2,7 @@ import pygame
 from pygame import Surface
 from utility.item_utility.item_flags import SlotFlag
 from utility.button import Button
+from utility.minigame_utility.minigameManager import MiniGameManager
 
 class AnvilHelper:
     def __init__(self, item_manager):
@@ -20,6 +21,8 @@ class AnvilHelper:
         )
         self.hammer_button_visible = False
 
+        self.base_screen = None
+
         # --- Hammering Window ---
         self.hammer_window_img = pygame.image.load("assets/screens/anvil/hammer_window.png").convert_alpha()
         self.hammering_active = False
@@ -30,7 +33,10 @@ class AnvilHelper:
         # --- GUI Control Flag ---
         self.hide_gui = False
 
-    def update(self, dt, item_manager):
+        self.minigame_manager = None
+
+
+    def update(self, dt, item_manager, virtual_mouse = None):
         self.hammer_button_visible = False
 
         # ---- Check if there's a valid item in the slot ----
@@ -46,6 +52,7 @@ class AnvilHelper:
                     button_y = item.pos[1] + 50
                     self.hammer_button.rect.center = (button_x, button_y)
                     self.hammer_button.text_rect.center = (button_x, button_y)
+                    self.item_in_slot = item
 
         # ---- Determine virtual height (safe fallback) ----
         virtual_height = getattr(item_manager, "virtual_size", (0, 1080))[1]
@@ -59,6 +66,13 @@ class AnvilHelper:
         # ---- Snap to target when close enough ----
         if abs(delta) < 0.5:
             self.hammer_window_y = target_y
+
+        if self.minigame_manager:
+            self.minigame_manager.update(dt, virtual_mouse)
+            if self.minigame_manager.finished:
+                result = self.minigame_manager.get_final_score()
+                print("🎯 MiniGame Result:", result)
+                self.minigame_manager = None
 
 
 
@@ -81,11 +95,23 @@ class AnvilHelper:
         # ---- Sliding minigame window ----
         scaled_window = pygame.transform.scale(self.hammer_window_img, virtual_size)
         surface.blit(scaled_window, (0, self.hammer_window_y))
+        if self.minigame_manager:
+            self.minigame_manager.draw(surface)
 
-    def handleEvents(self, event, pos):
+
+    def handleEvents(self, event, pos, virtual_size):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.hammer_button_visible and self.hammer_button.checkForInput(pos):
-                self.hammering_active = not self.hammering_active
+                if self.hammering_active:
+                    self.hammering_active = False
+                    self.minigame_manager = None
+                else:
+                    self.hammering_active = True
+                    self.minigame_manager = MiniGameManager(virtual_size, self)
+        if self.minigame_manager:
+            self.minigame_manager.handle_event(event, pos)
+
+
 
     def get_save_data(self):
         return {

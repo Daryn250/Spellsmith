@@ -150,10 +150,10 @@ def make_smoke(pos, count=5):
             pos=pos,
             color=(100, 100, 100),
             velocity=(vx, vy),
-            gravity=0.05,
-            lifetime=40,
+            gravity=-0.002,
+            lifetime=100,
             glow=False,
-            animated_tile=AnimatedTile("assets/particles/smoke", frame_duration=80)
+            animated_tile=AnimatedTile("assets/particles/smoke", frame_duration=20)
         )
         particles.append(p)
     return particles
