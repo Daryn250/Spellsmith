@@ -133,24 +133,32 @@ class BaseItem:
         rotated_rect = rotated_img.get_rect(center=(center_x, center_y))
 
         if "no_shadow" not in self.flags:
-            # No flip – keep original rotation
-            shadow_img = pygame.transform.scale(rotated_img, (
-                rotated_img.get_width(),
-                int(rotated_img.get_height() * 0.5)
-            ))
+            SHADOW_OFFSET = (10, -10)
+            shadow_bottom_y = getattr(self, "floor", rotated_rect.bottom)
 
-            shadow_surface = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
-            shadow_surface.blit(shadow_img, (0, 0))
-            shadow_surface.fill((0, 0, 0, 20 if getattr(self, "dragging", False) else 80), special_flags=pygame.BLEND_RGBA_MULT)
-
-            # Constant downward-right offset (light from camera)
-            SHADOW_OFFSET = (10, 10)
-            shadow_pos = (
-                rotated_rect.centerx - shadow_surface.get_width() // 2 + SHADOW_OFFSET[0],
-                rotated_rect.bottom + SHADOW_OFFSET[1]
+            # Simulate blur by drawing multiple semi-transparent shadows
+            shadow_img = pygame.transform.scale(
+                rotated_img,
+                (rotated_img.get_width(), int(rotated_img.get_height() * 0.5))
             )
 
-            surface.blit(shadow_surface, shadow_pos)
+            for blur_radius in range(4):  # Number of blur layers
+                alpha = 60 // (blur_radius + 1)  # Decreasing alpha
+                offset = blur_radius  # Spread radius
+
+                blurred_shadow = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
+                blurred_shadow.blit(shadow_img, (0, 0))
+                blurred_shadow.fill((0, 0, 0, alpha if not getattr(self, "dragging", False) else alpha // 4), special_flags=pygame.BLEND_RGBA_MULT)
+
+                shadow_pos = (
+                    rotated_rect.centerx - shadow_img.get_width() // 2 + SHADOW_OFFSET[0] + offset,
+                    shadow_bottom_y + SHADOW_OFFSET[1] + offset
+                )
+
+                surface.blit(blurred_shadow, shadow_pos)
+
+
+
 
 
 

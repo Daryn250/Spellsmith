@@ -16,9 +16,9 @@ class DraggableFlag:
 
                     if hasattr(item, "type"):
                         rect = item.get_scaled_hitbox(virtual_size)
-                        colliding = rect.collidepoint(mx,my)
+                        colliding = rect.collidepoint(mx, my)
                     elif hasattr(item, "tool_type"):
-                        colliding = item.is_point_inside((mx,my), virtual_size)
+                        colliding = item.is_point_inside((mx, my), virtual_size)
 
                     if colliding:
                         DraggableFlag.dragging_item = item
@@ -28,7 +28,7 @@ class DraggableFlag:
                             if "slot" not in slot.flags:
                                 continue
                             if slot.contains == DraggableFlag.dragging_item.uuid:
-                                if getattr(slot, "locked", False) == False:
+                                if not getattr(slot, "locked", False):
                                     slot.contains = None
                                 else:
                                     DraggableFlag.dragging_item = None
@@ -42,35 +42,25 @@ class DraggableFlag:
                 if DraggableFlag.dragging_item in item_list:
                     item = DraggableFlag.dragging_item
 
-                    if hasattr(item, "ovx"):
-                        if item.dragging_for > 1:
-                            item.vx = item.ovx
-                            item.vy = item.ovy
+                    if hasattr(item, "ovx") and item.dragging_for > 1:
+                        item.vx = item.ovx
+                        item.vy = item.ovy
 
-
-                    # 🔻 Try putting it in the bag (if bag window is active)
+                    # --- Try dropping into the bag ---
+                    dropped_in_bag = False
                     if gui_manager.bag_window:
                         success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
                         if success:
-                            # item was added to bag, cancel rest of release logic
-                            
-                            DraggableFlag.dragging_item = None
-                            DraggableFlag.last_pos = None
-                            item.dragging = False #### this line is needed but when added causes items to drop at the borders even when not placed there
-                            item.floor = item.pos[1] + 15
-                            item.currentGravity = item.storedGravity/2
-                            print("item put in bag")
-                            return
-                            
+                            dropped_in_bag = True
 
-                    # 🔻 Otherwise, continue with normal item drop logic
-                    item.floor = item.pos[1] + 30
-                    item.currentGravity = item.storedGravity
+                    if dropped_in_bag:
+                        item.floor = item.pos[1] + 15
+                        item.currentGravity = item.storedGravity / 2
+                    else:
+                        item.floor = item.pos[1] + 30
+                        item.currentGravity = item.storedGravity
 
-                    
-                            
-
-
+                    item.dragging = False
                     item.dragging_for = 0
 
                     if hasattr(item, "anchor_pos") and item.anchor_pos is None:
@@ -81,44 +71,41 @@ class DraggableFlag:
 
                     SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
 
-                    item.dragging = False
-
                 DraggableFlag.dragging_item = None
                 DraggableFlag.last_pos = None
 
-
         elif event.type == pygame.MOUSEMOTION:
-            if DraggableFlag.dragging_item:
-                if DraggableFlag.dragging_item in item_list:
-                    DraggableFlag.dragging_item.floor = DraggableFlag.dragging_item.pos[1] + 30 # set value so it doesn't interfere with dragging
-                    DraggableFlag.dragging_item.dragging = True
-                    if hasattr(DraggableFlag.dragging_item, "dragging_for"):
-                        DraggableFlag.dragging_item.dragging_for +=1
+            if DraggableFlag.dragging_item and DraggableFlag.dragging_item in item_list:
+                item = DraggableFlag.dragging_item
+                item.floor = item.pos[1] + 30
+                item.dragging = True
 
-                    else:
-                        DraggableFlag.dragging_item.dragging_for = 1
-                    dx, dy = DraggableFlag.offset
-                    new_pos = (mx - dx, my - dy)
+                if hasattr(item, "dragging_for"):
+                    item.dragging_for += 1
+                else:
+                    item.dragging_for = 1
 
-                    old_x, old_y = DraggableFlag.last_pos
-                    vx = new_pos[0] - old_x
-                    vy = new_pos[1] - old_y
+                dx, dy = DraggableFlag.offset
+                new_pos = (mx - dx, my - dy)
 
-                    DraggableFlag.last_pos = new_pos
+                old_x, old_y = DraggableFlag.last_pos
+                vx = new_pos[0] - old_x
+                vy = new_pos[1] - old_y
 
-                    DraggableFlag.dragging_item.pos = new_pos
+                DraggableFlag.last_pos = new_pos
+                item.pos = new_pos
+                item.currentGravity = 0
 
-                    # Apply rotational velocity based on horizontal speed
-                    DraggableFlag.dragging_item.currentGravity = 0
-                    if hasattr(DraggableFlag.dragging_item, "type"):
-                        DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
-                    elif hasattr(DraggableFlag.dragging_item, "tool_type"):
-                        DraggableFlag.dragging_item.rotational_velocity += vx * 0.005
-                    DraggableFlag.dragging_item.ovx = vx
-                    DraggableFlag.dragging_item.ovy = vy
+                if hasattr(item, "type"):
+                    item.rotational_velocity += vx * 0.05
+                elif hasattr(item, "tool_type"):
+                    item.rotational_velocity += vx * 0.005
 
-                    
-                    HangableFlag.try_detatch(DraggableFlag.dragging_item, item_manager)
+                item.ovx = vx
+                item.ovy = vy
+
+                HangableFlag.try_detatch(item, item_manager)
+
                 
 
 class ScreenChangeFlag:

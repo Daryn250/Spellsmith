@@ -4,13 +4,12 @@
             "class": "BaseItem",
             "type": "furnace",
             "pos": [
-                608.0,
-                164
+                200.0,
+                300
             ],
             "flags": [
                 "draggable",
                 "screen_change",
-                "no_shadow",
                 "unbaggable"
             ],
             "img_path": "assets/screens/workstation/furnace.png",
@@ -24,23 +23,22 @@
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
-            "vy": 0.3,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "uuid": "9cd26e67-b0a2-45a3-9431-ef0d236fdb74"
+            "uuid": "8349e0b2-e8cc-4df1-8cea-4e4661d42729"
         },
         {
             "class": "BaseItem",
             "type": "anvil",
             "pos": [
-                327.0351791411876,
-                338
+                400.0,
+                300
             ],
             "flags": [
                 "draggable",
                 "screen_change",
-                "no_shadow",
                 "unbaggable"
             ],
             "img_path": "assets/screens/workstation/anvil.png",
@@ -53,74 +51,78 @@
             "origin_screen": "workstation",
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": -1.8816987248440637e-16,
-            "vy": 0.3,
+            "vx": 0.0,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "uuid": "71b1a8c7-c0cd-421b-9170-d901ac101204"
+            "uuid": "1fd20088-86d1-494f-a47d-1caf062e3a83"
         }
     ],
-    "bag_contents": [
-        {
-            "type": "bottle",
-            "img_path": "assets/items/bottles/large_bottle/img1.png",
-            "flags": [
-                "draggable"
-            ],
-            "bottleType": "large_bottle",
-            "capacity": 100,
-            "contents": 50,
-            "liquid": "water",
-            "scale": [
-                0.5,
-                0.5
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 2.3424052163000925e-33,
-            "vy": 0,
-            "currentGravity": 0,
-            "storedGravity": 0.3,
-            "dragging_for": 253,
-            "liquid_rotation": 1.9415498832985265,
-            "liquid_rotational_velocity": 0.030012258648621483,
-            "cached_mask_size": [
-                18,
-                63
-            ],
-            "uuid": "e181ffcc-2b7d-42a7-a44b-5affbbc4beda",
-            "state": "bagged",
-            "friction": 1.05,
-            "ovx": 1.0,
-            "ovy": -1,
-            "pos": [
-                800.0000001440461,
-                91
-            ]
-        }
-    ],
+    "bag_contents": [],
     "table": [
         {
             "class": "BottleItem",
             "type": "bottle",
             "pos": [
-                200.0,
-                200
+                279.0,
+                211
             ],
-            "img_path": "assets/items/bottles/large_bottle/img1.png",
+            "img_path": "assets/items/bottles/circle_bottle/img1.png",
             "flags": [
                 "draggable"
             ],
-            "bottleType": "large_bottle",
-            "capacity": 100,
-            "contents": 50,
+            "bottleType": "circle_bottle",
+            "capacity": 6,
+            "contents": 1,
             "liquid": "water",
             "scale": [
-                2,
-                2
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -3.961972721125934e-63,
+            "liquid_rotational_velocity": -9.909796079981984e-64,
+            "cached_mask_size": [
+                126,
+                192
+            ],
+            "uuid": "da31e695-b667-404d-ad00-e50a36e3ded5"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                434.0,
+                218
+            ],
+            "img_path": "assets/items/bottles/crescent_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "crescent_bottle",
+            "capacity": 7,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
             ],
             "origin_screen": "table",
             "animated": false,
@@ -131,41 +133,493 @@
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "liquid_rotation": 0.0,
-            "liquid_rotational_velocity": 0.0,
+            "liquid_rotation": 6.487503672755954e-70,
+            "liquid_rotational_velocity": 7.293835603272346e-70,
+            "cached_mask_size": [
+                108,
+                150
+            ],
+            "uuid": "da44dd61-1826-4a1a-9272-5c20a3b47f29"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                212.0,
+                379
+            ],
+            "img_path": "assets/items/bottles/gold_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "gold_bottle",
+            "capacity": 10,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 6.110619246050213e-112,
+            "liquid_rotational_velocity": 1.3464186611408208e-113,
+            "cached_mask_size": [
+                102,
+                192
+            ],
+            "uuid": "c7f5fa30-758b-48dc-bd0c-2ee8f0301415"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                742.0,
+                290
+            ],
+            "img_path": "assets/items/bottles/hexagon_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "hexagon_bottle",
+            "capacity": 7,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 7.848161824209384e-89,
+            "liquid_rotational_velocity": 2.143517028666903e-89,
+            "cached_mask_size": [
+                90,
+                93
+            ],
+            "uuid": "e1838e48-461b-4ccf-a10f-a948a7ad35c8"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                812.0,
+                367
+            ],
+            "img_path": "assets/items/bottles/large_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "large_bottle",
+            "capacity": 10,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 1.368980575672777e-95,
+            "liquid_rotational_velocity": 1.2541738980362086e-96,
+            "cached_mask_size": [
+                54,
+                189
+            ],
+            "uuid": "8ad67fd4-4a4a-4a71-b8ab-189ba76d208f"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                611.2813636742505,
+                374
+            ],
+            "img_path": "assets/items/bottles/spiked_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "spiked_bottle",
+            "capacity": 10,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 5.665390149293505e-102,
+            "liquid_rotational_velocity": -2.6473514107699156e-104,
+            "cached_mask_size": [
+                66,
+                171
+            ],
+            "uuid": "3ac308a0-c6fc-4a80-8a2b-c5910b983c6a"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                358.91232385346103,
+                294
+            ],
+            "img_path": "assets/items/bottles/uranium_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "uranium_bottle",
+            "capacity": 11,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 1.570317792488466e-73,
+            "liquid_rotational_velocity": -3.197329325580158e-75,
+            "cached_mask_size": [
+                60,
+                162
+            ],
+            "uuid": "2657bae2-3622-40ee-8556-5458114eafdd"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                671.517589570594,
+                371
+            ],
+            "img_path": "assets/items/bottles/tall_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "tall_bottle",
+            "capacity": 9,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": -5e-324,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -2.315617221302208e-99,
+            "liquid_rotational_velocity": 3.082051006917921e-100,
+            "cached_mask_size": [
+                42,
+                177
+            ],
+            "uuid": "e4b587b0-10e8-4de0-b4e8-ce35139eea84"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                478.9925579810105,
+                425
+            ],
+            "img_path": "assets/items/bottles/small_uranium_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "small_uranium_bottle",
+            "capacity": 3,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 5e-324,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -3.099749860482315e-108,
+            "liquid_rotational_velocity": -4.269299822037436e-109,
+            "cached_mask_size": [
+                54,
+                90
+            ],
+            "uuid": "e7e78603-d374-4a92-a7ae-15a398940159"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                327.0,
+                423
+            ],
+            "img_path": "assets/items/bottles/small_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "small_bottle",
+            "capacity": 3,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -3.9100922460062006e-110,
+            "liquid_rotational_velocity": 9.801035196451399e-111,
+            "cached_mask_size": [
+                54,
+                75
+            ],
+            "uuid": "340484a7-9eba-4854-ad1c-7deb39856631"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                411.929641707201,
+                396
+            ],
+            "img_path": "assets/items/bottles/red_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "red_bottle",
+            "capacity": 5,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -3.310769485993957e-107,
+            "liquid_rotational_velocity": 9.530838620138444e-107,
+            "cached_mask_size": [
+                54,
+                138
+            ],
+            "uuid": "9068e752-d8e2-4722-b524-1fe3e27db08a"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                536.2018684913158,
+                421
+            ],
+            "img_path": "assets/items/bottles/mini_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "mini_bottle",
+            "capacity": 1,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": -2.640649055822337e-97,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 2.101878738671578e-15,
+            "liquid_rotational_velocity": -2.0177106647327423e-15,
+            "cached_mask_size": [
+                36,
+                84
+            ],
+            "uuid": "af06e0e2-7f9a-4861-8f63-69d171164af9"
+        },
+        {
+            "class": "BottleItem",
+            "type": "bottle",
+            "pos": [
+                742.0,
+                407
+            ],
+            "img_path": "assets/items/bottles/brown_bottle/img1.png",
+            "flags": [
+                "draggable"
+            ],
+            "bottleType": "brown_bottle",
+            "capacity": 4,
+            "contents": 1,
+            "liquid": "water",
+            "scale": [
+                1.5,
+                1.5
+            ],
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": -8.34872097264871e-99,
+            "liquid_rotational_velocity": -8.552768772434e-99,
             "cached_mask_size": [
                 72,
-                252
+                126
             ],
-            "uuid": "552b5799-8a42-43a0-80ca-5bf2815cb8be"
-        }
-    ],
-    "anvilScreen": [
+            "uuid": "78ea630e-b745-44d9-afbd-899bb7db62ab"
+        },
         {
-            "class": "BaseItem",
-            "type": "slot",
+            "class": "BottleItem",
+            "type": "bottle",
             "pos": [
-                396.0,
-                102.0
+                520.5094858181114,
+                287
             ],
+            "img_path": "assets/items/bottles/chain_bottle/img1.png",
             "flags": [
-                "slot",
-                "invisible"
+                "draggable"
             ],
-            "slot_accepts": [],
-            "img_path": "assets/very_important/cat.png",
-            "animated": false,
-            "contains": null,
-            "slot_name": "anvil_input_1",
-            "origin_screen": "anvilScreen",
+            "bottleType": "chain_bottle",
+            "capacity": 6,
+            "contents": 1,
+            "liquid": "water",
             "scale": [
-                1,
-                1
+                1.5,
+                1.5
             ],
-            "uuid": "b5f10c3c-19ab-4e31-b625-f2dbc2727df6"
+            "default_scale": [
+                1.5,
+                1.5
+            ],
+            "origin_screen": "table",
+            "animated": false,
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "liquid_rotation": 1.8013831381436594e-86,
+            "liquid_rotational_velocity": 1.2521020172950216e-86,
+            "cached_mask_size": [
+                90,
+                180
+            ],
+            "uuid": "ce490cb0-4e3b-4d77-8d7b-0adbae040cd4"
         }
-    ],
-    "_screen_data": {
-        "anvilScreen": {}
-    }
+    ]
 }

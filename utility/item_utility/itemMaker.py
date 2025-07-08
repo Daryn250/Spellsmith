@@ -18,7 +18,7 @@ ITEM_BASES = {
         "class": "BaseItem",
         "type": "furnace",
         "nbt": {
-            "flags": ["draggable", "screen_change", "no_shadow", "unbaggable"],
+            "flags": ["draggable", "screen_change", "unbaggable"],
             "img_path": "assets/screens/workstation/furnace.png",
             "animated": False,
             "next_screen": "furnaceScreen",
@@ -29,7 +29,7 @@ ITEM_BASES = {
         "class": "BaseItem",
         "type": "anvil",
         "nbt": {
-            "flags": ["draggable", "screen_change", "no_shadow", "unbaggable"],
+            "flags": ["draggable", "screen_change", "unbaggable"],
             "img_path": "assets/screens/workstation/anvil.png",
             "animated": False,
             "next_screen": "anvilScreen",
@@ -240,13 +240,196 @@ ITEM_BASES = {
         "class": "BottleItem",
         "type": "bottle",
         "nbt": {
-            "img_path": "assets/items/bottles/large_bottle/img1.png",  # ✅ Points to actual image
+            "img_path": "assets/items/bottles/large_bottle/img1.png",
             "flags": ["draggable"],
             "bottleType": "large_bottle",
-            "capacity": 100,
-            "contents": 50,
-            "liquid": "water",
-            "scale":[2,2]
+            "capacity": 10, # units of liquid
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "hexagon_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/hexagon_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "hexagon_bottle",
+            "capacity": 7,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "gold_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/gold_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "gold_bottle",
+            "capacity": 10,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "crescent_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/crescent_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "crescent_bottle",
+            "capacity": 7,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "circle_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/circle_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "circle_bottle",
+            "capacity": 6,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "spiked_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/spiked_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "spiked_bottle",
+            "capacity": 10,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "uranium_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/uranium_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "uranium_bottle",
+            "capacity": 11,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "tall_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/tall_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "tall_bottle",
+            "capacity": 9,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "small_uranium_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/small_uranium_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "small_uranium_bottle",
+            "capacity": 3,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "small_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/small_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "small_bottle",
+            "capacity": 3,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "red_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/red_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "red_bottle",
+            "capacity": 5,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "mini_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/mini_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "mini_bottle",
+            "capacity": 1,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "brown_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/brown_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "brown_bottle",
+            "capacity": 4,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
+        }
+    },
+    "chain_bottle": {
+        "class": "BottleItem",
+        "type": "bottle",
+        "nbt": {
+            "img_path": "assets/items/bottles/chain_bottle/img1.png",
+            "flags": ["draggable"],
+            "bottleType": "chain_bottle",
+            "capacity": 6,
+            "contents": 0,
+            "liquid": None,
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
         }
     },
 

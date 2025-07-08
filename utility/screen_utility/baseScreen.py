@@ -101,12 +101,14 @@ class BaseScreen:
                         pygame.quit()
                         sys.exit()
 
-            DraggableFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
+            # Combine items and bag contents for drag handling:
+            combined_items = list(self.item_manager.items)
+            # Add only items that are NOT already in item_manager.items to avoid duplicates
+            combined_items.extend([item for item in self.gui_manager.bag_manager.contents if item not in self.item_manager.items])
 
-            DraggableFlag.handle_event(event, self.gui_manager.bag_manager.contents, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
+            DraggableFlag.handle_event(event, combined_items, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
 
-
-
+            # Adjust cursor based on dragging item temperature
             if DraggableFlag.dragging_item:
                 if getattr(DraggableFlag.dragging_item, "temperature", 0) > 200:
                     self.cursor_manager.set_cursor("tongs", self.virtual_surface, "assets/cursor/tongs")
@@ -117,6 +119,7 @@ class BaseScreen:
             CharmFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size)
             TrickFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
             self.gui_manager.handleEvent(event, virtual_mouse)
+
 
     def update(self, dt, virtual_mouse):
         if self.helper:
