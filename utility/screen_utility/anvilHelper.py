@@ -56,6 +56,7 @@ class AnvilHelper:
                     self.hammer_button.rect.center = (button_x, button_y)
                     self.hammer_button.text_rect.center = (button_x, button_y)
                     self.item_in_slot = item
+                    
 
         # ---- Determine virtual height (safe fallback) ----
         virtual_height = getattr(item_manager, "virtual_size", (0, 1080))[1]
@@ -73,10 +74,10 @@ class AnvilHelper:
         if self.minigame_manager:
             self.minigame_manager.update(dt, virtual_mouse)
             if self.minigame_manager.finished:
-                result = self.minigame_manager.get_final_score()
-                print("🎯 MiniGame Result:", result)
+                print("finished!")
+                self.hammering_active = False
                 self.minigame_manager = None
-
+                slot.locked = False
 
 
 
@@ -102,15 +103,21 @@ class AnvilHelper:
             self.minigame_manager.draw(surface)
 
 
-    def handleEvents(self, event, pos, virtual_size):
+    def handleEvents(self, event, pos, virtual_size, screen):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.hammer_button_visible and self.hammer_button.checkForInput(pos):
                 if self.hammering_active:
                     self.hammering_active = False
                     self.minigame_manager = None
+                    slot = screen.item_manager.getSlotByName("anvil_input_1")
+                    slot.locked = False
+                    screen.gui_manager.gui_input = True
                 else:
                     self.hammering_active = True
+                    slot = screen.item_manager.getSlotByName("anvil_input_1")
+                    slot.locked = True
                     self.minigame_manager = MiniGameManager(virtual_size, self)
+                    screen.gui_manager.gui_input = False
         if self.minigame_manager:
             self.minigame_manager.handle_event(event, pos)
 

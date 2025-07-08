@@ -195,6 +195,7 @@ class HeatTreatMinigame:
             "score": self.fill_ratio,  # ← return normalized range 0.0–1.0
             "target_range": (self.target_min, self.target_max),
             "final_temp": self.temp,
-            "hits": self.hits
+            "hits": self.hits,
+            "game_name":"Heat Treating"
         }
 

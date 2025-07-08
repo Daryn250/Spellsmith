@@ -80,7 +80,7 @@ class BaseScreen:
                 self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
 
             if hasattr(self.helper, "handleEvents"):
-                self.helper.handleEvents(event, virtual_mouse, self.virtual_size)
+                self.helper.handleEvents(event, virtual_mouse, self.virtual_size, self)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.cursor_manager.click()

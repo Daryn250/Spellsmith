@@ -13,7 +13,7 @@
             "slot_accepts": [],
             "img_path": "assets/very_important/cat.png",
             "animated": false,
-            "contains": "537939b8-0f68-466a-aca4-3a0bc3da7ab2",
+            "contains": null,
             "slot_name": "anvil_input_1",
             "origin_screen": "anvilScreen",
             "friction": 1.05,
@@ -26,8 +26,8 @@
         {
             "type": "iron_ore",
             "pos": [
-                396.0,
-                102.0
+                266.0,
+                155.0
             ],
             "img_path": "assets/items/iron/iron1.png",
             "flags": [

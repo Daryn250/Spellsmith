@@ -232,7 +232,8 @@ class QuenchMinigame:
             "warp": self.warp,
             "time_remaining": max(0, self.timer / 1000),
             "score": score_ratio,
-            "hits": [grade]
+            "hits": [grade],
+            "game_name":"Quenching"
         }
 
 

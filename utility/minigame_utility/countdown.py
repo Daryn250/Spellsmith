@@ -55,7 +55,7 @@ class CountdownMiniGame:
 
         # === Draw numeric countdown ===
         seconds_remaining = max(0, int(self.timer / 1000))
-        countdown_surface = self.font.render(str(seconds_remaining + 1), True, (255, 255, 255))
+        countdown_surface = self.font.render(str(seconds_remaining + 1), False, (255, 255, 255))
         countdown_rect = countdown_surface.get_rect(center=clip_rect.center)
         surface.blit(countdown_surface, countdown_rect)
 
@@ -63,7 +63,7 @@ class CountdownMiniGame:
         if hasattr(self, "item") and isinstance(self.item, dict):
             name = self.item.get("name", "???")
             title_text = name
-            title_surface = self.font.render(title_text, True, (255, 255, 100))
+            title_surface = self.font.render(title_text, False, (255, 255, 100))
             title_rect = title_surface.get_rect(midbottom=(clip_rect.centerx, countdown_rect.top - 10))
             surface.blit(title_surface, title_rect)
 

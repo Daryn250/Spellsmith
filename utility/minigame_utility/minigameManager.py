@@ -3,6 +3,7 @@ import pygame
 from utility.minigame_utility.hammer_game import HammerMiniGame
 from utility.minigame_utility.countdown import CountdownMiniGame
 from utility.minigame_utility.selector import WeaponSelector
+from utility.minigame_utility.results import ResultsMinigame
 from utility.minigame_utility.heattreatminigame import HeatTreatMinigame
 from utility.minigame_utility.quenchMinigame import QuenchMinigame
 from utility.minigame_utility.SliderMinigame import SliderMinigame
@@ -16,6 +17,7 @@ class MiniGameManager:
         self.game_queue = []
         self.result_log = []
         self.finished = False
+        self.finishing = False
 
         self.base_screen = helper.base_screen
 
@@ -50,10 +52,10 @@ class MiniGameManager:
         difficulty = round(((max_temp+1)/temp)+(mass/2)+(rarity_scale*10))
 
         if part == "pommel":
-            self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
-            self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            #self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            #self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
             self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
-            self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            #self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
         
         if part == "guard":
             self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
@@ -66,12 +68,6 @@ class MiniGameManager:
             self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
             self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
             self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
-
-
-
-
-        
-
         self._next_game()
 
 
@@ -81,22 +77,25 @@ class MiniGameManager:
             self.current_game = self.game_queue.pop(0)
         else:
             self.current_game = None
-            self.finished = True
+            self.finishing = True
+            self.current_game = ResultsMinigame(self.clip, self.result_log)
 
     def update(self, dt, virtual_mouse):
-        if self.finished:
-            return
-
-        if self.in_selector:
-            self.selector.update(dt, virtual_mouse)
-            return
-
-        if self.current_game:
+        if isinstance(self.current_game, ResultsMinigame):
             self.current_game.update(dt, virtual_mouse)
-            if self.current_game.finished:
-                result = self.current_game.get_result()
-                self.result_log.append(result)
-                self._next_game()
+            if self.current_game.is_finished():
+                self.finished = True
+        else:
+            if self.in_selector:
+                self.selector.update(dt, virtual_mouse)
+                return
+
+            if self.current_game:
+                self.current_game.update(dt, virtual_mouse)
+                if self.current_game.finished:
+                    result = self.current_game.get_result()
+                    self.result_log.append(result)
+                    self._next_game()
 
     def draw(self, surface):
         clip_rect = pygame.Rect(

@@ -28,7 +28,12 @@ class DraggableFlag:
                             if "slot" not in slot.flags:
                                 continue
                             if slot.contains == DraggableFlag.dragging_item.uuid:
-                                slot.contains = None
+                                if getattr(slot, "locked", False) == False:
+                                    slot.contains = None
+                                else:
+                                    DraggableFlag.dragging_item = None
+                                    DraggableFlag.offset = None
+                                    DraggableFlag.last_pos = None
                                 break
                         break
 

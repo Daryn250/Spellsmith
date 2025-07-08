@@ -188,7 +188,8 @@ class HammerMiniGame:
         return {
             "score": self.score,
             "max_score": self.max_score,
-            "hits": self.results
+            "hits": self.results,
+            "game_name":"Hammering"
         }
 
     def draw(self, surface, clip_rect):

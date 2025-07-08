@@ -24,6 +24,7 @@ class SliderMinigame:
 
         self.rough = 0
         self.fine = 0
+        self.lockdt = 1000000000000000000000000
 
         self.slider_width = 240
         self.slider_height = 30
@@ -59,6 +60,9 @@ class SliderMinigame:
         if not self.locked and self.total_value() == self.target:
             self.locked = True
             self.spawn_stars()
+            self.lockdt = self.timer
+        if self.timer - self.lockdt >= 1000:
+            self.finish()
 
     def handle_event(self, event, virtual_mouse):
         if self.finished or self.locked:
@@ -163,7 +167,12 @@ class SliderMinigame:
         else:
             grade = "miss"
 
-        return {"success": self.success, "target": self.target, "value": total, "grade": grade, "hits": [grade]}
+        return {"success": self.success, 
+                "target": self.target, 
+                "value": total, 
+                "grade": grade, 
+                "hits": [grade],
+                "game_name":"Balancing"}
 
     def spawn_stars(self):
         total = self.total_value()

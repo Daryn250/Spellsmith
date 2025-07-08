@@ -18,6 +18,7 @@ class GUIManager:
         self.bag_window = BagWindow(self.bag_manager)
 
         self.quick_menu = None  # Optional QuickMenu
+        self.gui_input = True
 
         self.charmboard_img = pygame.image.load("assets/gui/charm_board/charm_board.png").convert_alpha()
         self.bag_img_closed = pygame.image.load("assets/gui/bag/bag1.png").convert_alpha()
@@ -52,7 +53,8 @@ class GUIManager:
         else:
             self.screenMenu.visible = False
 
-        self.screenMenu.handle_event(event)
+        if self.gui_input:
+            self.screenMenu.handle_event(event)
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             if self.bag_manager.bag_rect and self.bag_manager.bag_rect.collidepoint(mouse):

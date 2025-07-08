@@ -15,7 +15,7 @@ functionality for the charms as in they actually do something and aren't fancy p
 rarity mapping
 common, uncommon, rare, rare+, unique, elite, legendary, mythic, fabled
 
-# switch font to custom spellsmith.ttf
+# finish the making of the items so that the item made is actually made lol
 
 # story
 you were young and left on a boat, in a world with many oceans and water. you make swords for the two (?) factions, the regal knights, a band of knights seperated by hierarchy. you also make swords for the dungeon keepers, people or monsters who run dungeons and their ecosystems. helping out either side boosts your reputation with them and lowers your reputation with the other side.
