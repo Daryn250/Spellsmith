@@ -11,6 +11,21 @@ from utility.item_utility.item_flag_handlers import (
     handle_temperature_particles
 )
 
+def get_shadow_offset(screen_width, item_x, intensity=0.3, vertical_push=10):
+    # Light sources at 2/6 and 4/6 of screen width
+    light1_x = screen_width * (2 / 6)
+    light2_x = screen_width * (4 / 6)
+
+    # Average light direction
+    avg_light_x = (light1_x + light2_x) / 2
+
+    # Direction from light to object
+    dx = item_x - avg_light_x
+
+    # Apply intensity scaling and return horizontal + vertical offset
+    return int(dx * intensity), vertical_push
+
+
 class BaseItem:
     def __init__(self, manager, type, pos, nbt_data={}):
         self.manager = manager
@@ -98,6 +113,7 @@ class BaseItem:
     def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
         if "invisible" in self.flags:
             return
+        
 
         angle = -getattr(self, "rotation", 0)
         s = getattr(self, "scale", (1, 1))
@@ -117,14 +133,26 @@ class BaseItem:
         rotated_rect = rotated_img.get_rect(center=(center_x, center_y))
 
         if "no_shadow" not in self.flags:
-            shadow_width = img.get_width() * 0.8
-            shadow_height = img.get_height() * 0.2
-            shadow_alpha = 100 if getattr(self, "dragging", False) else 20
-            shadow_surface = pygame.Surface((shadow_width, shadow_height), pygame.SRCALPHA)
-            pygame.draw.ellipse(shadow_surface, (0, 0, 0, shadow_alpha), shadow_surface.get_rect())
-            shadow_x = center_x - shadow_width / 2
-            shadow_y = center_y + img.get_height() * 0.75 / 2
-            surface.blit(shadow_surface, (shadow_x, shadow_y))
+            # No flip – keep original rotation
+            shadow_img = pygame.transform.scale(rotated_img, (
+                rotated_img.get_width(),
+                int(rotated_img.get_height() * 0.5)
+            ))
+
+            shadow_surface = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
+            shadow_surface.blit(shadow_img, (0, 0))
+            shadow_surface.fill((0, 0, 0, 20 if getattr(self, "dragging", False) else 80), special_flags=pygame.BLEND_RGBA_MULT)
+
+            # Constant downward-right offset (light from camera)
+            SHADOW_OFFSET = (10, 10)
+            shadow_pos = (
+                rotated_rect.centerx - shadow_surface.get_width() // 2 + SHADOW_OFFSET[0],
+                rotated_rect.bottom + SHADOW_OFFSET[1]
+            )
+
+            surface.blit(shadow_surface, shadow_pos)
+
+
 
         if getattr(self, "is_clicked", False):
             mask = pygame.mask.from_surface(rotated_img)
@@ -228,7 +256,7 @@ class BottleItem(BaseItem):
         if "invisible" in self.flags:
             return
 
-        # --- Scale calculations ---
+        # --- Scale and rotation setup ---
         angle = -getattr(self, "rotation", 0)
         s = self.scale
         x_scale = (screensize[0] / 480) * s[0]
@@ -243,60 +271,61 @@ class BottleItem(BaseItem):
         bottle_img = pygame.transform.scale(self.image, bottle_size)
         self.update_mask_cache(bottle_size)
 
-        # --- Prepare rotated bottle mask ---
-        upright_mask_surf = self.cached_mask.to_surface(setcolor=(255, 255, 255, 255),
-                                                        unsetcolor=(0, 0, 0, 0))
+        rotated_bottle = pygame.transform.rotate(bottle_img, angle)
+        bottle_rect = rotated_bottle.get_rect(center=(center_x, center_y))
+
+        # --- Draw shadow first ---
+        if "no_shadow" not in self.flags:
+            shadow_img = pygame.transform.scale(
+                rotated_bottle,
+                (rotated_bottle.get_width(), int(rotated_bottle.get_height() * 0.5))
+            )
+            shadow_surface = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
+            shadow_surface.blit(shadow_img, (0, 0))
+            shadow_surface.fill((0, 0, 0, 20 if self.dragging else 80), special_flags=pygame.BLEND_RGBA_MULT)
+
+            SHADOW_OFFSET = (10, -10)
+            shadow_bottom_y = self.floor
+            shadow_pos = (
+                bottle_rect.centerx - shadow_surface.get_width() // 2 + SHADOW_OFFSET[0],
+                shadow_bottom_y + SHADOW_OFFSET[1]
+            )
+            surface.blit(shadow_surface, shadow_pos)
+
+        # --- Prepare mask and liquid ---
+        upright_mask_surf = self.cached_mask.to_surface(setcolor=(255, 255, 255, 255), unsetcolor=(0, 0, 0, 0))
         rotated_mask = pygame.transform.rotate(upright_mask_surf, angle)
         mask_rect = rotated_mask.get_rect()
 
-        # --- Prepare square upright liquid texture (same height as bottle) ---
         liquid_frame = self.liquid_anim.get_current_frame()
         liquid_size = (bottle_size[1], bottle_size[1])  # square image
         liquid_img = pygame.transform.scale(liquid_frame, liquid_size)
-
-        # --- Rotate liquid independently (sloshing effect) ---
-        
         sloshed_liquid = pygame.transform.rotate(liquid_img, self.liquid_rotation)
         sloshed_rect = sloshed_liquid.get_rect()
 
-        # --- Prepare surface for sloshed liquid (same size as rotated mask) ---
-        liquid_surface = pygame.Surface(mask_rect.size, pygame.SRCALPHA)
-
-        # Determine vertical offset based on fill level
         fill_ratio = min(max(self.contents / self.capacity, 0), 1)
-        fill_offset = int((1.0 - fill_ratio) * bottle_size[1])  # how much to shift the liquid *up*
-
-        # Center sloshed liquid and apply downward offset
+        fill_offset = int((1.0 - fill_ratio) * bottle_size[1])
         liquid_x = (mask_rect.width // 2) - (sloshed_rect.width // 2)
         liquid_y = (mask_rect.height // 2) - (sloshed_rect.height // 2) + fill_offset
-        liquid_surface.blit(sloshed_liquid, (liquid_x, liquid_y))
 
-        # --- Mask the upright liquid with rotated mask ---
+        liquid_surface = pygame.Surface(mask_rect.size, pygame.SRCALPHA)
+        liquid_surface.blit(sloshed_liquid, (liquid_x, liquid_y))
         masked_liquid = liquid_surface.copy()
         masked_liquid.blit(rotated_mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-
-        # --- Draw masked liquid ---
         masked_rect = masked_liquid.get_rect(center=(center_x, center_y))
-        surface.blit(masked_liquid, masked_rect.topleft)
 
-        # --- Draw rotated bottle ---
-        rotated_bottle = pygame.transform.rotate(bottle_img, angle)
-        bottle_rect = rotated_bottle.get_rect(center=(center_x, center_y))
+        # --- Render final visuals ---
+        surface.blit(masked_liquid, masked_rect.topleft)
         surface.blit(rotated_bottle, bottle_rect.topleft)
 
-        # --- Draw cork ---
+        # --- Cork on top ---
         cork_img = pygame.transform.scale(self.cork_img, bottle_size)
         rotated_cork = pygame.transform.rotate(cork_img, angle)
         cork_rect = rotated_cork.get_rect(center=(center_x, center_y))
         surface.blit(rotated_cork, cork_rect.topleft)
 
 
-
-
-
-
-
-
+        
 
 
 class MaterialItem(BaseItem):
