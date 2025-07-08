@@ -2,7 +2,7 @@ import uuid
 import json
 import os
 import pygame
-from utility.item_utility.item import defaultItem  # Assuming your class is named `DefaultItem` # it is thank you chat gpt you're amazing
+from utility.item_utility.baseItem import BaseItem, BottleItem, MaterialItem, CharmItem, PartItem
 from utility.tool_utility.tool import Tool
 from utility.screen_utility.screenManager import *
 
@@ -19,10 +19,7 @@ class ItemManager:
     def remove_by_uuid(self, uuid_to_remove):
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
-
-
     def save_items(self, file_path, current_screen, extra_screen_data=None):
-        # Load existing data if it exists
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
                 try:
@@ -32,49 +29,43 @@ class ItemManager:
         else:
             existing_data = {}
 
-        # Build list of items only for the current screen
         screen_items = []
         for item in self.items:
             screen_name = getattr(item, "origin_screen", "unknown")
             if screen_name != current_screen:
-                continue  # Skip items from other screens
+                continue
 
             if hasattr(item, "type"):
                 data = {
+                    "class": item.__class__.__name__,
                     "type": item.type,
                     "pos": list(item.pos),
                     **item.to_nbt()
                 }
             elif hasattr(item, "tool_type"):
                 data = {
+                    "class": "Tool",
                     "tool_type": item.tool_type,
                     "pos": list(item.pos),
                     **item.to_nbt()
                 }
             else:
-                continue  # Skip unknown item types
+                continue
 
-            # Convert callable next_screen to its name (if used)
             if "next_screen" in data and callable(data["next_screen"]):
                 data["next_screen"] = data["next_screen"].__name__
 
             screen_items.append(data)
 
-        # Update just the current screen's items
         existing_data[current_screen] = screen_items
 
-        # Update or add per-screen extra data
         if extra_screen_data:
             existing_data["_screen_data"] = extra_screen_data
 
-        # Ensure directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        # Write updated data
         with open(file_path, "w") as f:
             json.dump(existing_data, f, indent=4)
-
-
 
     def load_items(self, file_path, current_screen):
         if not os.path.exists(file_path):
@@ -89,42 +80,42 @@ class ItemManager:
             print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
             return False
 
-        # Remove existing items with matching UUIDs
         saved_uuids = {entry.get("uuid") for entry in screen_data if "uuid" in entry}
         self.items = [item for item in self.items if getattr(item, "uuid", None) not in saved_uuids]
+
+        item_class_map = {
+            "BaseItem": BaseItem,
+            "BottleItem": BottleItem,
+            "MaterialItem": MaterialItem,
+            "CharmItem": CharmItem,
+            "PartItem": PartItem,
+            "Tool": Tool
+        }
 
         for entry in screen_data:
             try:
                 pos = tuple(entry["pos"])
-                nbt = {k: v for k, v in entry.items() if k not in {"type", "tool_type", "pos"}}
+                class_name = entry.get("class", "BaseItem")
+                nbt = {k: v for k, v in entry.items() if k not in {"class", "type", "tool_type", "pos"}}
 
-                if "tool_type" in entry:
+                if class_name == "Tool":
                     tool_type = entry["tool_type"]
                     item = Tool(self, tool_type, pos, nbt)
-                    self.items.append(item)
-
-                elif "type" in entry:
-                    item_type = entry["type"]
-                    item = defaultItem(self, item_type, pos, nbt)
-                    self.items.append(item)
-
                 else:
-                    raise ValueError("Item entry missing both 'type' and 'tool_type' fields")
+                    item_type = entry["type"]
+                    item_class = item_class_map.get(class_name, BaseItem)
+                    item = item_class(self, item_type, pos, nbt)
+
+                self.items.append(item)
 
             except Exception as e:
                 print(f"[ItemManager] Failed to load item: {entry.get('uuid', 'unknown')} - {e}")
 
-        # Return extra screen metadata if available
         screen_meta = data.get("_screen_data", {}).get(current_screen)
         return screen_meta or {}
 
-        
-
     def remove_item(self, uuid):
-        # Remove items that match the UUID
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid]
-
-        # Clear any references in slots or containers
         for item in self.items:
             if getattr(item, "contains", None) == uuid:
                 item.contains = None
@@ -138,20 +129,18 @@ class ItemManager:
             is_animating = hasattr(item, "animation") and not item.animation.finished
 
             if is_dragged:
-                dragged_item = item  # Save for draw_dragged_item
+                dragged_item = item
             elif is_animating:
-                continue  # Skip for now, will be drawn later
+                continue
             else:
                 items_to_draw.append(item)
 
-        # Sort by Y position
         items_to_draw.sort(key=lambda item: item.pos[1])
 
         for item in items_to_draw:
             item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
             for p in item.particles:
                 p.draw(virtual_surface)
-
 
     def draw_dragged_item(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
         for item in self.items:
@@ -163,26 +152,21 @@ class ItemManager:
                 for p in item.particles:
                     p.draw(virtual_surface)
 
-
-
-
-
     def getItemByUUID(self, uuid):
         for item in self.items:
             if item.uuid == uuid:
                 return item
         return None
-    
+
     def get_dragged(self):
         for item in self.items:
             if getattr(item, "dragging", False) == True:
                 return item
         return None
-    
+
     def getSlotByName(self, name):
         for item in self.items:
             if "slot" in item.flags: 
                 if getattr(item, "slot_name", None) == name:
                     return item
         return None
-

@@ -39,80 +39,91 @@ class DraggableFlag:
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if DraggableFlag.dragging_item is not None:
-                item = DraggableFlag.dragging_item
+                if DraggableFlag.dragging_item in item_list:
+                    item = DraggableFlag.dragging_item
 
-                # 🔻 Try putting it in the bag (if bag window is active)
-                if gui_manager.bag_window:
-                    success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
-                    if success:
-                        # item was added to bag, cancel rest of release logic
-                        item.dragging = False #### this line is needed but when added causes items to drop at the borders even when not placed there
-                        DraggableFlag.dragging_item = None
-                        DraggableFlag.last_pos = None
-                        item.floor = item.pos[1] + 15
-                        item.currentGravity = item.storedGravity/2
-                        
-                        return
-                        
+                    if hasattr(item, "ovx"):
+                        if item.dragging_for > 1:
+                            item.vx = item.ovx
+                            item.vy = item.ovy
 
-                # 🔻 Otherwise, continue with normal item drop logic
-                item.floor = item.pos[1] + 30
-                item.currentGravity = item.storedGravity
 
-                if hasattr(item, "ovx"):
-                    if item.dragging_for > 1:
-                        item.vx = item.ovx
-                        item.vy = item.ovy
+                    # 🔻 Try putting it in the bag (if bag window is active)
+                    if gui_manager.bag_window:
+                        success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
+                        if success:
+                            # item was added to bag, cancel rest of release logic
+                            
+                            DraggableFlag.dragging_item = None
+                            DraggableFlag.last_pos = None
+                            item.dragging = False #### this line is needed but when added causes items to drop at the borders even when not placed there
+                            item.floor = item.pos[1] + 15
+                            item.currentGravity = item.storedGravity/2
+                            print("item put in bag")
+                            return
+                            
 
-                item.dragging_for = 0
+                    # 🔻 Otherwise, continue with normal item drop logic
+                    item.floor = item.pos[1] + 30
+                    item.currentGravity = item.storedGravity
 
-                if hasattr(item, "anchor_pos") and item.anchor_pos is None:
-                    HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager, item_manager)
+                    
+                            
 
-                if hasattr(item, "anchor") and item.anchor is None:
-                    detatch_connected(item, item_list, item_manager)
 
-                SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
+                    item.dragging_for = 0
 
-                item.dragging = False
+                    if hasattr(item, "anchor_pos") and item.anchor_pos is None:
+                        HangableFlag.try_attatch(event, item, item_list, mouse_pos, virtual_size, gui_manager, item_manager)
 
-            DraggableFlag.dragging_item = None
-            DraggableFlag.last_pos = None
+                    if hasattr(item, "anchor") and item.anchor is None:
+                        detatch_connected(item, item_list, item_manager)
+
+                    SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
+
+                    item.dragging = False
+
+                DraggableFlag.dragging_item = None
+                DraggableFlag.last_pos = None
 
 
         elif event.type == pygame.MOUSEMOTION:
             if DraggableFlag.dragging_item:
-                DraggableFlag.dragging_item.floor = DraggableFlag.dragging_item.pos[1] + 30 # set value so it doesn't interfere with dragging
-                DraggableFlag.dragging_item.dragging = True
-                if hasattr(DraggableFlag.dragging_item, "dragging_for"):
-                    DraggableFlag.dragging_item.dragging_for +=1
-                else:
-                    DraggableFlag.dragging_item.dragging_for = 1
-                dx, dy = DraggableFlag.offset
-                new_pos = (mx - dx, my - dy)
+                if DraggableFlag.dragging_item in item_list:
+                    DraggableFlag.dragging_item.floor = DraggableFlag.dragging_item.pos[1] + 30 # set value so it doesn't interfere with dragging
+                    DraggableFlag.dragging_item.dragging = True
+                    if hasattr(DraggableFlag.dragging_item, "dragging_for"):
+                        DraggableFlag.dragging_item.dragging_for +=1
 
-                old_x, old_y = DraggableFlag.last_pos
-                vx = new_pos[0] - old_x
-                vy = new_pos[1] - old_y
-                DraggableFlag.last_pos = new_pos
+                    else:
+                        DraggableFlag.dragging_item.dragging_for = 1
+                    dx, dy = DraggableFlag.offset
+                    new_pos = (mx - dx, my - dy)
 
-                DraggableFlag.dragging_item.pos = new_pos
+                    old_x, old_y = DraggableFlag.last_pos
+                    vx = new_pos[0] - old_x
+                    vy = new_pos[1] - old_y
 
-                # Apply rotational velocity based on horizontal speed
-                DraggableFlag.dragging_item.currentGravity = 0
-                if hasattr(DraggableFlag.dragging_item, "type"):
-                    DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
-                elif hasattr(DraggableFlag.dragging_item, "tool_type"):
-                    DraggableFlag.dragging_item.rotational_velocity += vx * 0.005
-                DraggableFlag.dragging_item.ovx = vx
-                DraggableFlag.dragging_item.ovy = vy
-                
-                HangableFlag.try_detatch(DraggableFlag.dragging_item, item_manager)
+                    DraggableFlag.last_pos = new_pos
+
+                    DraggableFlag.dragging_item.pos = new_pos
+
+                    # Apply rotational velocity based on horizontal speed
+                    DraggableFlag.dragging_item.currentGravity = 0
+                    if hasattr(DraggableFlag.dragging_item, "type"):
+                        DraggableFlag.dragging_item.rotational_velocity += vx * 0.05
+                    elif hasattr(DraggableFlag.dragging_item, "tool_type"):
+                        DraggableFlag.dragging_item.rotational_velocity += vx * 0.005
+                    DraggableFlag.dragging_item.ovx = vx
+                    DraggableFlag.dragging_item.ovy = vy
+
+                    
+                    HangableFlag.try_detatch(DraggableFlag.dragging_item, item_manager)
                 
 
 class ScreenChangeFlag:
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, screen, screenSwitcher, virtual_size):
+    def handle_event(event, item_list, mouse_pos, screen, screenSwitcher, virtual_size, baseScreen):
         mx, my = mouse_pos
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
@@ -121,7 +132,7 @@ class ScreenChangeFlag:
                     rect = item.get_scaled_hitbox(virtual_size)
                     if rect.collidepoint(mx, my):
                         if hasattr(item, "next_screen"):
-                            item.start_screen_switch(screen, screenSwitcher)
+                            item.start_screen_switch(screen, screenSwitcher, baseScreen)
                         else:
                             print(f"Warning: Item {item} has 'screen_change' flag but no 'next_screen' method.")
                         break

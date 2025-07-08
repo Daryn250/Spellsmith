@@ -102,7 +102,10 @@ class BaseScreen:
                         sys.exit()
 
             DraggableFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
+
             DraggableFlag.handle_event(event, self.gui_manager.bag_manager.contents, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
+
+
 
             if DraggableFlag.dragging_item:
                 if getattr(DraggableFlag.dragging_item, "temperature", 0) > 200:
@@ -110,7 +113,7 @@ class BaseScreen:
             else:
                 self.cursor_manager.set_cursor("base", self.virtual_surface, "assets/cursor/defaultCursor")
 
-            ScreenChangeFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.screen, self.switcher, self.virtual_size)
+            ScreenChangeFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.screen, self.switcher, self.virtual_size, self)
             CharmFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size)
             TrickFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
             self.gui_manager.handleEvent(event, virtual_mouse)

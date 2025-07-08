@@ -17,6 +17,8 @@ common, uncommon, rare, rare+, unique, elite, legendary, mythic, fabled
 
 # finish the making of the items so that the item made is actually made lol
 
+# for some reason items can be placed into the bag when the bag is not open, but only when they're scaled up. issue. probably.
+
 # story
 you were young and left on a boat, in a world with many oceans and water. you make swords for the two (?) factions, the regal knights, a band of knights seperated by hierarchy. you also make swords for the dungeon keepers, people or monsters who run dungeons and their ecosystems. helping out either side boosts your reputation with them and lowers your reputation with the other side.
 if a dungeon gets too powerful, the regal knights will swoop in and defeat it, leaving it to ruin. if a dungeon is too weak, people will get cocky and children and teens will venture in, to never return.

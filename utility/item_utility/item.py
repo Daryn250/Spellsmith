@@ -8,6 +8,8 @@ from utility.screen_utility.screenManager import *
 from utility.particle import make_scale
 
 
+####### DECREPIT NOW USING baseItem.py
+
 class defaultItem:
     def __init__(self, manager, type, pos, nbt_data = {}):
 
@@ -75,7 +77,7 @@ class defaultItem:
             self.show_nail = False
 
 
-    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "ovx", "ovy", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "locked"]):
+    def to_nbt(self, exclude=["manager", "pos", "type", "is_hovered", "img", "floor", "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "locked"]):
         return {k: v for k, v in self.__dict__.items() if k not in exclude}
 
     def draw_at(self, surface, pos, size=None):

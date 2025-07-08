@@ -29,4 +29,5 @@ def table(screen, prev_screen = None):
         default_items_func=default_items_func,
         previous_screen=main_menu  # Reference to the previous screen function
     )
+    makeItem(base.item_manager, "large_bottle", (200,200), "table")
     base.run()

@@ -22,7 +22,7 @@ class ScreenSwitcher:
         self.transition_duration = transition_duration
         self.elapsed_time = 0.0
 
-    def start(self, next_screen_func, save_callback=None):
+    def start(self, next_screen_func, save_callback):
         surf = pygame.display.get_surface()
         screen_size = surf.get_width(), surf.get_height()
         self.center = (surf.get_width() // 2, surf.get_height() // 2)
