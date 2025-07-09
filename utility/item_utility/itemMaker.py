@@ -1,4 +1,4 @@
-from .baseItem import BaseItem, BottleItem, MaterialItem, CharmItem, PartItem
+from .baseItem import *
 from utility.screen_utility.screenManager import get_screen_function
 
 ITEM_BASES = {
@@ -432,7 +432,47 @@ ITEM_BASES = {
             "default_scale":(1.5,1.5)
         }
     },
-
+    ###### GEMS #########
+    "aquamarine": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/aquamarine/gem.png",
+            "shine_path": "assets/items/gems/aquamarine/shine.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
+    "citrine": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/citrine/gem.png",
+            "shine_path": "assets/items/gems/citrine/shine.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
+    "emerald": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/emerald/gem.png",
+            "shine_path": "assets/items/gems/emerald/shine.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
+    "rhotochrosite": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/rhotochrosite/gem.png",
+            "shine_path": "assets/items/gems/rhotochrosite/shine.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
 
 }
 
@@ -441,7 +481,8 @@ item_class_map = {
     "BottleItem": BottleItem,
     "MaterialItem": MaterialItem,
     "CharmItem": CharmItem,
-    "PartItem": PartItem
+    "PartItem": PartItem,
+    "GemItem": GemItem,
 }
 
 class makeItem:

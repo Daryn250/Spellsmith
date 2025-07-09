@@ -1,7 +1,7 @@
 import os
 import json
 from .hoverWindow import *
-from utility.item_utility.baseItem import BaseItem, BottleItem, MaterialItem, CharmItem, PartItem
+from utility.item_utility.baseItem import *
 from utility.tool_utility.tool import Tool
 
 class BagManager:
@@ -95,6 +95,7 @@ class BagManager:
             "MaterialItem": MaterialItem,
             "CharmItem": CharmItem,
             "PartItem": PartItem,
+            "GemItem": GemItem,
             "Tool": Tool
         }
 

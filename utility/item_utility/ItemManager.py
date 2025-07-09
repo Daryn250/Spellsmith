@@ -2,7 +2,7 @@ import uuid
 import json
 import os
 import pygame
-from utility.item_utility.baseItem import BaseItem, BottleItem, MaterialItem, CharmItem, PartItem
+from utility.item_utility.baseItem import *
 from utility.tool_utility.tool import Tool
 from utility.screen_utility.screenManager import *
 
@@ -89,6 +89,7 @@ class ItemManager:
             "MaterialItem": MaterialItem,
             "CharmItem": CharmItem,
             "PartItem": PartItem,
+            "GemItem": GemItem,
             "Tool": Tool
         }
 

@@ -217,11 +217,30 @@ def make_scale(pos, count=1):
         particles.append(p)
     return particles
 
+def make_tiny_sparkle(pos, count=1):
+    particles = []
+    for _ in range(count):
+        rotation = random.uniform(0, 360)
+        p = Particle(
+            pos=pos,
+            velocity=(0, 0),
+            gravity=0,
+            lifetime=random.randint(20, 35),
+            glow=False,
+            rotation=rotation,
+            rotation_speed=random.randint(-20,20),
+            animated_tile=AnimatedTile("assets/particles/gem_sparkle")
+        )
+        particles.append(p)
+    return particles
+
+
 make_particles_presets = {
     "sparkles": make_sparkles,
     "smoke": make_smoke,
     "stars": make_stars,
     "fire": make_fire,
-    "scale": make_scale
+    "scale": make_scale,
+    "tiny_sparkle":make_tiny_sparkle
 }
 

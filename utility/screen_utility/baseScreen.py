@@ -63,7 +63,10 @@ class BaseScreen:
 
 
     def save_items(self, save_path):
-        extra = self.helper.get_save_data() if self.helper else None
+        if hasattr(self.helper, "get_save_data"):
+            extra = self.helper.get_save_data() if self.helper else None
+        else:
+            extra = None
         self.item_manager.save_items(save_path, self.screen_name, extra_screen_data=extra)
         if self.draw_bag:
             self.gui_manager.save_bag(save_path)

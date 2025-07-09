@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 from utility.animated_sprite import AnimatedTile
 from utility.item_utility.charmWindows import returnCharmWindow
 from utility.screen_utility.screenManager import get_screen_function
@@ -10,6 +11,7 @@ from utility.item_utility.item_flag_handlers import (
     handle_hangable,
     handle_temperature_particles
 )
+from utility.particle import make_tiny_sparkle
 
 def get_shadow_offset(screen_width, item_x, intensity=0.3, vertical_push=10):
     # Light sources at 2/6 and 4/6 of screen width
@@ -85,7 +87,8 @@ class BaseItem:
         base_exclude = [
             "manager", "pos", "type", "is_hovered", "img", "floor", "ovx", "ovy",
             "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "locked",
-            "liquid_anim", "cork_img", "original_mask_img", "cached_mask_surface", "cached_mask"
+            "liquid_anim", "cork_img", "original_mask_img", "cached_mask_surface", "cached_mask",
+            "shine_img", "glow_img"
         ]
         safe_nbt = {}
         for k, v in self.__dict__.items():
@@ -373,3 +376,139 @@ class SlotItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
         super().__init__(manager, type, pos, nbt_data)
         
+class GemItem(BaseItem):
+    def __init__(self, manager, type, pos, nbt_data={}):
+        super().__init__(manager, type, pos, nbt_data)
+        self.shine_path = getattr(self, "shine_path", None)
+        if self.shine_path!=None:
+            self.shine_img = pygame.image.load(self.shine_path).convert_alpha()
+        self.shine_alpha = 0
+        self.shine_time = 0
+        self.shine_speed = getattr(self, "shine_speed", 0.3)  # Pulses per second
+        self.is_shiny = "shiny" in self.flags
+        self.glow_path = getattr(self, "glow_path", "assets/misc/glow_img2.png")
+        if self.is_shiny:
+            self.glow_img = pygame.image.load(self.glow_path).convert_alpha()
+        else:
+            self.glow_img = None
+
+
+    def update(self, screen, gui_manager, virtual_size, bounds=None, dt=None):
+        super().update(screen, gui_manager, virtual_size, bounds, dt)
+        if dt:
+            self.shine_time += dt / 1000
+            pulse = math.sin(self.shine_time * math.pi * self.shine_speed)
+            self.shine_alpha = int(127 + 128 * pulse)  # 0–255 range for alpha
+            if self.is_shiny:
+                if random.random() < 0.05:  # Adjust spawn rate as needed
+                    bounds = pygame.Rect(0, 0, self.image.get_width(), self.image.get_height())
+                    bounds.center = self.pos
+                    rand_pos = (
+                        random.randint(bounds.left, bounds.right),
+                        random.randint(bounds.top, bounds.bottom)
+                    )
+                    self.particles.extend(make_tiny_sparkle(rand_pos, count=1))
+
+
+    def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
+        if "invisible" in self.flags:
+            return
+
+        angle = -getattr(self, "rotation", 0)
+        s = getattr(self, "scale", (1, 1))
+        x_scale = (screensize[0] / 480) * s[0]
+        y_scale = (screensize[1] / 270) * s[1]
+        scale = min(x_scale, y_scale)
+
+        original_img = self.image
+        scaled_size = (
+            int(original_img.get_width() * scale),
+            int(original_img.get_height() * scale)
+        )
+        img = pygame.transform.scale(original_img, scaled_size)
+        rotated_img = pygame.transform.rotate(img, angle)
+        rotated_rect = rotated_img.get_rect(center=self.pos)
+
+        # 🌈 Custom shadow using gem color
+        if "no_shadow" not in self.flags:
+            SHADOW_OFFSET = (10, -10)
+            shadow_bottom_y = getattr(self, "floor", rotated_rect.bottom)
+
+            shadow_img = pygame.transform.scale(
+                rotated_img,
+                (rotated_img.get_width(), int(rotated_img.get_height() * 0.5))
+            )
+
+            gem_color = getattr(self, "shadow_color", (255, 255, 255))  # default cyan glow
+            for blur_radius in range(4):
+                alpha = 60 // (blur_radius + 1)
+                offset = blur_radius
+
+                blurred_shadow = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
+                blurred_shadow.blit(shadow_img, (0, 0))
+
+                # Apply the colored tint here
+                tint_surface = pygame.Surface(shadow_img.get_size(), pygame.SRCALPHA)
+                r, g, b = gem_color
+                tint_surface.fill((r, g, b, alpha if not getattr(self, "dragging", False) else alpha // 4))
+                blurred_shadow.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+                shadow_pos = (
+                    rotated_rect.centerx - shadow_img.get_width() // 2 + SHADOW_OFFSET[0] + offset,
+                    shadow_bottom_y + SHADOW_OFFSET[1] + offset
+                )
+
+                surface.blit(blurred_shadow, shadow_pos)
+
+        # ✨ Shine and base image
+        surface.blit(rotated_img, rotated_rect.topleft)
+        if self.is_shiny and self.glow_img:
+            # Match glow size to full gem image
+            glow_w = rotated_img.get_width()
+            glow_h = rotated_img.get_height()
+            scaled_glow = pygame.transform.scale(self.glow_img, (glow_w, glow_h))
+            rotated_glow = pygame.transform.rotate(scaled_glow, angle)
+
+            # Optional: Apply soft blur effect by layering semi-transparent versions
+            for i in range(1):  # Number of blur layers
+                blur_alpha = int(50 / (i + 1))  # Decreasing alpha per layer
+                blur_scale = 1.0 + 0.1 * i  # Slightly increase size per layer
+
+                blurred_size = (
+                    int(rotated_glow.get_width() * blur_scale),
+                    int(rotated_glow.get_height() * blur_scale)
+                )
+                blurred_glow = pygame.transform.smoothscale(rotated_glow, blurred_size)
+
+                # Center it again after scaling
+                blurred_rect = blurred_glow.get_rect(center=self.pos)
+
+                # Set alpha manually
+                blurred_glow.set_alpha(blur_alpha)
+                surface.blit(blurred_glow, blurred_rect.topleft, special_flags=pygame.BLEND_ADD)
+
+
+        
+
+
+
+        if self.shine_img is not None:
+            shine_scaled = pygame.transform.scale(
+                self.shine_img,
+                (
+                    int(self.shine_img.get_width() * scale),
+                    int(self.shine_img.get_height() * scale)
+                )
+            )
+            shine_rotated = pygame.transform.rotate(shine_scaled, angle)
+            shine_rotated.set_alpha(self.shine_alpha)
+            shine_rect = shine_rotated.get_rect(center=self.pos)
+            surface.blit(shine_rotated, shine_rect.topleft)
+        
+        for p in self.particles[:]:
+            p.update()
+            if not p.is_alive():
+                self.particles.remove(p)
+            else:
+                p.draw(surface)
+
