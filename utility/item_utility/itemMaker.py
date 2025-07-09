@@ -473,6 +473,26 @@ ITEM_BASES = {
             "scale":(1,1)
         }
     },
+    "tourmaline": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/tourmaline/gem.png",
+            "shine_path": "assets/items/gems/tourmaline/shine.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
+    "flawless_tourmaline": {
+        "class":"GemItem",
+        "type":"gem",
+        "nbt": {
+            "img_path": "assets/items/gems/tourmaline/perfect.png",
+            "shine_path": "assets/items/gems/tourmaline/shine_perfect.png",
+            "flags": ["draggable", "shiny"],
+            "scale":(1,1)
+        }
+    },
 
 }
 

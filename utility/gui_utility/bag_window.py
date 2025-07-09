@@ -1,18 +1,22 @@
 import pygame
 from utility.item_utility.trickAnimation import TrickAnimation
+from utility.screen_utility.screenManager import get_screen_function
 
 class BagWindow:
-    def __init__(self, bag_manager):
+    def __init__(self, bag_manager, main_screen):
         self.bag = bag_manager
         self.animation = None
         self.original_pos = (0, 0)
         self.scale = [1.0, 1.0]
         self.pos = (0, 0)
+        self.main_screen = main_screen
 
         self.max_items = 50
         self.item_size = 24
         self.padding = 8
         self.spacing = 6
+
+        self.open=False
 
         self.hovered = False
         self.bg_image = pygame.image.load("assets/gui/bag/bag_window_bg.png").convert_alpha()
@@ -61,6 +65,7 @@ class BagWindow:
             self.bag.contents.remove(item)
             item_manager.add_item(item)
             item.state = "free"
+            item.origin_screen = self.main_screen.screen_name
             item.vx = 0
             item.vy = -2
             return True

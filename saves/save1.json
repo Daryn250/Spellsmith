@@ -4,8 +4,8 @@
             "class": "BaseItem",
             "type": "furnace",
             "pos": [
-                200.0,
-                300
+                691.1291574741086,
+                133
             ],
             "flags": [
                 "draggable",
@@ -22,19 +22,19 @@
             "origin_screen": "workstation",
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0.3,
+            "vx": 5e-324,
+            "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "uuid": "12f89368-e5f3-4d4b-bfa1-9d3def8d728b"
+            "uuid": "24ce3f63-d82b-4ea1-9267-0f86e37c3917"
         },
         {
             "class": "BaseItem",
             "type": "anvil",
             "pos": [
-                400.0,
-                300
+                342.9925579810105,
+                363
             ],
             "flags": [
                 "draggable",
@@ -51,172 +51,93 @@
             "origin_screen": "workstation",
             "rotation": 0.0,
             "rotational_velocity": 0.0,
-            "vx": 0.0,
+            "vx": 5e-324,
             "vy": 0.3,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "uuid": "ad72d7e5-f127-460d-9eda-acd205370e49"
+            "uuid": "6df41b74-c63f-4bb1-b8e5-154c3a19bb6a"
         }
     ],
-    "bag_contents": [
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                78,
-                280
-            ],
-            "img_path": "assets/items/gems/aquamarine/gem.png",
-            "shine_path": "assets/items/gems/aquamarine/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                0.5,
-                0.5
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -5.226129031676846e-37,
-            "vy": 0.0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 0,
-            "shine_time": 0,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "42273316-8287-4692-a4b3-bf0301e0d2e3",
-            "state": "bagged"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                78,
-                280
-            ],
-            "img_path": "assets/items/gems/emerald/gem.png",
-            "shine_path": "assets/items/gems/emerald/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                0.5,
-                0.5
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -3.687269993193401e-25,
-            "vy": 0.0,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 0,
-            "shine_time": 0,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "d662ffd9-d80c-4b2f-b41b-c561467e4b06",
-            "state": "bagged"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                78,
-                280
-            ],
-            "img_path": "assets/items/gems/rhotochrosite/gem.png",
-            "shine_path": "assets/items/gems/rhotochrosite/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                0.5,
-                0.5
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -8.868690343242466e-31,
-            "vy": 0.2727272727272727,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 0,
-            "shine_time": 0,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "f2d0ad39-abfa-4ab8-b158-9b668a26051a",
-            "state": "bagged"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                78,
-                280
-            ],
-            "img_path": "assets/items/gems/citrine/gem.png",
-            "shine_path": "assets/items/gems/citrine/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                0.5,
-                0.5
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -0.0,
-            "vy": 0.2727272727272727,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 0,
-            "shine_time": 0,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "58974737-1bcf-4aab-83c1-6135b328a06b",
-            "state": "bagged"
-        }
-    ],
+    "bag_contents": [],
     "table": [
         {
-            "class": "GemItem",
-            "type": "gem",
+            "class": "MaterialItem",
+            "type": "ore",
             "pos": [
-                331.52035370185286,
-                285
+                200.0,
+                200
             ],
-            "img_path": "assets/items/gems/aquamarine/gem.png",
-            "shine_path": "assets/items/gems/aquamarine/shine.png",
+            "img_path": "assets/items/iron/iron1.png",
             "flags": [
-                "draggable",
-                "shiny"
+                "draggable"
             ],
+            "temperature": 0,
+            "material": "iron",
+            "origin_screen": "table",
+            "animated": false,
             "scale": [
                 1,
                 1
             ],
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "mass": 1,
+            "uuid": "03f134b6-8caf-4261-88a3-43bd37a498d8"
+        },
+        {
+            "class": "MaterialItem",
+            "type": "ore",
+            "pos": [
+                200.0,
+                200
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 0,
+            "material": "iron",
             "origin_screen": "table",
             "animated": false,
+            "scale": [
+                1,
+                1
+            ],
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "mass": 1,
+            "uuid": "dab3bd89-8abd-489a-b6c1-33ba08cdd3f5"
+        },
+        {
+            "class": "MaterialItem",
+            "type": "ore",
+            "pos": [
+                200.0,
+                200
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 0,
+            "material": "iron",
+            "origin_screen": "table",
+            "animated": false,
+            "scale": [
+                1,
+                1
+            ],
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
@@ -224,32 +145,53 @@
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "971eb6c6-ce49-4ea5-98e1-869c7ab6763b"
-        },
+            "mass": 1,
+            "uuid": "1983e6b4-4f7c-4b5c-8af0-d2e31414c5be"
+        }
+    ],
+    "anvilScreen": [
         {
-            "class": "GemItem",
-            "type": "gem",
+            "class": "BaseItem",
+            "type": "slot",
             "pos": [
-                432.30651472347023,
-                294
+                396.0,
+                102.0
             ],
-            "img_path": "assets/items/gems/citrine/gem.png",
-            "shine_path": "assets/items/gems/citrine/shine.png",
             "flags": [
-                "draggable",
-                "shiny"
+                "slot",
+                "invisible"
             ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": "18d1958d-f0db-45d5-a086-94cb2b512918",
+            "slot_name": "anvil_input_1",
+            "origin_screen": "anvilScreen",
             "scale": [
                 1,
                 1
             ],
-            "origin_screen": "table",
+            "uuid": "d36e4c84-76a8-4383-a2c3-2231f2fb28f4"
+        },
+        {
+            "class": "MaterialItem",
+            "type": "ore",
+            "pos": [
+                396.0,
+                102.0
+            ],
+            "img_path": "assets/items/iron/iron1.png",
+            "flags": [
+                "draggable"
+            ],
+            "temperature": 907.9199999999462,
+            "material": "iron",
+            "origin_screen": "anvilScreen",
             "animated": false,
+            "scale": [
+                1.0,
+                1.0
+            ],
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
@@ -257,210 +199,228 @@
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "17681e66-4e52-496d-9429-cf72432193d2"
+            "mass": 1,
+            "uuid": "18d1958d-f0db-45d5-a086-94cb2b512918",
+            "state": "free"
         },
         {
-            "class": "GemItem",
-            "type": "gem",
+            "class": "MaterialItem",
+            "type": "ore",
             "pos": [
-                571.506131397368,
-                230
+                793.0000053720913,
+                155
             ],
-            "img_path": "assets/items/gems/emerald/gem.png",
-            "shine_path": "assets/items/gems/emerald/shine.png",
+            "img_path": "assets/items/iron/iron1.png",
             "flags": [
-                "draggable",
-                "shiny"
+                "draggable"
             ],
-            "scale": [
-                1,
-                1
-            ],
-            "origin_screen": "table",
+            "temperature": 919.8299999999439,
+            "material": "iron",
+            "origin_screen": "anvilScreen",
             "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 7.007445403326203e-25,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "ca749b6c-6b08-4f9e-ba3e-75660d6b2c5f"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                208.0,
-                267
-            ],
-            "img_path": "assets/items/gems/rhotochrosite/gem.png",
-            "shine_path": "assets/items/gems/rhotochrosite/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
             "scale": [
-                1,
-                1
+                1.0,
+                1.0
             ],
-            "origin_screen": "table",
-            "animated": false,
             "rotation": 0.0,
             "rotational_velocity": 0.0,
             "vx": 0.0,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "06822213-d593-4323-8d9f-3bd07d33eaf5"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                708.3687692533625,
-                243
-            ],
-            "img_path": "assets/items/gems/aquamarine/gem.png",
-            "shine_path": "assets/items/gems/aquamarine/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                1,
-                1
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 4.06529469738016e-124,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "7d16b5a1-6aab-4d9e-9079-d49ac284f481"
-        },
-        {
-            "class": "GemItem",
-            "type": "gem",
-            "pos": [
-                654.4683349983563,
-                282
-            ],
-            "img_path": "assets/items/gems/citrine/gem.png",
-            "shine_path": "assets/items/gems/citrine/shine.png",
-            "flags": [
-                "draggable",
-                "shiny"
-            ],
-            "scale": [
-                1,
-                1
-            ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 5.428202412429621e-68,
             "vy": 0,
             "currentGravity": 0.3,
             "storedGravity": 0.3,
             "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "cbf8645e-b7c1-42b9-9828-27399fc616aa"
-        },
+            "mass": 1,
+            "uuid": "9a4e3ed5-5d85-421f-a2f5-2238bcab2db3",
+            "state": "free"
+        }
+    ],
+    "_screen_data": {
+        "anvilScreen": {}
+    },
+    "furnaceScreen": [
         {
-            "class": "GemItem",
-            "type": "gem",
+            "class": "BaseItem",
+            "type": "slot",
             "pos": [
-                320.7203492533169,
-                346
+                192.0,
+                138.0
             ],
-            "img_path": "assets/items/gems/emerald/gem.png",
-            "shine_path": "assets/items/gems/emerald/shine.png",
             "flags": [
-                "draggable",
-                "shiny"
+                "slot",
+                "invisible"
             ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_1",
+            "origin_screen": "furnaceScreen",
             "scale": [
                 1,
                 1
             ],
-            "origin_screen": "table",
-            "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": -7.716549055079947e-55,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "5b84f606-d728-4995-a208-1d7d78a0a654"
+            "uuid": "c3512fde-e9c7-4400-a05d-718a90d2577e"
         },
         {
-            "class": "GemItem",
-            "type": "gem",
+            "class": "BaseItem",
+            "type": "slot",
             "pos": [
-                533.8241042940631,
-                357
+                336.0,
+                138.0
             ],
-            "img_path": "assets/items/gems/rhotochrosite/gem.png",
-            "shine_path": "assets/items/gems/rhotochrosite/shine.png",
             "flags": [
-                "draggable",
-                "shiny"
+                "slot",
+                "invisible"
             ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_2",
+            "origin_screen": "furnaceScreen",
             "scale": [
                 1,
                 1
             ],
-            "origin_screen": "table",
+            "uuid": "70bcad4c-c7fd-4f3a-91f7-2e17acb0fe3f"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                480.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
             "animated": false,
-            "rotation": 0.0,
-            "rotational_velocity": 0.0,
-            "vx": 0.0,
-            "vy": 0.3,
-            "currentGravity": 0.3,
-            "storedGravity": 0.3,
-            "dragging_for": 0,
-            "shine_alpha": 39,
-            "shine_time": 24.134999999999348,
-            "shine_speed": 0.3,
-            "is_shiny": true,
-            "glow_path": "assets/misc/glow_img2.png",
-            "uuid": "0d99dee8-3ad6-4e72-aa4b-e8ed06e7449a"
+            "contains": null,
+            "slot_name": "furnace_input_3",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "b78ddd01-04f9-41fd-a7d6-10b4b7a4c7c0"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                624.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_4",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "1b603414-0375-4428-bed7-59b0df4d94d5"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                768.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_5",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "24a6eb3a-30fc-4952-9305-7a68f95b8930"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                480.0,
+                450.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "fuel_input",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "d5467b30-fd1d-4bdf-91d5-231fcb73175b"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                252.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot1",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "bec5c557-26b9-4b0d-8795-5de5970237bd"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                720.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot2",
+            "origin_screen": "furnaceScreen",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "ab68f5ec-b34f-4a58-88fc-24d7df408fd6"
         }
     ]
 }

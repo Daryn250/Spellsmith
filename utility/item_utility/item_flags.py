@@ -28,7 +28,7 @@ class DraggableFlag:
                             if "slot" not in slot.flags:
                                 continue
                             if slot.contains == DraggableFlag.dragging_item.uuid:
-                                if not getattr(slot, "locked", False):
+                                if getattr(slot, "locked", False) == False:
                                     slot.contains = None
                                 else:
                                     DraggableFlag.dragging_item = None
@@ -48,7 +48,7 @@ class DraggableFlag:
 
                     # --- Try dropping into the bag ---
                     dropped_in_bag = False
-                    if gui_manager.bag_window:
+                    if gui_manager.bag_window and gui_manager.bag_window.open:
                         success = gui_manager.bag_window.handle_drop(item, mouse_pos, item_manager)
                         if success:
                             dropped_in_bag = True
@@ -69,7 +69,7 @@ class DraggableFlag:
                     if hasattr(item, "anchor") and item.anchor is None:
                         detatch_connected(item, item_list, item_manager)
 
-                    SlotFlag.handle_event(event, item_list, mouse_pos, virtual_size)
+                    SlotFlag.handle_event(event, item_list, DraggableFlag.dragging_item, mouse_pos, virtual_size)
 
                 DraggableFlag.dragging_item = None
                 DraggableFlag.last_pos = None
@@ -239,25 +239,24 @@ def get_connected(item, itemlist, item_manager):
 
 class SlotFlag:
     @staticmethod
-    def handle_event(event, items, mouse_pos, virtual_size):
+    def handle_event(event, items, dragged, mouse_pos, virtual_size):
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
                 slot_rect = slot.get_scaled_hitbox(virtual_size)
-                for dragged in [j for j in items if getattr(j, "dragging", False)]:
-                    if slot_rect.collidepoint(mouse_pos):
-                        accepted = getattr(slot, "slot_accepts", [])
-                        dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
-                        if is_valid_for_slot(slot, dragged) and slot.contains is None:
+                if slot_rect.collidepoint(mouse_pos):
+                    accepted = getattr(slot, "slot_accepts", [])
+                    dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
+                    if is_valid_for_slot(slot, dragged) and slot.contains is None:
 
-                            dragged.set_position(slot.pos)
+                        dragged.set_position(slot.pos)
 
-                            dragged.trick = TrickAnimation([
-                                {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
-                                {"time": 0.1, "scale": (0.95, 0.95)},
-                                {"time": 0.2, "scale": (1.0, 1.0)}
-                            ])
+                        dragged.trick = TrickAnimation([
+                            {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
+                            {"time": 0.1, "scale": (0.95, 0.95)},
+                            {"time": 0.2, "scale": (1.0, 1.0)}
+                        ])
 
-                            slot.contains = dragged.uuid
+                        slot.contains = dragged.uuid
 
 
     @staticmethod

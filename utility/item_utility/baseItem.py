@@ -210,6 +210,13 @@ class BaseItem:
 
     def set_position(self, pos):
         self.pos = pos
+        if "draggable" in self.flags:
+            self.vx = 0
+            self.vy = 0
+            self.floor = pos[1]
+            self.ovx = 0
+            self.ovy = 0
+            self.rotation = 0
 
     def get_scaled_hitbox(self, screensize):
         s = self.scale

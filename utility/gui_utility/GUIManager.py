@@ -15,7 +15,7 @@ class GUIManager:
 
         self.drawBag = bag
         self.bag_manager = BagManager(capacity=50)
-        self.bag_window = BagWindow(self.bag_manager)
+        self.bag_window = BagWindow(self.bag_manager, screen)
 
         self.quick_menu = None  # Optional QuickMenu
         self.gui_input = True
@@ -81,12 +81,14 @@ class GUIManager:
             self.bag_window.animation = TrickAnimation(close_animation, on_complete=remove_window_when_done)
             self.bag_window.animation.reset()
             self.bag_img = self.bag_img_closed
+            self.bag_window.open = False
         else:
             # Start opening animation
             self.bag_window.animation = TrickAnimation(open_animation)
             self.bag_window.animation.reset()
             self.windows.insert(0, self.bag_window)
             self.bag_img = self.bag_img_open
+            self.bag_window.open = True
 
         self.bag_manager.hover_info = None
 

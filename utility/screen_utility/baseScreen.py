@@ -68,14 +68,14 @@ class BaseScreen:
         else:
             extra = None
         self.item_manager.save_items(save_path, self.screen_name, extra_screen_data=extra)
-        if self.draw_bag:
-            self.gui_manager.save_bag(save_path)
+
+        self.gui_manager.save_bag(save_path)
 
     def handle_events(self, virtual_mouse):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.save_items("saves/save1.json")
-                self.gui_manager.bag_manager.save_bag("saves/save1.json")
+                print("saving")
                 pygame.quit()
                 sys.exit()
 

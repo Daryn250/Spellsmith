@@ -158,3 +158,4 @@ def handle_screen_switch(item, screen, screen_switcher):
     if isinstance(item.next_screen, str):
         item.next_screen = get_screen_function(item.next_screen)
     screen_switcher.start(lambda: item.next_screen(screen))
+

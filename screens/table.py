@@ -95,9 +95,6 @@ def table(screen, prev_screen = None):
         previous_screen=main_menu  # Reference to the previous screen function
     )
 
-    makeItem(base.item_manager, "aquamarine", (200,200), "table")
-    makeItem(base.item_manager, "citrine", (200,200), "table")
-    makeItem(base.item_manager, "emerald", (200,200), "table")
-    makeItem(base.item_manager, "rhotochrosite", (200,200), "table")
+    makeItem(base.item_manager, "iron_ore", (200,200), "table")
 
     base.run()
