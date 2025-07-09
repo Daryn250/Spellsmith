@@ -28,15 +28,16 @@ class BagWindow:
         if self.animation:
             self.animation.update(dt, self, virtual_size)
 
-        if self.animation.finished:
-            for item in self.bag.contents:
-                if item.dragging:
-                    continue
-                if item.state == "bagged":
-                    item.update(None, gui_manager, virtual_size, bounds=self.get_bounds_rect(), dt=dt)
-                    for p in item.particles:
-                        p.update()
-                    item.particles = [p for p in item.particles if p.is_alive()]
+        if self.open:
+            if self.animation.finished:
+                for item in self.bag.contents:
+                    if item.dragging:
+                        continue
+                    if item.state == "bagged":
+                        item.update(None, gui_manager, virtual_size, bounds=self.get_bounds_rect(), dt=dt)
+                        for p in item.particles:
+                            p.update()
+                        item.particles = [p for p in item.particles if p.is_alive()]
 
     def get_bounds_rect(self):
         x, y = self.pos

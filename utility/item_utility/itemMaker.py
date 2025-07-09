@@ -493,6 +493,16 @@ ITEM_BASES = {
             "scale":(1,1)
         }
     },
+    ##### PARTS #####
+    "rounded_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt as such: "assets/tools/parts/{name}/{material}.png"
+            "flags": ["draggable"],
+            "scale":(1.5,1.5)
+        }
+    }
 
 }
 
@@ -507,10 +517,10 @@ item_class_map = {
 
 class makeItem:
     def __init__(self, item_manager, itemType: str, pos, screen: str, extra_nbt=None):
-        if itemType not in ITEM_BASES:
+        if itemType.lower() not in ITEM_BASES:
             raise ValueError(f"Unknown itemType: {itemType}")
 
-        base = ITEM_BASES[itemType]
+        base = ITEM_BASES[itemType.lower()]
         nbt = base["nbt"].copy()
         item_class_name = base.get("class", "BaseItem")
         item_class = item_class_map.get(item_class_name, BaseItem)
@@ -533,3 +543,6 @@ class makeItem:
         item_manager.add_item(new_item)
 
         self.item = new_item
+
+
+

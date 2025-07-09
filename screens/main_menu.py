@@ -6,6 +6,8 @@ from utility.cursor_utility.cursorManager import CursorManager
 from utility.cursor_utility.cursor import HammerCursor
 from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.button import Button
+from utility.settingsManager import get_font
+import math
 
 from screens.table import table  # next screen
 
@@ -25,12 +27,12 @@ class MainMenuHelper:
         sw, sh = self.screen_size
         center_x = sw // 20 + 50
         self.buttons = [
-            Button(None, (center_x, sh * 2 // 5), "play", pygame.font.Font(None, 32), "White", "gray"),
-            Button(None, (center_x, sh // 2), "settings", pygame.font.Font(None, 32), "White", "gray"),
-            Button(None, (center_x, int(sh * 0.9)), "quit", pygame.font.Font(None, 32), "White", "indianred1")
+            Button(None, (center_x, sh * 2 // 5), "play", pygame.font.Font(get_font(), 20), "White", "gray"),
+            Button(None, (center_x, sh // 2), "settings", pygame.font.Font(get_font(), 20), "White", "gray"),
+            Button(None, (center_x, int(sh * 0.9)), "quit", pygame.font.Font(get_font(), 20), "White", "indianred1")
         ]
 
-    def update(self, dt, item_manager):
+    def update(self, dt, item_manager, mouse, screen):
         self.bg_tile.update(dt)
         self.boat_sprite.update(dt)
 
@@ -57,7 +59,7 @@ class MainMenuHelper:
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.buttons[0].checkForInput(virtual_mouse):  # Play
-                switcher.start(lambda: table(screen))
+                switcher.start(lambda: table(screen), None)
             elif self.buttons[1].checkForInput(virtual_mouse):  # Settings
                 pass  # placeholder
             elif self.buttons[2].checkForInput(virtual_mouse):  # Quit

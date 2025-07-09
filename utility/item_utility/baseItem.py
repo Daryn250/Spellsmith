@@ -136,7 +136,10 @@ class BaseItem:
         rotated_rect = rotated_img.get_rect(center=(center_x, center_y))
 
         if "no_shadow" not in self.flags:
-            SHADOW_OFFSET = (10, -10)
+            if getattr(self, "state", None) == "bagged":
+                SHADOW_OFFSET = (5, -5)
+            else:
+                SHADOW_OFFSET = (10, -10)
             shadow_bottom_y = getattr(self, "floor", rotated_rect.bottom)
 
             # Simulate blur by drawing multiple semi-transparent shadows

@@ -85,6 +85,7 @@ class MiniGameManager:
             self.current_game.update(dt, virtual_mouse)
             if self.current_game.is_finished():
                 self.finished = True
+                self.final_grade = self.current_game.ratioFinal
         else:
             if self.in_selector:
                 self.selector.update(dt, virtual_mouse)
@@ -121,8 +122,8 @@ class MiniGameManager:
 
             if self.selector.finished:
                 selected_type = self.selector.get_selected_type()
-                print(selected_type)
                 self._setup_games_for_item(selected_type)
+                self.selected = selected_type
                 self.in_selector = False
             return
 

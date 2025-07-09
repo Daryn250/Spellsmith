@@ -25,7 +25,7 @@ class FurnaceHelper:
 
 
 
-    def update(self, dt, item_manager, mouse):
+    def update(self, dt, item_manager, mouse, base_screen):
         MAX_FUEL = 1.0  # Maximum stored fuel level
         BASE_DRAIN_RATE = dt / 300000  # base drain rate for 1 item
 

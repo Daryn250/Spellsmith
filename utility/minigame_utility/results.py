@@ -97,8 +97,8 @@ class ResultsMinigame:
         if all_arrived:
             self.final_timer += dt
             if self.final_timer >= self.final_delay and not self.final_grade:
-                ratio = self.total_score / self.max_score if self.max_score else 0
-                grade = self._letter_grade(ratio)
+                self.ratioFinal = self.total_score / self.max_score if self.max_score else 0
+                grade = self._letter_grade(self.ratioFinal)
                 self.final_grade = grade
 
                 box_margin = 10

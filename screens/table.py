@@ -18,7 +18,7 @@ class TableHelper:
         self.sway_speed = 1.5     # radians/sec
         self.enable_blur = enable_blur
 
-    def update(self, dt, item_manager, virtual_mouse):
+    def update(self, dt, item_manager, virtual_mouse, screen):
         self.backdrop_anim.update(dt)
         self.overlay_anim.update(dt)
         self.time += dt / 1000

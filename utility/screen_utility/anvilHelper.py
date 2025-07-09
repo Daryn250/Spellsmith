@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 from utility.item_utility.item_flags import SlotFlag
+from utility.item_utility.itemMaker import makeItem
 from utility.button import Button
 from utility.minigame_utility.minigameManager import MiniGameManager
 from utility.tool_utility.temperatureHandler import get_temp_range
@@ -37,9 +38,10 @@ class AnvilHelper:
         self.minigame_manager = None
 
     
-    def update(self, dt, item_manager, virtual_mouse = None):
+    def update(self, dt, item_manager, virtual_mouse = None, screen = None):
         self.hammer_button_visible = False
-
+        if screen == None:
+            raise KeyError("no screen parsed. please parse a screen for this function.")
         # ---- Check if there's a valid item in the slot ----
         slot = item_manager.getSlotByName("anvil_input_1")
         if slot and slot.contains:
@@ -74,6 +76,18 @@ class AnvilHelper:
         if self.minigame_manager:
             self.minigame_manager.update(dt, virtual_mouse)
             if self.minigame_manager.finished:
+                # delete the item on the anvil and then replace it with the new item, add smoke particles.
+                s = self.item_in_slot # if breaks then serious issue cuz how you do that
+                item_manager.remove_item(self.item_in_slot.uuid)
+                i = self.minigame_manager.selected
+                name = i.get("key")
+                makeItem(item_manager, name, (slot.pos), screen.screen_name, 
+                         {"img_path": f"assets/tools/parts/{name}/{s.material}.png", 
+                          "material":s.material, 
+                          "mass":s.mass, 
+                          "quality":self.minigame_manager.final_grade
+                          }
+                    )
                 print("finished!")
                 self.hammering_active = False
                 self.minigame_manager = None
