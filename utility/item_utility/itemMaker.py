@@ -7,7 +7,7 @@ ITEM_BASES = {
         "class": "BaseItem",
         "type": "slot",
         "nbt": {
-            "flags": ["slot", "invisible"],
+            "flags": ["slot", "invisible", "no_shadow"],
             "slot_accepts": [],
             "img_path": "assets/very_important/cat.png",
             "animated": False,
@@ -18,7 +18,7 @@ ITEM_BASES = {
         "class": "BaseItem",
         "type": "furnace",
         "nbt": {
-            "flags": ["draggable", "screen_change", "unbaggable"],
+            "flags": ["draggable", "screen_change", "unbaggable", "inspectable"],
             "img_path": "assets/screens/workstation/furnace.png",
             "animated": False,
             "next_screen": "furnaceScreen",
@@ -29,11 +29,45 @@ ITEM_BASES = {
         "class": "BaseItem",
         "type": "anvil",
         "nbt": {
-            "flags": ["draggable", "screen_change", "unbaggable"],
+            "flags": ["draggable", "screen_change", "unbaggable", "inspectable"],
             "img_path": "assets/screens/workstation/anvil.png",
             "animated": False,
             "next_screen": "anvilScreen",
             "scale": (2, 2)
+        }
+    },
+    "map": {
+        "class": "BaseItem",
+        "type": "paper",
+        "nbt": {
+            "flags": ["draggable", "screen_change", "unbaggable", "background", "no_shadow", "inspectable"],
+            "img_path": "assets/screens/table/paper1.png",
+            "animated": False,
+            "next_screen": "mapScreen",
+            "scale": (2, 2)
+        }
+    },
+    "craft": {
+        "class": "BaseItem",
+        "type": "paper",
+        "nbt": {
+            "flags": ["draggable", "screen_change", "unbaggable", "background", "no_shadow", "inspectable"],
+            "img_path": "assets/screens/table/paper2.png",
+            "animated": False,
+            "next_screen": "workstation",
+            "scale": (2, 2)
+        }
+    },
+    #### ISLANDS FOR MAP ####
+    "island1": {
+        "class": "IslandItem",
+        "type": "island",
+        "nbt": {
+            "flags": ["screen_change", "island", "no_shadow", "inspectable"],
+            "img_path": "assets/error.png",
+            "animated": False,
+            "next_screen": "main_menu",
+            "scale": (1,1)
         }
     },
     #### CHARMS ####
@@ -43,7 +77,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/gui/charm_board/rain_charm/passive",
             "animated": True,
-            "flags": ["draggable", "charm", "hangable"],
+            "flags": ["draggable", "charm", "hangable", "inspectable"],
             "charmType": "rain_charm"
         }
     },
@@ -53,7 +87,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/gui/charm_board/moon_charm/passive",
             "animated": True,
-            "flags": ["draggable", "charm", "hangable"],
+            "flags": ["draggable", "charm", "hangable", "inspectable"],
             "charmType": "moon_charm"
         }
     },
@@ -63,7 +97,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/gui/charm_board/mana_charm/passive",
             "animated": True,
-            "flags": ["draggable", "charm", "hangable"],
+            "flags": ["draggable", "charm", "hangable", "inspectable"],
             "charmType": "mana_charm"
         }
     },
@@ -73,7 +107,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/copper/copper1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
         }
@@ -83,7 +117,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/copper/copper2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
         }
@@ -93,7 +127,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/iron/iron1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "iron"
         }
@@ -103,7 +137,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/iron/iron2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "iron"
         }
@@ -113,7 +147,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/lead/lead1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
         }
@@ -123,7 +157,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/lead/lead2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
         }
@@ -133,7 +167,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/lomium/lomium1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lomium"
         }
@@ -143,7 +177,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/lomium/lomium2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lomium"
         }
@@ -153,7 +187,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/silver/silver1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
         }
@@ -163,7 +197,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/silver/silver2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
         }
@@ -173,7 +207,7 @@ ITEM_BASES = {
         "type": "ore",
         "nbt": {
             "img_path": "assets/items/titanium/titanium1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"
         }
@@ -183,7 +217,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/titanium/titanium2.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"
         }
@@ -193,7 +227,7 @@ ITEM_BASES = {
         "type": "ingot",
         "nbt": {
             "img_path": "assets/items/titanium/titanium3.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"
         }
@@ -204,7 +238,7 @@ ITEM_BASES = {
         "type": "fuel",
         "nbt": {
             "img_path": "assets/items/fuel/large_coal.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "fuel": 0.4
         }
     },
@@ -213,7 +247,7 @@ ITEM_BASES = {
         "type": "fuel",
         "nbt": {
             "img_path": "assets/items/fuel/med_coal.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "fuel": 0.3
         }
     },
@@ -222,7 +256,7 @@ ITEM_BASES = {
         "type": "fuel",
         "nbt": {
             "img_path": "assets/items/fuel/small_coal.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "fuel": 0.2
         }
     },
@@ -231,7 +265,7 @@ ITEM_BASES = {
         "type": "fuel",
         "nbt": {
             "img_path": "assets/items/fuel/log.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "fuel": 0.05
         }
     },
@@ -241,7 +275,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/large_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "large_bottle",
             "capacity": 10, # units of liquid
             "contents": 0,
@@ -255,7 +289,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/hexagon_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "hexagon_bottle",
             "capacity": 7,
             "contents": 0,
@@ -269,7 +303,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/gold_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "gold_bottle",
             "capacity": 10,
             "contents": 0,
@@ -283,7 +317,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/crescent_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "crescent_bottle",
             "capacity": 7,
             "contents": 0,
@@ -297,7 +331,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/circle_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "circle_bottle",
             "capacity": 6,
             "contents": 0,
@@ -311,7 +345,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/spiked_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "spiked_bottle",
             "capacity": 10,
             "contents": 0,
@@ -325,7 +359,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/uranium_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "uranium_bottle",
             "capacity": 11,
             "contents": 0,
@@ -339,7 +373,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/tall_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "tall_bottle",
             "capacity": 9,
             "contents": 0,
@@ -353,7 +387,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/small_uranium_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "small_uranium_bottle",
             "capacity": 3,
             "contents": 0,
@@ -367,7 +401,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/small_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "small_bottle",
             "capacity": 3,
             "contents": 0,
@@ -381,7 +415,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/red_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "red_bottle",
             "capacity": 5,
             "contents": 0,
@@ -395,7 +429,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/mini_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "mini_bottle",
             "capacity": 1,
             "contents": 0,
@@ -409,7 +443,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/brown_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "brown_bottle",
             "capacity": 4,
             "contents": 0,
@@ -423,7 +457,7 @@ ITEM_BASES = {
         "type": "bottle",
         "nbt": {
             "img_path": "assets/items/bottles/chain_bottle/img1.png",
-            "flags": ["draggable"],
+            "flags": ["draggable", "inspectable"],
             "bottleType": "chain_bottle",
             "capacity": 6,
             "contents": 0,
@@ -439,7 +473,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/aquamarine/gem.png",
             "shine_path": "assets/items/gems/aquamarine/shine.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -449,7 +483,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/citrine/gem.png",
             "shine_path": "assets/items/gems/citrine/shine.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -459,7 +493,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/emerald/gem.png",
             "shine_path": "assets/items/gems/emerald/shine.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -469,7 +503,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/rhotochrosite/gem.png",
             "shine_path": "assets/items/gems/rhotochrosite/shine.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -479,7 +513,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/tourmaline/gem.png",
             "shine_path": "assets/items/gems/tourmaline/shine.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -489,7 +523,7 @@ ITEM_BASES = {
         "nbt": {
             "img_path": "assets/items/gems/tourmaline/perfect.png",
             "shine_path": "assets/items/gems/tourmaline/shine_perfect.png",
-            "flags": ["draggable", "shiny"],
+            "flags": ["draggable", "shiny", "inspectable"],
             "scale":(1,1)
         }
     },
@@ -499,8 +533,9 @@ ITEM_BASES = {
         "type":"pommel",
         "nbt": {
             # pass in img_path as extra nbt as such: "assets/tools/parts/{name}/{material}.png"
-            "flags": ["draggable"],
-            "scale":(1.5,1.5)
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5)
         }
     }
 
@@ -529,6 +564,7 @@ class makeItem:
             nbt.update(extra_nbt)
 
         nbt["origin_screen"] = screen
+        nbt["item_name"] = itemType
 
         if "next_screen" in nbt and isinstance(nbt["next_screen"], str):
             screen_name = nbt["next_screen"]
@@ -536,7 +572,8 @@ class makeItem:
             if screen_func:
                 nbt["next_screen"] = screen_func
             else:
-                print(f"[makeItem] Warning: Could not resolve screen '{screen_name}' to a function.")
+                nbt["next_screen"] = get_screen_function("main_menu")
+                print(f"[makeItem] Warning: Could not resolve screen '{screen_name}' to a function, defaulting to main menu for security.")
 
         new_item = item_class(item_manager, base["type"], pos, nbt)
 
@@ -544,5 +581,27 @@ class makeItem:
 
         self.item = new_item
 
+def item_debug(item_manager, start_pos=(50, 50), screen_name="main_menu", spacing=48, max_columns=10):
+    """Spawns all non-part items in a grid for debug purposes."""
+    x, y = start_pos
+    col = 0
+
+    for name, data in ITEM_BASES.items():
+        nbt = {}
+        if data.get("class") == "PartItem":
+            continue  # Skip parts
+        
+        try:
+            makeItem(item_manager, name, (x, y), screen_name, nbt)
+        except Exception as e:
+            print(f"item {name} failed to load: {e}")
+
+        col += 1
+        if col >= max_columns:
+            col = 0
+            x = start_pos[0]
+            y += spacing
+        else:
+            x += spacing
 
 

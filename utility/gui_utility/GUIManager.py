@@ -5,6 +5,8 @@ from utility.item_utility.trickAnimation import TrickAnimation
 from utility.gui_utility.QuickScreenSwitcherWindow import QuickScreenSwitcherWindow
 from utility.screen_utility.screenManager import get_all_screen_functions, get_formatted_screen_name
 
+from utility.gui_utility.hoverWindow import HoverInfo
+
 
 class GUIManager:
     def __init__(self, screen, charmboard=True, bag=True):
@@ -35,6 +37,7 @@ class GUIManager:
     self.screenMenu.width, 
     self.screenMenu.scroll_area_height
 )
+        self.inspecting = False
 
 
 
@@ -62,6 +65,10 @@ class GUIManager:
 
         if self.bag_window in self.windows:
             self.bag_window.handle_event(event)
+        
+        keys = pygame.key.get_pressed()
+        self.inspecting = keys[pygame.K_q] # smart people stuff
+
 
 
     def toggle_bag_window(self):
@@ -136,9 +143,9 @@ class GUIManager:
 
             # Optional hover info
             if self.bag_manager.hover_info:
-                font = pygame.font.SysFont(None, 20)
                 info_pos = (bottom_left_pos[0] + bag_scaled[0] + 10, bottom_left_pos[1])
-                self.bag_manager.hover_info.draw(screen, info_pos, font)
+                self.bag_manager.hover_info.mode = "default" if self.inspecting else "reduced"
+                self.bag_manager.hover_info.draw(screen, info_pos, )
 
         # ---- Draw Charm Nails ----
         for img, x, y in self.nails:
@@ -156,8 +163,11 @@ class GUIManager:
             # Special-case for BagWindow: pass dragged item for interaction
             if window == self.bag_window:
                 window.draw(screen, window.pos, mouse_pos, screensize, dragged_item)
+            elif isinstance(window, HoverInfo):
+                window.draw(screen, mouse_pos)
+
             else:
-                window.draw(screen, window.pos, mouse_pos, screensize)
+                window.draw(screen)
 
         # ---- Draw screen switcher menu ----
         if self.screenMenu:

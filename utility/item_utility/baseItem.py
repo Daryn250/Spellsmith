@@ -9,7 +9,8 @@ from utility.item_utility.item_flag_handlers import (
     handle_draggable,
     handle_charm,
     handle_hangable,
-    handle_temperature_particles
+    handle_temperature_particles,
+    handle_inspectable
 )
 from utility.particle import make_tiny_sparkle
 
@@ -168,7 +169,7 @@ class BaseItem:
 
 
 
-        if getattr(self, "is_clicked", False):
+        if getattr(self, "is_clicked", False) or getattr(self, "highlighted", False):
             mask = pygame.mask.from_surface(rotated_img)
             outline_points = mask.outline()
             if outline_points:
@@ -241,7 +242,6 @@ class BaseItem:
         screenSwitcher.start(lambda: self.next_screen(screen),
                              save_callback=lambda: baseScreen.save_items("saves/save1.json"))
 
-
 class BottleItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
         super().__init__(manager, type, pos, nbt_data)
@@ -254,9 +254,10 @@ class BottleItem(BaseItem):
             raise ValueError("No bottle type given, cannot generate mask")
 
         # --- Liquid Animation ---
-        self.liquid_anim = AnimatedTile("assets/liquids/water", frame_duration=100)
-        self.liquid_rotation = 0.0
-        self.liquid_rotational_velocity = 0.0
+        if self.liquid!=None:
+            self.liquid_anim = AnimatedTile(f"assets/liquids/{self.liquid}", frame_duration=3)
+            self.liquid_rotation = 0.0
+            self.liquid_rotational_velocity = 0.0
 
         # --- Load mask image and cache scaled version + alpha mask ---
         self.cork_img = pygame.image.load(f"assets/items/bottles/{self.bottleType}/img3.png").convert_alpha()
@@ -272,6 +273,11 @@ class BottleItem(BaseItem):
             self.cached_mask_size = bottle_size
             self.cached_mask_surface = pygame.transform.scale(self.original_mask_img, bottle_size)
             self.cached_mask = pygame.mask.from_surface(self.cached_mask_surface)
+    
+    def update(self, screen, gui_manager, virtual_size, dt):
+        super().update(screen, gui_manager, virtual_size, dt)
+        if self.liquid!=None:
+            self.liquid_anim.update(dt)
 
     def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
         if "invisible" in self.flags:
@@ -318,25 +324,27 @@ class BottleItem(BaseItem):
         rotated_mask = pygame.transform.rotate(upright_mask_surf, angle)
         mask_rect = rotated_mask.get_rect()
 
-        liquid_frame = self.liquid_anim.get_current_frame()
-        liquid_size = (bottle_size[1], bottle_size[1])  # square image
-        liquid_img = pygame.transform.scale(liquid_frame, liquid_size)
-        sloshed_liquid = pygame.transform.rotate(liquid_img, self.liquid_rotation)
-        sloshed_rect = sloshed_liquid.get_rect()
+        if self.liquid!=None:
+            liquid_frame = self.liquid_anim.get_current_frame()
+            liquid_size = (bottle_size[1], bottle_size[1])  # square image
+            liquid_img = pygame.transform.scale(liquid_frame, liquid_size)
+            sloshed_liquid = pygame.transform.rotate(liquid_img, self.liquid_rotation)
+            sloshed_rect = sloshed_liquid.get_rect()
 
-        fill_ratio = min(max(self.contents / self.capacity, 0), 1)
-        fill_offset = int((1.0 - fill_ratio) * bottle_size[1])
-        liquid_x = (mask_rect.width // 2) - (sloshed_rect.width // 2)
-        liquid_y = (mask_rect.height // 2) - (sloshed_rect.height // 2) + fill_offset
+            fill_ratio = min(max(self.contents / self.capacity, 0), 1)
+            fill_offset = int((1.0 - fill_ratio) * bottle_size[1])
+            liquid_x = (mask_rect.width // 2) - (sloshed_rect.width // 2)
+            liquid_y = (mask_rect.height // 2) - (sloshed_rect.height // 2) + fill_offset
 
-        liquid_surface = pygame.Surface(mask_rect.size, pygame.SRCALPHA)
-        liquid_surface.blit(sloshed_liquid, (liquid_x, liquid_y))
-        masked_liquid = liquid_surface.copy()
-        masked_liquid.blit(rotated_mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-        masked_rect = masked_liquid.get_rect(center=(center_x, center_y))
+            liquid_surface = pygame.Surface(mask_rect.size, pygame.SRCALPHA)
+            liquid_surface.blit(sloshed_liquid, (liquid_x, liquid_y))
+            masked_liquid = liquid_surface.copy()
+            masked_liquid.blit(rotated_mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+            masked_rect = masked_liquid.get_rect(center=(center_x, center_y))
 
         # --- Render final visuals ---
-        surface.blit(masked_liquid, masked_rect.topleft)
+        if self.liquid!=None:
+            surface.blit(masked_liquid, masked_rect.topleft)
         surface.blit(rotated_bottle, bottle_rect.topleft)
 
         # --- Cork on top ---
@@ -344,17 +352,16 @@ class BottleItem(BaseItem):
         rotated_cork = pygame.transform.rotate(cork_img, angle)
         cork_rect = rotated_cork.get_rect(center=(center_x, center_y))
         surface.blit(rotated_cork, cork_rect.topleft)
-
-
-        
-
+    
+    def set_position(self, pos):
+        super().set_position(pos)
+        self.scale = getattr(self, "default_scale", self.scale)
 
 class MaterialItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
         super().__init__(manager, type, pos, nbt_data)
         self.temperature = getattr(self, "temperature", 0)
         self.mass = getattr(self, "mass", 1)
-
 
 class CharmItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
@@ -374,7 +381,6 @@ class CharmItem(BaseItem):
             if self.window in gui_manager.windows:
                 gui_manager.windows.remove(self.window)
             self.window = None
-
 
 class PartItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
@@ -522,3 +528,10 @@ class GemItem(BaseItem):
             else:
                 p.draw(surface)
 
+class IslandItem(BaseItem):
+    def __init__(self, manager, type, pos, nbt_data={}):
+        super().__init__(manager, type, pos, nbt_data)
+        self.hovered = False
+        self.name = getattr(self, "name", "???")
+        self.description = getattr(self, "description", "*insert cool description here*")
+    

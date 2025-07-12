@@ -121,6 +121,7 @@ class BaseScreen:
             ScreenChangeFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.screen, self.switcher, self.virtual_size, self)
             CharmFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size)
             TrickFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
+            InspectableFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
             self.gui_manager.handleEvent(event, virtual_mouse)
 
 

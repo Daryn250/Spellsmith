@@ -4,7 +4,7 @@ import math
 from utility.animated_sprite import AnimatedTile
 from utility.screen_utility.baseScreen import BaseScreen
 from utility.screen_utility.screenswitcher import ScreenSwitcher
-from utility.item_utility.itemMaker import makeItem
+from utility.item_utility.itemMaker import *
 
 class TableHelper:
     def __init__(self, screen_size, brightness=1.0, enable_blur=False):
@@ -72,7 +72,8 @@ def formattedScreenName():
     return "Table"
 
 def default_items_func(item_manager):
-    return # none for now :)
+    makeItem(item_manager, "map", (200,200), "table")
+    makeItem(item_manager, "craft", (200,200), "table")
 
 def table(screen, prev_screen = None):
     switcher = ScreenSwitcher()
@@ -94,7 +95,5 @@ def table(screen, prev_screen = None):
         default_items_func=default_items_func,
         previous_screen=main_menu  # Reference to the previous screen function
     )
-
-    makeItem(base.item_manager, "iron_ore", (200,200), "table")
 
     base.run()

@@ -136,11 +136,11 @@ class CharmFlag:
 
                     if inside and not getattr(item, "is_clicked", False):
                         item.is_clicked = True
-                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/active")
+                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/active", item.scale)
                         item.img_path = f"assets/gui/charm_board/{item.charmType}/passive"
                     elif not inside and getattr(item, "is_clicked", False):
                         item.is_clicked = False
-                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/passive")
+                        item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/passive", item.scale)
                         item.img_path = f"assets/gui/charm_board/{item.charmType}/passive"
 
 class HangableFlag:
@@ -215,7 +215,6 @@ class HangableFlag:
                 item.anchor_pos = None
                 item.show_nail = False
                 return True
-
     
 def detatch_connected(item, itemlist, item_manager):
     for a in itemlist:
@@ -250,10 +249,14 @@ class SlotFlag:
 
                         dragged.set_position(slot.pos)
 
+                        scale = getattr(dragged, "default_scale", dragged.scale)
+                        l = (scale[0]*1.2, scale[1]*1.2)
+                        s = (scale[0]*.95, scale[0]*.95)
+
                         dragged.trick = TrickAnimation([
-                            {"time": 0.0, "scale": (1.2, 1.2), "particles":"sparkles"},
-                            {"time": 0.1, "scale": (0.95, 0.95)},
-                            {"time": 0.2, "scale": (1.0, 1.0)}
+                            {"time": 0.0, "scale": l, "particles":"sparkles"},
+                            {"time": 0.1, "scale": s},
+                            {"time": 0.2, "scale": scale}
                         ])
 
                         slot.contains = dragged.uuid
@@ -277,16 +280,12 @@ class SlotFlag:
                 ghost_img = dragged_item.get_image(virtual_size)
             ghost_img.set_alpha(100)
 
-            # Uniform screen scale (dragged item always drawn at scale 1)
-            if hasattr(dragged_item, "type"):
-                scale_x = virtual_size[0] / 480
-                scale_y = virtual_size[1] / 270
-            else:
-                scale_x = dragged_item.scale[0]/2
-                scale_y = dragged_item.scale[1]/2
+            # Uniform screen scale (dragged item mostly drawn at scale 1 but account for larger scales)
+            scale_x, scale_y = getattr(dragged_item, "default_scale", dragged_item.scale)
+            scsx, scsy = virtual_size[0] / 480, virtual_size[1] / 270
             scaled_size = (
-                int(ghost_img.get_width() * scale_x),
-                int(ghost_img.get_height() * scale_y)
+                int(ghost_img.get_width() * scale_x)* scsx,
+                int(ghost_img.get_height() * scale_y) *scsy
             )
             ghost_img = pygame.transform.scale(ghost_img, scaled_size)
 
@@ -302,7 +301,6 @@ class SlotFlag:
                 if outline:
                     offset_outline = [(ghost_rect.left + x, ghost_rect.top + y) for x, y in outline]
                     pygame.draw.polygon(surface, (255, 255, 255), offset_outline, width=1)
-
 
 def is_valid_for_slot(slot, item):
     slot_name = getattr(slot, "slot_name", None)
@@ -329,10 +327,6 @@ def is_valid_for_slot(slot, item):
 
     # If slot_accepts is defined, item_type must be in it
     return item_type in accepted
-
-
-
-
 
 class TrickFlag:
     right_mouse_held = False
@@ -386,4 +380,53 @@ class TrickFlag:
                     gui_manager.quick_menu.hide()
                 TrickFlag.right_mouse_held = False
                 TrickFlag.active_item = None
+
+from utility.item_utility.item_to_info import item_to_info
+
+class InspectableFlag:
+    @staticmethod
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
+        keys = pygame.key.get_pressed()
+        inspecting = keys[pygame.K_q]
+
+        hovered_windows = []
+
+        # Track items that should still have a window
+        active_items = []
+
+        for item in item_list:  # TODO: Sort by Z if needed
+            if "inspectable" not in getattr(item, "flags", []):
+                continue
+
+            item.highlight = False  # reset highlight unless hovered
+
+            rect = item.get_scaled_hitbox(virtual_size)
+            is_hovering_item = rect.collidepoint(mouse_pos)
+            is_hovering_window = False
+
+            # Check if mouse is over the item's info window
+            if hasattr(item, "window") and item.window:
+                # You may want to store the last draw position of the window
+                win_rect = pygame.Rect(item.window_last_pos, (item.window.width, item.window.height)) \
+                    if hasattr(item.window, "width") and hasattr(item.window, "height") else None
+                if win_rect and win_rect.collidepoint(mouse_pos):
+                    is_hovering_window = True
+
+            if is_hovering_item or is_hovering_window:
+                # Create or update info window
+                if not hasattr(item, "window") or item.window is None:
+                    item.window = item_to_info(item, inspecting)
+                    item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)  # You could clamp to screen if needed
+                    gui_manager.windows.append(item.window)
+                item.window.mode = "default" if inspecting else "reduced"
+                item.highlight = True
+                active_items.append(item)
+            else:
+                # If mouse not on item or window, queue for removal
+                if hasattr(item, "window") and item.window in gui_manager.windows:
+                    gui_manager.windows.remove(item.window)
+                    item.window = None
+
+
+
 

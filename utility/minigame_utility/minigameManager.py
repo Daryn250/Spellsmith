@@ -52,10 +52,10 @@ class MiniGameManager:
         difficulty = round(((max_temp+1)/temp)+(mass/2)+(rarity_scale*10))
 
         if part == "pommel":
-            #self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
-            #self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(SliderMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
             self.game_queue.append(HeatTreatMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
-            #self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
+            self.game_queue.append(QuenchMinigame(self.virtual_size, difficulty, self.clip, self.base_screen))
         
         if part == "guard":
             self.game_queue.append(HammerMiniGame(self.virtual_size, difficulty, self.clip, self.base_screen))

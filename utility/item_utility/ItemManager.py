@@ -123,7 +123,8 @@ class ItemManager:
 
     def draw_with_z_respect(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
         dragged_item = None
-        items_to_draw = []
+        background_items = []
+        foreground_items = []
 
         for item in self.items:
             is_dragged = getattr(item, "dragging", False)
@@ -133,15 +134,34 @@ class ItemManager:
                 dragged_item = item
             elif is_animating:
                 continue
+            elif "background" in getattr(item, "flags", []):
+                background_items.append(item)
             else:
-                items_to_draw.append(item)
+                foreground_items.append(item)
 
-        items_to_draw.sort(key=lambda item: item.pos[1])
+        # Sort both background and foreground items by their Y position
+        background_items.sort(key=lambda item: item.pos[1])
+        foreground_items.sort(key=lambda item: item.pos[1])
 
-        for item in items_to_draw:
+        # Draw background items first
+        for item in background_items:
             item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
+
+        # Then draw foreground items
+        for item in foreground_items:
+            item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
+
+        # Then draw particles
+        for item in background_items + foreground_items:
             for p in item.particles:
                 p.draw(virtual_surface)
+
+        # Finally draw dragged item on top if it exists
+        if dragged_item:
+            dragged_item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
+            for p in dragged_item.particles:
+                p.draw(virtual_surface)
+
 
     def draw_dragged_item(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
         for item in self.items:

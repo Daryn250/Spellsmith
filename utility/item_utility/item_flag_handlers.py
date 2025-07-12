@@ -5,6 +5,7 @@ from utility.particle import make_scale
 from utility.screen_utility.screenManager import get_screen_function
 
 
+
 def handle_draggable(item, screen, gui_manager, virtual_size, bounds=None):
     item.rotation += getattr(item, "rotational_velocity", 0)
     item.rotational_velocity *= 0.85
@@ -159,3 +160,8 @@ def handle_screen_switch(item, screen, screen_switcher):
         item.next_screen = get_screen_function(item.next_screen)
     screen_switcher.start(lambda: item.next_screen(screen))
 
+def handle_inspectable(item, gui_manager):
+    window = getattr(item, "window", False)
+    if window:
+        pass
+    pass

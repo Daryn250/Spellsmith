@@ -2,9 +2,9 @@ import pygame
 import os
 
 class AnimatedTile:
-    def __init__(self, folder_path, frame_duration=100, loop=True, error_image_path="assets/error.png"):
+    def __init__(self, folder_path, frame_duration=100, loop=True, error_image_path="assets/error.png", scale = (1,1)):
         self.error_frame = pygame.image.load(error_image_path).convert_alpha()
-        self.frames = self._load_frames_from_folder(folder_path)
+        self.frames = self._load_frames_from_folder(folder_path, scale)
         if not self.frames:
             self.frames = [self.error_frame]
 
@@ -13,10 +13,13 @@ class AnimatedTile:
         self.loop = loop
         self.timer = 0
 
-    def _load_frames_from_folder(self, folder_path):
+    def _load_frames_from_folder(self, folder_path, scale):
         supported = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
         if folder_path.lower().endswith(supported):
-            return [pygame.image.load(folder_path).convert_alpha()]
+            a = pygame.image.load(folder_path).convert_alpha()
+            scaled = pygame.transform.scale(a, (int(a.get_width() * scale[0]), int(a.get_height() * scale[1])))
+            return [scaled]
+
         else:
             files = sorted(f for f in os.listdir(folder_path) if f.lower().endswith(supported))
             frames = []
@@ -25,10 +28,12 @@ class AnimatedTile:
                 try:
                     full_path = os.path.join(folder_path, f)
                     img = pygame.image.load(full_path).convert_alpha()
-                    frames.append(img)
+                    scaled = pygame.transform.scale(img, (int(img.get_width() * scale[0]), int(img.get_height() * scale[1])))
+                    frames.append(scaled)
                 except Exception as e:
                     print(f"[AnimatedTile] Failed to load frame: {f} — {e}")
                     frames.append(self.error_frame)
+
 
             return frames
 
