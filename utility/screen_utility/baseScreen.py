@@ -16,16 +16,19 @@ from utility.tool_utility.tool import Tool
 
 class BaseScreen:
     def __init__(self, screen, virtual_size, screen_name, switcher, helper=None,
-                draw_bag=True, draw_charmboard=False, background=None,
+                draw_bag=True, draw_charmboard=False, draw_screennav = True, background=None,
                 default_items_func=None, previous_screen=None,
-                item_manager=None):  # <-- add this
+                item_manager=None, override_draw = False,
+                instance_manager = None):
         ...
+        # screennav is the triangle in the corner that allows for easier screen navigation
         self.item_manager = item_manager if item_manager else ItemManager(virtual_size)
 
         self.screen = screen
         self.virtual_size = virtual_size
         self.vscreen = VirtualScreen(virtual_size)
         self.virtual_surface = self.vscreen.get_surface()
+        self.override_draw = override_draw
 
         self.switcher = switcher
         self.screen_name = screen_name
@@ -34,32 +37,36 @@ class BaseScreen:
         self.helper = helper
         self.draw_bag = draw_bag
         self.draw_charmboard = draw_charmboard
+        self.draw_screennav = draw_screennav
         self.background = background
         self.default_items_func = default_items_func  # callable function
+        self.instance_manager = instance_manager if instance_manager != None else print("[BASESCREEN.py] No instance manager was passed in. very critical error prolly")
 
-        self.item_manager = ItemManager(virtual_size)
         self.cursor_manager = CursorManager(self.virtual_surface)
         self.gui_manager = GUIManager(self, charmboard=draw_charmboard)
         self.clock = pygame.time.Clock()
+        
 
     def load_items(self, save_path):
         data = self.item_manager.load_items(save_path, self.screen_name)
+        # data should be the full save dict, including helper data
+
         if self.draw_bag:
             self.gui_manager.bag_manager.load_bag(save_path, self.item_manager)
 
         if not self.item_manager.items and self.default_items_func:
             self.default_items_func(self.item_manager)
 
-
-        # 🔧 FIX: Allow flexible helper restore logic
         if self.helper and data:
-            screen_data = data.get(self.screen_name, {})
+            screen_data = data.get(self.screen_name, {})  # extra helper data here
             if hasattr(self.helper, "restore"):
                 self.helper.restore(screen_data)
+                print(screen_data)
             elif hasattr(self.helper, "load_from_data"):
                 self.helper.load_from_data(screen_data)
             else:
                 print(f"⚠️ Helper for {self.screen_name} has no 'restore' or 'load_from_data' method.")
+
 
 
     def save_items(self, save_path):
@@ -96,7 +103,7 @@ class BaseScreen:
                             self.switcher.force_finish()
                         else:
                             self.switcher.start(
-                                next_screen_func=lambda: self.previous_screen(self.screen),
+                                next_screen_func=lambda: self.previous_screen(self.screen, self.instance_manager),
                                 save_callback=lambda: self.save_items("saves/save1.json")
                             )
                     else:
@@ -152,17 +159,20 @@ class BaseScreen:
         if self.helper and hasattr(self.helper, "draw"):
             self.helper.draw(self.virtual_surface, self.virtual_size)
 
-        self.item_manager.draw_with_z_respect(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
+        if self.override_draw == False:
+            self.item_manager.draw_with_z_respect(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
 
         dragged = next((i for i in self.item_manager.items if getattr(i, "dragging", False)), None)
         SlotFlag.draw_overlay(self.virtual_surface, self.item_manager.items, dragged, virtual_mouse, self.virtual_size)
 
-        if self.draw_bag or self.draw_charmboard:
-            if self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui:
-                pass  # Skip drawing GUI when hammering
-            else:
-                if self.draw_bag or self.draw_charmboard:
-                    self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
+
+        self.gui_manager.drawBag = self.draw_bag
+        self.gui_manager.drawCharmBoard = self.draw_charmboard
+        self.gui_manager.draw_screennav = self.draw_screennav
+        if self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui:
+            pass
+        else:
+            self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
 
         if self.helper and hasattr(self.helper, "draw_after_gui"):
             self.helper.draw_after_gui(self.virtual_surface, self.virtual_size)

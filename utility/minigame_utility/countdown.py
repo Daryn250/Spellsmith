@@ -1,9 +1,8 @@
 import pygame
 import os
-from utility.settingsManager import get_font
 
 class CountdownMiniGame:
-    def __init__(self, virtual_size, duration=3000, on_finish_callback=None, font_path=get_font(), font_size=48, item = {}):
+    def __init__(self, virtual_size, screen, duration=3000,  on_finish_callback=None, font_size=48, item = {}):
         self.virtual_size = virtual_size
         self.duration = duration
         self.timer = duration
@@ -13,10 +12,8 @@ class CountdownMiniGame:
         self.item = item
 
         # Load font
-        if os.path.exists(font_path):
-            self.font = pygame.font.Font(font_path, font_size)
-        else:
-            self.font = pygame.font.SysFont("arial", font_size)  # fallback
+        
+        self.font = pygame.font.Font(screen.instance_manager.settings.font, font_size)
 
     def update(self, dt, virtual_mouse):
         if self.finished:

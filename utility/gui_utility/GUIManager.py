@@ -14,10 +14,13 @@ class GUIManager:
         self.nails = []
         self.drawCharmBoard = charmboard
         self.charmboard_topright = None
+        self.draw_screennav = True # make this hide screennav when false please and don't forget about not sending updates dude
 
         self.drawBag = bag
         self.bag_manager = BagManager(capacity=50)
         self.bag_window = BagWindow(self.bag_manager, screen)
+        self.screen = screen
+        self.settings = screen.instance_manager.settings
 
         self.quick_menu = None  # Optional QuickMenu
         self.gui_input = True
@@ -32,11 +35,11 @@ class GUIManager:
         self.screenMenu = QuickScreenSwitcherWindow(screen_names, self.switch_to_screen, screen)
         self.arrow_rect = pygame.Rect(0, 0, 40, 40)  # Set properly in draw()
         self.screen_menu_rect =pygame.Rect(
-    self.screenMenu.pos[0], 
-    self.screenMenu.pos[1], 
-    self.screenMenu.width, 
-    self.screenMenu.scroll_area_height
-)
+            self.screenMenu.pos[0], 
+            self.screenMenu.pos[1], 
+            self.screenMenu.width, 
+            self.screenMenu.scroll_area_height
+        )
         self.inspecting = False
 
 
@@ -52,12 +55,14 @@ class GUIManager:
         if self.arrow_rect.collidepoint(mouse):
             self.screenMenu.visible = True
         elif self.screen_menu_rect.collidepoint(mouse) and self.screenMenu.visible == True:
-            self.screenMenu.visible = True
+            if self.draw_screennav:
+                self.screenMenu.visible = True
         else:
             self.screenMenu.visible = False
 
         if self.gui_input:
-            self.screenMenu.handle_event(event)
+            if self.draw_screennav:
+                self.screenMenu.handle_event(event)
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             if self.bag_manager.bag_rect and self.bag_manager.bag_rect.collidepoint(mouse):
@@ -145,7 +150,7 @@ class GUIManager:
             if self.bag_manager.hover_info:
                 info_pos = (bottom_left_pos[0] + bag_scaled[0] + 10, bottom_left_pos[1])
                 self.bag_manager.hover_info.mode = "default" if self.inspecting else "reduced"
-                self.bag_manager.hover_info.draw(screen, info_pos, )
+                self.bag_manager.hover_info.draw(screen, info_pos, self.settings)
 
         # ---- Draw Charm Nails ----
         for img, x, y in self.nails:
@@ -164,29 +169,29 @@ class GUIManager:
             if window == self.bag_window:
                 window.draw(screen, window.pos, mouse_pos, screensize, dragged_item)
             elif isinstance(window, HoverInfo):
-                window.draw(screen, mouse_pos)
+                window.draw(screen, mouse_pos, self.settings)
 
             else:
                 window.draw(screen)
 
         # ---- Draw screen switcher menu ----
-        if self.screenMenu:
+        if self.draw_screennav:
+
+
+            # Draw arrow (screen switch toggle)
+            arrow_color = (255, 255, 255) if self.screenMenu.visible else (100, 100, 100)
+            arrow_pos = (screen_width - 50, screen_height - 50)
+            self.arrow_rect.topleft = arrow_pos
+            pygame.draw.polygon(screen, arrow_color, [
+                (arrow_pos[0], arrow_pos[1]),
+                (arrow_pos[0] + 20, arrow_pos[1] + 10),
+                (arrow_pos[0], arrow_pos[1] + 20)
+            ])
+
+            # Update screen menu position and rect
+            self.screenMenu.pos = (arrow_pos[0] - 140, arrow_pos[1] - 120)
+            self.screen_menu_rect = pygame.Rect(self.screenMenu.pos[0], self.screenMenu.pos[1], self.screenMenu.width, len(self.screenMenu.screen_names) * self.screenMenu.entry_height)
             self.screenMenu.draw(screen)
-
-        # Draw arrow (screen switch toggle)
-        arrow_color = (255, 255, 255) if self.screenMenu.visible else (100, 100, 100)
-        arrow_pos = (screen_width - 50, screen_height - 50)
-        self.arrow_rect.topleft = arrow_pos
-        pygame.draw.polygon(screen, arrow_color, [
-            (arrow_pos[0], arrow_pos[1]),
-            (arrow_pos[0] + 20, arrow_pos[1] + 10),
-            (arrow_pos[0], arrow_pos[1] + 20)
-        ])
-
-        # Update screen menu position and rect
-        self.screenMenu.pos = (arrow_pos[0] - 140, arrow_pos[1] - 120)
-        self.screen_menu_rect = pygame.Rect(self.screenMenu.pos[0], self.screenMenu.pos[1], self.screenMenu.width, len(self.screenMenu.screen_names) * self.screenMenu.entry_height)
-        self.screenMenu.draw(screen)
 
     def save_bag(self, filepath):
         self.bag_manager.save_bag(filepath)

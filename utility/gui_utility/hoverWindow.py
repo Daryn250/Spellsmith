@@ -1,7 +1,7 @@
 import pygame
 import math
 from utility.animated_sprite import AnimatedTile
-from utility.settingsManager import get_font
+from utility.settingsManager import *
 
 class HoverData:
     def __init__(self, label, value=None, data_type="number", anim_tile=None, color=(255, 255, 255)):
@@ -39,14 +39,12 @@ class HoverInfo:
             lines.append(current)
         return [font.render(line, False, (255, 255, 255)) for line in lines]
 
-    def draw(self, surface, pos, small_font=None, font=None, color=(255, 255, 255), bg_color=(0, 0, 0, 180)):
-        if font is None:
-            font = pygame.font.Font(get_font(), 20 if self.mode == "default" else 15)
-        if small_font is None:
-            small_font = pygame.font.Font(get_font(), 12)
+    def draw(self, surface, pos, settings, color=(255, 255, 255), bg_color=(0, 0, 0, 180)):
+        font = pygame.font.Font(settings.font, settings.font_hover_size)
+        small_font = pygame.font.Font(settings.font, settings.gui_size)
 
         reduced = self.mode == "reduced"
-        small_font_reduced = pygame.font.Font(get_font(), int(12 * 0.75))
+        small_font_reduced = pygame.font.Font(settings.font, int(12 * 0.75))
 
         data_to_draw = self.reduced_data if reduced else self.data
 

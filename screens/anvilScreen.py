@@ -14,7 +14,7 @@ def anvilDefaultItems(manager):
         scaled = (pos[0] * (960 / 160), pos[1] * (540 / 90))
         makeItem(manager, "slot_node", scaled, "anvilScreen", extra_nbt={"slot_name": name})
 
-def anvilScreen(screen, previous_screen=None):
+def anvilScreen(screen, instance_manager, previous_screen=None):
     from utility.screen_utility.screenswitcher import ScreenSwitcher
     from utility.item_utility.ItemManager import ItemManager
     switcher = ScreenSwitcher()
@@ -34,7 +34,8 @@ def anvilScreen(screen, previous_screen=None):
         background=helper,
         item_manager=item_manager,
         default_items_func=anvilDefaultItems,
-        previous_screen=workstation
+        previous_screen=workstation,
+        instance_manager=instance_manager
     )
     helper.base_screen = screen_instance
     # Inject the shared item manager

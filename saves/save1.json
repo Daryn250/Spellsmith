@@ -1,1 +1,529 @@
-{}
+{
+    "workstation": [
+        {
+            "class": "BaseItem",
+            "type": "furnace",
+            "pos": [
+                190.0,
+                355
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "unbaggable",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/workstation/furnace.png",
+            "animated": false,
+            "next_screen": "furnaceScreen",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "workstation",
+            "item_name": "furnace",
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 0.0,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "uuid": "5330b9a9-9cee-4d25-9c6b-e5a54d69ee29",
+            "highlight": false,
+            "window_last_pos": [
+                240,
+                324
+            ]
+        },
+        {
+            "class": "BaseItem",
+            "type": "anvil",
+            "pos": [
+                774.957378839824,
+                249
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "unbaggable",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/workstation/anvil.png",
+            "animated": false,
+            "next_screen": "anvilScreen",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "workstation",
+            "item_name": "anvil",
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 1.5359419145512591e-69,
+            "vy": 0.3,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "uuid": "fb1ba41c-4e2e-40dc-898f-dc16ee992bd8",
+            "highlight": false,
+            "window_last_pos": [
+                688,
+                295
+            ]
+        }
+    ],
+    "bag_contents": [],
+    "table": [
+        {
+            "class": "BaseItem",
+            "type": "paper",
+            "pos": [
+                253.4472312882186,
+                219
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "unbaggable",
+                "background",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/table/paper1.png",
+            "animated": false,
+            "next_screen": "mapScreen",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "table",
+            "item_name": "map",
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": 1.4532242306537728e-220,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "uuid": "ee696945-0eba-4751-b268-7fe0472e2489",
+            "highlight": false,
+            "window_last_pos": [
+                208,
+                243
+            ]
+        },
+        {
+            "class": "BaseItem",
+            "type": "paper",
+            "pos": [
+                629.5104074725365,
+                239
+            ],
+            "flags": [
+                "draggable",
+                "screen_change",
+                "unbaggable",
+                "background",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/table/paper2.png",
+            "animated": false,
+            "next_screen": "workstation",
+            "scale": [
+                2,
+                2
+            ],
+            "origin_screen": "table",
+            "item_name": "craft",
+            "rotation": 0.0,
+            "rotational_velocity": 0.0,
+            "vx": -9.766524752565947e-201,
+            "vy": 0,
+            "currentGravity": 0.3,
+            "storedGravity": 0.3,
+            "dragging_for": 0,
+            "uuid": "bfe15208-8a52-4a48-9fc6-ffa321369063",
+            "highlight": true,
+            "window_last_pos": [
+                727,
+                252
+            ]
+        }
+    ],
+    "map": [
+        {
+            "class": "BaseItem",
+            "type": "island",
+            "pos": [
+                0,
+                0
+            ],
+            "island_name": "boat",
+            "flags": [
+                "screen_change",
+                "island",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/map/boat",
+            "animated": true,
+            "next_screen": "main_menu",
+            "scale": [
+                1,
+                1
+            ],
+            "origin_screen": "map",
+            "item_name": "map_boat",
+            "frameDuration": 100,
+            "uuid": "3cb47512-8e12-4269-a81b-9e7233ab04ed",
+            "pos_override": [
+                480.0,
+                270.0
+            ],
+            "highlight": false,
+            "window_last_pos": [
+                470,
+                266
+            ]
+        },
+        {
+            "class": "BaseItem",
+            "type": "island",
+            "pos": [
+                75,
+                242
+            ],
+            "island_name": "island1",
+            "flags": [
+                "screen_change",
+                "island",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/map/islands/island1.png",
+            "animated": false,
+            "next_screen": "main_menu",
+            "scale": [
+                1,
+                1
+            ],
+            "origin_screen": "map",
+            "item_name": "island1",
+            "uuid": "79523723-86da-4a0e-b3ca-f75970e286a3",
+            "pos_override": [
+                555.0,
+                512.0
+            ],
+            "highlight": false,
+            "window_last_pos": [
+                454,
+                303
+            ]
+        },
+        {
+            "class": "BaseItem",
+            "type": "island",
+            "pos": [
+                150,
+                -364
+            ],
+            "island_name": "island2",
+            "flags": [
+                "screen_change",
+                "island",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/map/islands/beach_island.png",
+            "animated": false,
+            "next_screen": "main_menu",
+            "scale": [
+                1,
+                1
+            ],
+            "origin_screen": "map",
+            "item_name": "island2",
+            "uuid": "7effc8cb-0a1a-4e63-ae5c-0c3022dd71b5",
+            "pos_override": [
+                630.0,
+                -94.0
+            ],
+            "highlight": false,
+            "window_last_pos": [
+                518,
+                239
+            ]
+        },
+        {
+            "class": "BaseItem",
+            "type": "island",
+            "pos": [
+                225,
+                364
+            ],
+            "island_name": "island3",
+            "flags": [
+                "screen_change",
+                "island",
+                "no_shadow",
+                "inspectable"
+            ],
+            "img_path": "assets/screens/map/islands/mountain_island.png",
+            "animated": false,
+            "next_screen": "main_menu",
+            "scale": [
+                1,
+                1
+            ],
+            "origin_screen": "map",
+            "item_name": "island3",
+            "uuid": "42bf3d1e-165d-4b23-bd8a-eb8ed73e1641",
+            "pos_override": [
+                705.0,
+                634.0
+            ],
+            "highlight": false,
+            "window_last_pos": [
+                482,
+                159
+            ]
+        }
+    ],
+    "_screen_data": {
+        "furnaceScreen": {
+            "fuel_level": 1
+        }
+    },
+    "anvilScreen": [
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                396.0,
+                102.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "anvil_input_1",
+            "origin_screen": "anvilScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "16642e43-d1e0-49b8-ae7c-715896e5cf54"
+        }
+    ],
+    "main_menu": [],
+    "furnaceScreen": [
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                192.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_1",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "acdbf264-2b6e-415c-9515-7a6b7b190ce9"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                336.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_2",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "4f709796-4270-4d61-8088-534c407d318a"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                480.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_3",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "3a0d00ff-fff6-45c3-b2e5-c48523d46886"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                624.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_4",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "9c91117b-4105-4451-b092-d8f6037c7908"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                768.0,
+                138.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "furnace_input_5",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "0a7961f0-f0ad-411a-b8c6-fe41099c00c1"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                480.0,
+                450.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "fuel_input",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "bc30ee50-57cb-42a4-b5d5-c54da203eaaf"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                252.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot1",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "83335af9-cd5a-43e8-892e-178282a9ade3"
+        },
+        {
+            "class": "BaseItem",
+            "type": "slot",
+            "pos": [
+                720.0,
+                270.0
+            ],
+            "flags": [
+                "slot",
+                "invisible",
+                "no_shadow"
+            ],
+            "slot_accepts": [],
+            "img_path": "assets/very_important/cat.png",
+            "animated": false,
+            "contains": null,
+            "slot_name": "weapon_slot2",
+            "origin_screen": "furnaceScreen",
+            "item_name": "slot_node",
+            "scale": [
+                1,
+                1
+            ],
+            "uuid": "1e62afc2-6588-4918-a72d-b3fba5168939"
+        }
+    ]
+}

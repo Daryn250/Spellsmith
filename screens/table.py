@@ -75,7 +75,7 @@ def default_items_func(item_manager):
     makeItem(item_manager, "map", (200,200), "table")
     makeItem(item_manager, "craft", (200,200), "table")
 
-def table(screen, prev_screen = None):
+def table(screen, instance_manager, prev_screen = None):
     switcher = ScreenSwitcher()
     virtual_size = (960, 540)
     background = AnimatedTile("assets/screens/table/table1.png", frame_duration=150)
@@ -93,7 +93,8 @@ def table(screen, prev_screen = None):
         background=background,
         helper=helper,
         default_items_func=default_items_func,
-        previous_screen=main_menu  # Reference to the previous screen function
+        previous_screen=main_menu,  # Reference to the previous screen function
+        instance_manager = instance_manager
     )
 
     base.run()

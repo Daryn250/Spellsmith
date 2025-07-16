@@ -6,7 +6,6 @@ from utility.cursor_utility.cursorManager import CursorManager
 from utility.cursor_utility.cursor import HammerCursor
 from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.button import Button
-from utility.settingsManager import get_font
 import math
 import random
 
@@ -16,13 +15,16 @@ def formattedScreenName():
     return "Main Menu"
 
 class MainMenuHelper:
-    def __init__(self, screen_size):
+    def __init__(self, screen_size, instance_manager):
         self.tile_size = 32
         self.screen_size = screen_size
         self.tiles = []  # Each tile: {"tile": AnimatedTile, "duration": int, "offset": float, "phase": float}
+        self.instance_manager = instance_manager
+        self.font = instance_manager.settings.font
         self._init_ocean_tiles()
         self._init_buttons()
         self.time_elapsed = 0
+        
 
         # Boat animation
         self.boat_sprite = AnimatedTile("assets/boat", frame_duration=150)  # Replace with actual path if different
@@ -48,9 +50,9 @@ class MainMenuHelper:
         sw, sh = self.screen_size
         center_x = sw // 20 + 50
         self.buttons = [
-            Button(None, (center_x, sh * 2 // 5), "play", pygame.font.Font(get_font(), 20), "White", "gray"),
-            Button(None, (center_x, sh // 2), "settings", pygame.font.Font(get_font(), 20), "White", "gray"),
-            Button(None, (center_x, int(sh * 0.9)), "quit", pygame.font.Font(get_font(), 20), "White", "indianred1")
+            Button(None, (center_x, sh * 2 // 5), "play", pygame.font.Font(self.font, 20), "White", "gray"),
+            Button(None, (center_x, sh // 2), "settings", pygame.font.Font(self.font, 20), "White", "gray"),
+            Button(None, (center_x, int(sh * 0.9)), "quit", pygame.font.Font(self.font, 20), "White", "indianred1")
         ]
 
     def update(self, dt, item_manager, mouse, screen):
@@ -103,7 +105,7 @@ class MainMenuHelper:
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.buttons[0].checkForInput(virtual_mouse):  # Play
-                switcher.start(lambda: table(screen), None)
+                switcher.start(lambda: table(screen, self.instance_manager), None)
             elif self.buttons[1].checkForInput(virtual_mouse):  # Settings
                 pass  # placeholder
             elif self.buttons[2].checkForInput(virtual_mouse):  # Quit
@@ -112,10 +114,10 @@ class MainMenuHelper:
 
 
 
-def main_menu(screen):
+def main_menu(screen, instance_manager):
     switcher = ScreenSwitcher()
     virtual_size = (480, 270)
-    helper = MainMenuHelper(virtual_size)
+    helper = MainMenuHelper(virtual_size, instance_manager)
 
     base = BaseScreen(
         screen=screen,
@@ -128,7 +130,9 @@ def main_menu(screen):
         default_items_func=None,
         previous_screen=None,
         helper=helper,
-        item_manager=None
+        item_manager=None,
+        draw_screennav=False,
+        instance_manager = instance_manager
     )
 
 

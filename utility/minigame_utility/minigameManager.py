@@ -33,7 +33,7 @@ class MiniGameManager:
 
     def _setup_games_for_item(self, item):
 
-        self.game_queue.append(CountdownMiniGame(self.virtual_size, item = self.selector.get_selected_type()))
+        self.game_queue.append(CountdownMiniGame(self.virtual_size, item = self.selector.get_selected_type(), screen=self.base_screen))
 
         material = getattr(self.anvil_item, "material", "unexplicible error with material please consult the minigame manager")
         temp = getattr(self.anvil_item, "temperature", "how you do this")

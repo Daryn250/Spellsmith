@@ -1,11 +1,10 @@
 import pygame
 import math
 import random
-from utility.settingsManager import get_font
 
 class QuenchMinigame:
     def __init__(self, virtual_size, difficulty, clip_rect, screen, item_image=None, on_finish=None):
-        self.font = pygame.font.Font(get_font(), 15)
+        self.font = pygame.font.Font(screen.instance_manager.settings.font, 15)
         self.virtual_size = virtual_size
         self.clip_rect = clip_rect
         self.screen = screen

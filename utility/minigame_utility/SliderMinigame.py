@@ -2,12 +2,11 @@ import pygame
 import random
 import math
 from utility.particle import make_particles_presets  # if not already imported
-from utility.settingsManager import get_font
 
 
 class SliderMinigame:
     def __init__(self, virtual_size, difficulty, clip_rect, screen, on_finish=None):
-        self.font = pygame.font.Font(get_font(), 16)
+        self.font = pygame.font.Font(screen.instance_manager.settings.font, 16)
         self.clip_rect = clip_rect
         self.screen = screen
         self.on_finish_callback = on_finish

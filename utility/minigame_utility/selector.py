@@ -2,19 +2,18 @@ import pygame
 import math
 import random
 from utility.button import Button
-from utility.settingsManager import get_font
 from utility.tool_utility.temperatureHandler import get_temp_range
 
 class WeaponSelector:
-    def __init__(self, virtual_size, item_on_anvil):
+    def __init__(self, virtual_size, item_on_anvil, screen):
         self.virtual_size = virtual_size
         self.scroll_x = 0
         self.scroll_target = 0
         self.scroll_easing = 0.15
         self.items = []
         self.selected_index = 0
-        self.font_title = pygame.font.Font(get_font(), 18)
-        self.font_desc = pygame.font.Font(get_font(), 14)
+        self.font_title = pygame.font.Font(screen.instance_manager.settings.font, 18)
+        self.font_desc = pygame.font.Font(screen.instance_manager.settings.font, 14)
 
 
         self.item_on_anvil = item_on_anvil
@@ -66,7 +65,7 @@ class WeaponSelector:
 
         self.error_message = None
         self.error_timer = 0
-        self.font_error = pygame.font.Font(get_font(), 20)
+        self.font_error = pygame.font.Font(screen.instance_manager.settings.font, 20)
 
 
 

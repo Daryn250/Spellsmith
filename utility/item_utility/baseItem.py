@@ -114,7 +114,7 @@ class BaseItem:
 
         handle_temperature_particles(self)
 
-    def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale):
+    def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale, pos_override = None):
         if "invisible" in self.flags:
             return
         
@@ -132,7 +132,7 @@ class BaseItem:
         )
         img = pygame.transform.scale(original_img, scaled_size)
 
-        center_x, center_y = self.pos
+        center_x, center_y = self.pos if pos_override == None else pos_override
         rotated_img = pygame.transform.rotate(img, angle)
         rotated_rect = rotated_img.get_rect(center=(center_x, center_y))
 
@@ -222,24 +222,28 @@ class BaseItem:
             self.ovy = 0
             self.rotation = 0
 
-    def get_scaled_hitbox(self, screensize):
+    def get_scaled_hitbox(self, screensize, pos_override=None):
         s = self.scale
         x_scale = screensize[0] / 480 * s[0]
         y_scale = screensize[1] / 270 * s[1]
         scale = min(x_scale, y_scale)
         width = int(self.image.get_width() * scale)
         height = int(self.image.get_height() * scale)
-        return pygame.Rect(self.pos[0] - width // 2, self.pos[1] - height // 2, width, height)
+
+        pos = pos_override if pos_override else self.pos
+        return pygame.Rect(pos[0] - width // 2, pos[1] - height // 2, width, height)
+
 
     @property
     def uniform_scale(self):
         scale = self.scale
         return (scale, scale) if isinstance(scale, (int, float)) else scale
+    
 
     def start_screen_switch(self, screen, screenSwitcher, baseScreen):
         if type(self.next_screen) == str:
             self.next_screen = get_screen_function(self.next_screen)
-        screenSwitcher.start(lambda: self.next_screen(screen),
+        screenSwitcher.start(lambda: self.next_screen(screen, baseScreen.instance_manager),
                              save_callback=lambda: baseScreen.save_items("saves/save1.json"))
 
 class BottleItem(BaseItem):
@@ -534,4 +538,6 @@ class IslandItem(BaseItem):
         self.hovered = False
         self.name = getattr(self, "name", "???")
         self.description = getattr(self, "description", "*insert cool description here*")
+
+
     

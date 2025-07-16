@@ -116,7 +116,8 @@ class ScreenChangeFlag:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             for item in reversed(item_list):  # Topmost items get priority
                 if "screen_change" in getattr(item, "flags", []):
-                    rect = item.get_scaled_hitbox(virtual_size)
+                    override_pos = getattr(item, "pos_override", item.pos)
+                    rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
                     if rect.collidepoint(mx, my):
                         if hasattr(item, "next_screen"):
                             item.start_screen_switch(screen, screenSwitcher, baseScreen)
@@ -390,42 +391,45 @@ class InspectableFlag:
         inspecting = keys[pygame.K_q]
 
         hovered_windows = []
-
-        # Track items that should still have a window
         active_items = []
 
-        for item in item_list:  # TODO: Sort by Z if needed
+        for item in item_list:
             if "inspectable" not in getattr(item, "flags", []):
                 continue
+            if getattr(item, "dragging", False) == True:
+                if hasattr(item, "window") and item.window in gui_manager.windows:
+                    gui_manager.windows.remove(item.window)
+                    item.window = None
+                continue
 
-            item.highlight = False  # reset highlight unless hovered
+            item.highlight = False
 
-            rect = item.get_scaled_hitbox(virtual_size)
+            # Get override position if it exists
+            override_pos = getattr(item, "pos_override", item.pos)
+            rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
+
             is_hovering_item = rect.collidepoint(mouse_pos)
             is_hovering_window = False
 
-            # Check if mouse is over the item's info window
             if hasattr(item, "window") and item.window:
-                # You may want to store the last draw position of the window
                 win_rect = pygame.Rect(item.window_last_pos, (item.window.width, item.window.height)) \
                     if hasattr(item.window, "width") and hasattr(item.window, "height") else None
                 if win_rect and win_rect.collidepoint(mouse_pos):
                     is_hovering_window = True
 
             if is_hovering_item or is_hovering_window:
-                # Create or update info window
                 if not hasattr(item, "window") or item.window is None:
                     item.window = item_to_info(item, inspecting)
-                    item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)  # You could clamp to screen if needed
+                    item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)
                     gui_manager.windows.append(item.window)
                 item.window.mode = "default" if inspecting else "reduced"
                 item.highlight = True
                 active_items.append(item)
             else:
-                # If mouse not on item or window, queue for removal
                 if hasattr(item, "window") and item.window in gui_manager.windows:
                     gui_manager.windows.remove(item.window)
                     item.window = None
+
 
 
 

@@ -59,12 +59,49 @@ ITEM_BASES = {
         }
     },
     #### ISLANDS FOR MAP ####
+    "map_boat": {
+        "class": "IslandItem",
+        "type": "island",
+        "nbt": {
+            "island_name": "boat",
+            "flags": ["screen_change", "island", "no_shadow", "inspectable"],
+            "img_path": "assets/screens/map/boat",
+            "animated": True,
+            "next_screen": "main_menu",
+            "scale": (1,1)
+        }
+    },
     "island1": {
         "class": "IslandItem",
         "type": "island",
         "nbt": {
+            "island_name": "island1",
             "flags": ["screen_change", "island", "no_shadow", "inspectable"],
-            "img_path": "assets/error.png",
+            "img_path": "assets/screens/map/islands/island1.png",
+            "animated": False,
+            "next_screen": "main_menu",
+            "scale": (1,1)
+        }
+    },
+    "island2": {
+        "class": "IslandItem",
+        "type": "island",
+        "nbt": {
+            "island_name": "island2",
+            "flags": ["screen_change", "island", "no_shadow", "inspectable"],
+            "img_path": "assets/screens/map/islands/beach_island.png",
+            "animated": False,
+            "next_screen": "main_menu",
+            "scale": (1,1)
+        }
+    },
+    "island3": {
+        "class": "IslandItem",
+        "type": "island",
+        "nbt": {
+            "island_name": "island3",
+            "flags": ["screen_change", "island", "no_shadow", "inspectable"],
+            "img_path": "assets/screens/map/islands/mountain_island.png",
             "animated": False,
             "next_screen": "main_menu",
             "scale": (1,1)

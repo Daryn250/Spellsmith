@@ -21,7 +21,7 @@ def furnace_default_items(manager):
         scaled = (pos[0] * (960 / 160), pos[1] * (540 / 90))
         makeItem(manager, "slot_node", scaled, "furnaceScreen", extra_nbt={"slot_name": name})
 
-def furnaceScreen(screen, previous_screen=None):
+def furnaceScreen(screen, instance_manager, previous_screen=None):
     from utility.screen_utility.screenswitcher import ScreenSwitcher
     from utility.item_utility.ItemManager import ItemManager
     switcher = ScreenSwitcher()
@@ -39,7 +39,8 @@ def furnaceScreen(screen, previous_screen=None):
         background=helper,
         item_manager=item_manager,
         default_items_func=furnace_default_items,
-        previous_screen=workstation
+        previous_screen=workstation,
+        instance_manager=instance_manager
     )
 
     # Inject the shared item manager

@@ -74,7 +74,7 @@ def default_items_func(item_manager):
     makeItem(item_manager, "furnace", (200, 300), "workstation")
     makeItem(item_manager, "anvil", (400, 300), "workstation")
 
-def workstation(screen, prev_screen = None):
+def workstation(screen, instance_manager, prev_screen = None):
     switcher = ScreenSwitcher()
     virtual_size = (960, 540)
     helper = WorkstationHelper(virtual_size)
@@ -89,6 +89,7 @@ def workstation(screen, prev_screen = None):
         helper = helper,
         draw_charmboard=False,
         default_items_func=default_items_func,
-        previous_screen=table  # Reference to the previous screen function
+        previous_screen=table,  # Reference to the previous screen function
+        instance_manager= instance_manager
     )
     base.run()
