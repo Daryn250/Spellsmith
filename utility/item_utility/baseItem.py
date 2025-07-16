@@ -5,13 +5,7 @@ from utility.animated_sprite import AnimatedTile
 from utility.item_utility.charmWindows import returnCharmWindow
 from utility.screen_utility.screenManager import get_screen_function
 import json
-from utility.item_utility.item_flag_handlers import (
-    handle_draggable,
-    handle_charm,
-    handle_hangable,
-    handle_temperature_particles,
-    handle_inspectable
-)
+from utility.item_utility.item_flag_handlers import *
 from utility.particle import make_tiny_sparkle
 
 def get_shadow_offset(screen_width, item_x, intensity=0.3, vertical_push=10):
@@ -111,8 +105,12 @@ class BaseItem:
 
         if "hangable" in self.flags:
             handle_hangable(self, screen)
+        
+        if "inspectable" in self.flags:
+            handle_inspectable(self, gui_manager, dt)
 
-        handle_temperature_particles(self)
+
+        handle_temperature(self, dt)
 
     def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale, pos_override = None):
         if "invisible" in self.flags:
@@ -244,7 +242,7 @@ class BaseItem:
         if type(self.next_screen) == str:
             self.next_screen = get_screen_function(self.next_screen)
         screenSwitcher.start(lambda: self.next_screen(screen, baseScreen.instance_manager),
-                             save_callback=lambda: baseScreen.save_items("saves/save1.json"))
+                             save_callback=lambda: baseScreen.save_items(baseScreen.instance_manager.save_file))
 
 class BottleItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):

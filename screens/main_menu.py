@@ -140,7 +140,7 @@ def main_menu(screen, instance_manager):
     def handle_events_with_buttons(virtual_mouse):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                base.save_items("saves/save1.json")
+                base.save_items(instance_manager.save_file)
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:

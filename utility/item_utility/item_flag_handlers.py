@@ -149,10 +149,22 @@ def handle_hangable(item, screen):
         item.anchor_pos = (anchor_x, anchor_y)
 
 
-def handle_temperature_particles(item):
-    if getattr(item, "temperature", 0) >= 500:
-        if random.random() < item.temperature / 50000:
+def handle_temperature(item, dt):
+    temp = getattr(item, "temperature", 0)
+
+    # Emit particles if hot enough
+    if temp >= 500:
+        if random.random() < temp / 50000:
             item.particles.extend(make_scale(item.pos, count=1))
+
+    # Decay temperature # ONLY IF NOT BAGGED
+    if getattr(item, "state", "free") == "free":
+        if temp > 0:
+            # You probably meant to *decrease over time*; divide by FPS-like rate, so this is right
+            temp -= 0.25 / dt
+            temp = max(temp, 0)  # prevent negative temps
+            item.temperature = temp  # ✅ save back to the item!
+
 
 
 def handle_screen_switch(item, screen, screen_switcher):
@@ -160,8 +172,7 @@ def handle_screen_switch(item, screen, screen_switcher):
         item.next_screen = get_screen_function(item.next_screen)
     screen_switcher.start(lambda: item.next_screen(screen))
 
-def handle_inspectable(item, gui_manager):
+def handle_inspectable(item, gui_manager, dt):
     window = getattr(item, "window", False)
     if window:
-        pass
-    pass
+        window.update(dt)

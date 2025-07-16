@@ -51,13 +51,14 @@ class AnvilHelper:
                 minTemp = get_temp_range(item.material).get("min")
                 maxTemp = get_temp_range(item.material).get("max")
                 if minTemp <= temp <= maxTemp:
-                    self.hammer_button_visible = True
-                    # Center button under the item
-                    button_x = item.pos[0]
-                    button_y = item.pos[1] + 50
-                    self.hammer_button.rect.center = (button_x, button_y)
-                    self.hammer_button.text_rect.center = (button_x, button_y)
-                    self.item_in_slot = item
+                    if getattr(item, "type", False) == "ingot":
+                        self.hammer_button_visible = True
+                        # Center button under the item
+                        button_x = item.pos[0]
+                        button_y = item.pos[1] + 50
+                        self.hammer_button.rect.center = (button_x, button_y)
+                        self.hammer_button.text_rect.center = (button_x, button_y)
+                        self.item_in_slot = item
                     
 
         # ---- Determine virtual height (safe fallback) ----
@@ -85,7 +86,8 @@ class AnvilHelper:
                          {"img_path": f"assets/tools/parts/{name}/{s.material}.png", 
                           "material":s.material, 
                           "mass":s.mass, 
-                          "quality":self.minigame_manager.final_grade
+                          "quality":self.minigame_manager.final_grade,
+                          "temperature":s.temperature/2
                           }
                     )
                 print("finished!")

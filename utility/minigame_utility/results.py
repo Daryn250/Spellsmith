@@ -1,7 +1,7 @@
 import pygame
 
 class ResultEntry:
-    def __init__(self, game_name, grade, start_center, target_pos, delay, screen):
+    def __init__(self, game_name, grade, start_center, target_pos, delay, settings):
         self.text = f"{game_name}: {grade}"
         self.start_center = start_center
         self.current_pos = list(start_center)
@@ -11,7 +11,7 @@ class ResultEntry:
         self.timer = 0
         self.delay = delay
         self.arrived = False
-        self.font = screen.instance_manager.settings.font
+        self.font = settings.font
 
     def update(self, dt):
         self.timer += dt
@@ -31,7 +31,7 @@ class ResultEntry:
 
 
 class ResultsMinigame:
-    def __init__(self, clip_rect, result_log, on_finish=None):
+    def __init__(self, clip_rect, result_log, settings, on_finish=None):
         self.clip_rect = clip_rect
         self.result_log = [r for r in result_log if r.get("game_name")]
         self.entries = []
@@ -43,6 +43,7 @@ class ResultsMinigame:
         self.final_timer = 0
         self.finished = False
         self.grade_animation_done = False
+        self.settings = settings
 
         self.on_finish = on_finish
         self._initialize()
@@ -65,7 +66,7 @@ class ResultsMinigame:
             ratio = score / max_score if max_score else 0
 
             grade = self._letter_grade(ratio)
-            self.entries.append(ResultEntry(result["game_name"], grade, center, target_pos, i * delay_step))
+            self.entries.append(ResultEntry(result["game_name"], grade, center, target_pos, i * delay_step, self.settings))
 
     def _layout_grid(self, count, margin=100):
         max_rows = 4
@@ -122,7 +123,7 @@ class ResultsMinigame:
         prev_clip = surface.get_clip()
         surface.set_clip(clip)  # Use the passed-in clip, not self.clip_rect
 
-        font = pygame.font.Font(self.font, 24)
+        font = pygame.font.Font(self.settings.font, 24)
         for entry in self.entries:
             text_surf = font.render(entry.text, False, (255, 255, 255))
             text_surf.set_alpha(min(255, int(entry.alpha)))
@@ -134,7 +135,7 @@ class ResultsMinigame:
             surface.blit(scaled, rect)
 
         if self.final_grade:
-            font_big = pygame.font.Font(self.font, 48)
+            font_big = pygame.font.Font(self.settings.font, 48)
             grade_text = font_big.render(self.final_grade, False, (255, 255, 100))
             grade_text.set_alpha(min(255, int(self.final_alpha)))
             rect = grade_text.get_rect(center=self.final_grade_anim_pos)
@@ -150,7 +151,7 @@ class ResultsMinigame:
             pygame.draw.rect(surface, (255, 255, 255), box_rect, width=2)
 
             if self.grade_animation_done:
-                prompt_font = pygame.font.Font(self.font, 20)
+                prompt_font = pygame.font.Font(self.settings.font, 20)
                 prompt_text = prompt_font.render("Click to continue...", False, (255, 255, 255))
                 prompt_rect = prompt_text.get_rect(center=(clip.centerx, clip.bottom - 20))
                 surface.blit(prompt_text, prompt_rect)

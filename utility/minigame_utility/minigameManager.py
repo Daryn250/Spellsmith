@@ -21,7 +21,7 @@ class MiniGameManager:
 
         self.base_screen = helper.base_screen
 
-        self.selector = WeaponSelector(virtual_size, helper.item_in_slot)
+        self.selector = WeaponSelector(virtual_size, helper.item_in_slot, self.base_screen)
         self.anvil_item = helper.item_in_slot
         self.in_selector = True
 
@@ -78,7 +78,7 @@ class MiniGameManager:
         else:
             self.current_game = None
             self.finishing = True
-            self.current_game = ResultsMinigame(self.clip, self.result_log)
+            self.current_game = ResultsMinigame(self.clip, self.result_log, self.base_screen.instance_manager.settings)
 
     def update(self, dt, virtual_mouse):
         if isinstance(self.current_game, ResultsMinigame):

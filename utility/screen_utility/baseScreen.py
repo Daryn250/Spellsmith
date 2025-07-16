@@ -81,7 +81,7 @@ class BaseScreen:
     def handle_events(self, virtual_mouse):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.save_items("saves/save1.json")
+                self.save_items(self.instance_manager.save_file)
                 print("saving")
                 pygame.quit()
                 sys.exit()
@@ -97,14 +97,14 @@ class BaseScreen:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.save_items("saves/save1.json")
+                    self.save_items(self.instance_manager.save_file)
                     if self.previous_screen:
                         if self.switcher.active:
                             self.switcher.force_finish()
                         else:
                             self.switcher.start(
                                 next_screen_func=lambda: self.previous_screen(self.screen, self.instance_manager),
-                                save_callback=lambda: self.save_items("saves/save1.json")
+                                save_callback=lambda: self.save_items(self.instance_manager.save_file)
                             )
                     else:
                         print("⚠️ No previous screen set.")
@@ -125,10 +125,10 @@ class BaseScreen:
             else:
                 self.cursor_manager.set_cursor("base", self.virtual_surface, "assets/cursor/defaultCursor")
 
-            ScreenChangeFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.screen, self.switcher, self.virtual_size, self)
-            CharmFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size)
-            TrickFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
-            InspectableFlag.handle_event(event, self.item_manager.items, virtual_mouse, self.virtual_size, self.gui_manager)
+            ScreenChangeFlag.handle_event(event, combined_items, virtual_mouse, self.screen, self.switcher, self.virtual_size, self)
+            CharmFlag.handle_event(event, combined_items, virtual_mouse, self.virtual_size)
+            TrickFlag.handle_event(event, combined_items, virtual_mouse, self.virtual_size, self.gui_manager)
+            InspectableFlag.handle_event(event, combined_items, virtual_mouse, self.virtual_size, self.gui_manager)
             self.gui_manager.handleEvent(event, virtual_mouse)
 
 
@@ -188,7 +188,7 @@ class BaseScreen:
 
 
     def run(self):
-        self.load_items("saves/save1.json")
+        self.load_items(self.instance_manager.save_file)
         while True:
             dt = self.clock.tick(60)
             virtual_mouse = self.vscreen.get_virtual_mouse(self.screen.get_size())

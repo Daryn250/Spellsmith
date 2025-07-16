@@ -572,7 +572,8 @@ ITEM_BASES = {
             # pass in img_path as extra nbt as such: "assets/tools/parts/{name}/{material}.png"
             "flags": ["draggable", "inspectable"],
             "scale":(1.5,1.5),
-            "default_scale":(1.5,1.5)
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
         }
     }
 

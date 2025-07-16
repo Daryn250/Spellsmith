@@ -42,7 +42,7 @@ window_data = {
     "iron_ore": {
         "title": "Iron Ore",
         "description": "Iron ore is a common metal, with higher strength than copper. However, it requires hotter temperatures to forge, requiring more fuel or higher forge efficiency.",
-        "data": {"mass":"number", "impurities":"percent"},
+        "data": {"mass":"number", "temperature":"number", "impurities":"percent"},
     },
     "iron_ingot": {
         "title": "Iron Ingot",
@@ -52,7 +52,7 @@ window_data = {
     "lead_ore": {
         "title": "Lead Ore",
         "description": "Lead is a very dense metal. It's the end of many major nuclear chains, and can hold magic easier due to high proton count.",
-        "data": {"mass":"number", "impurities":"percent"},
+        "data": {"mass":"number", "temperature":"number", "impurities":"percent"},
     },
     "lead_ingot": {
         "title": "Lead Ingot",
@@ -62,7 +62,7 @@ window_data = {
     "lomium_ore": {
         "title": "Lomium Ore",
         "description": "Lomium, despite it's appearance, is a strong crystalline structure. It's a metal that smells sweetly of sugar, and has high tensile strength at base without being treated.",
-        "data": {"mass":"number", "impurities":"percent"}, # in the future, i can show impurities as cloudiness in the metal, or add specks or some opacity layer.
+        "data": {"mass":"number", "temperature":"number", "impurities":"percent"}, # in the future, i can show impurities as cloudiness in the metal, or add specks or some opacity layer.
     },
     "lomium_ingot": {
         "title": "Lomium Ingot",
@@ -72,7 +72,7 @@ window_data = {
     "silver_ore": {
         "title": "Silver Ore",
         "description": "Silver is a shiny, lustrous metal, that's stronger than copper and incredibly valuable.",
-        "data": {"mass":"number", "impurities":"percent"}, 
+        "data": {"mass":"number", "temperature":"number", "impurities":"percent"}, 
     },
     "silver_ingot": {
         "title": "Silver Ingot",
@@ -82,7 +82,7 @@ window_data = {
     "titanium_ore": {
         "title": "Titanium Ore",
         "description": "Titanium has the highest strength to weight ratio of any metal, however lacks the hardness to maintain an edge.",
-        "data": {"mass":"number", "impurities":"percent"}, 
+        "data": {"mass":"number", "temperature":"number", "impurities":"percent"}, 
     },
     "titanium_ingot": {
         "title": "Titanium Ingot",
@@ -220,9 +220,8 @@ window_data = {
     "rounded_pommel": {
         "title": "Rounded Pommel",
         "description": "A basic pommel.",
-        "data": {"material":"highlight", "quality":"percent"},
+        "data": {"material":"highlight", "temperature":"number", "quality":"percent"},
     },
-    ##### ISLANDS #####
 }
 from utility.animated_sprite import AnimatedTile
 from utility.gui_utility.hoverWindow import *
@@ -283,16 +282,17 @@ def item_to_info(item, inspecting):
         icon=None,
         data=hover_data,
         reduced_data=reduced_data,
-        mode="default" if inspecting else "reduced"
+        mode="default" if inspecting else "reduced",
+        source_item=item
     )
 
 
 highlights = {
-    "default":"assets/items/highlights/default"
+    "default": "assets/items/highlights/default",
+    "copper": "assets/items/highlights/copper"
 }
 
 def get_highlight(name):
-    for key, value in highlights:
-        if key == name:
-            return AnimatedTile(value, 300)
-    return AnimatedTile(highlights["default"], 300)
+    if name in highlights:
+        return AnimatedTile(highlights[name], 100)
+    return AnimatedTile(highlights["default"], 100)

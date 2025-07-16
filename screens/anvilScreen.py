@@ -38,6 +38,6 @@ def anvilScreen(screen, instance_manager, previous_screen=None):
         instance_manager=instance_manager
     )
     helper.base_screen = screen_instance
-    # Inject the shared item manager
+    
     screen_instance.run()
 

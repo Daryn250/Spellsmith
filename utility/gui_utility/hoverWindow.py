@@ -2,6 +2,8 @@ import pygame
 import math
 from utility.animated_sprite import AnimatedTile
 from utility.settingsManager import *
+from utility.tool_utility.temperatureHandler import get_temp_range
+from utility.gui_utility.color_utils import get_temperature_color
 
 class HoverData:
     def __init__(self, label, value=None, data_type="number", anim_tile=None, color=(255, 255, 255)):
@@ -12,16 +14,18 @@ class HoverData:
         self.color = color
 
 class HoverInfo:
-    def __init__(self, title="", description="", icon=None, data=None, reduced_data=None, mode="default"):
+    def __init__(self, title="", description="", icon=None, data=None, reduced_data=None, mode="default", source_item=None):
         self.title = title
         self.description = description
-        self.icon = icon  # Optional pygame.Surface
+        self.icon = icon
         self.data = data if data else []
         self.reduced_data = reduced_data if reduced_data else []
         self.mode = mode
         self.margin = 6
         self.padding = 4
         self.columns = 3
+        self.source_item = source_item  # tracks the item for updating information about the item so you dont gotta keep hovering over it lol
+
 
     def wrap_text(self, text, font, max_width):
         words = text.split()
@@ -48,7 +52,8 @@ class HoverInfo:
 
         data_to_draw = self.reduced_data if reduced else self.data
 
-        highlights = [d for d in data_to_draw if d.data_type == "highlight" and d.value is not None]
+        highlights = [d for d in data_to_draw if d.data_type == "highlight" and d.anim_tile is not None]
+
         numbers = [d for d in data_to_draw if d.data_type in ("number", "percent") and d.value is not None]
         bars = [d for d in data_to_draw if d.data_type == "bar" and d.value is not None]
 
@@ -103,8 +108,8 @@ class HoverInfo:
             tmp_font = small_font_reduced if reduced else small_font
             line_widths.append(tmp_font.size(d.label)[0])
 
-        highlight_size = 32
-        highlight_padding = 4
+        highlight_size = 40
+        highlight_padding = 8
         highlight_rows = math.ceil(len(highlights) / self.columns)
         highlight_height = highlight_rows * (highlight_size + highlight_padding)
 
@@ -137,19 +142,20 @@ class HoverInfo:
             pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
             y += 4
 
+        # Draw highlight entries
         for i, d in enumerate(highlights):
             col = i % self.columns
             row = i // self.columns
             x = pos[0] + self.padding + col * (highlight_size + highlight_padding)
             y_offset = y + row * (highlight_size + highlight_padding)
+
             if isinstance(d.anim_tile, AnimatedTile):
-                d.anim_tile.update(0)
-                d.anim_tile.draw(surface, (x, y_offset), scale_to=(highlight_size, highlight_size))
+                d.anim_tile.update(0)  # optional: you may want to pass actual dt here
+                d.anim_tile.draw(surface, (x, y_offset), scale_to=(highlight_size*2, highlight_size))
             else:
                 pygame.draw.rect(surface, d.color, (x, y_offset, highlight_size, highlight_size), border_radius=6)
-            label_font = small_font_reduced if reduced else small_font
-            label_surf = label_font.render(d.label, False, (255, 255, 255))
-            surface.blit(label_surf, (x, y_offset + highlight_size + 2))
+
+
 
         if highlights:
             y += highlight_rows * (highlight_size + highlight_padding) + 4
@@ -179,6 +185,36 @@ class HoverInfo:
             pygame.draw.rect(surface, color_val, (bar_x, bar_y, int(bar_w * val), bar_h))
             bar_label = small_font.render(label, False, (255, 255, 255))
             surface.blit(bar_label, (bar_x, bar_y - bar_label.get_height()))
+    
+    def update(self, dt):
+        """
+        Updates AnimatedTiles and live data from the source item.
+        """
+        data_to_update = self.reduced_data if self.mode == "reduced" else self.data
+
+        for d in data_to_update:
+            # Update animation if it's a highlight
+            if d.data_type == "highlight" and isinstance(d.anim_tile, AnimatedTile):
+                d.anim_tile.update(dt)
+
+            # Live-update value from the source item if applicable
+            if self.source_item and hasattr(self.source_item, d.label):
+                raw_value = getattr(self.source_item, d.label)
+
+                if d.data_type == "percent":
+                    d.value = round(float(raw_value), 3)
+                elif d.data_type == "number":
+                    d.value = round(float(raw_value), 1)
+
+                    # Special temperature color logic
+                    if d.label.lower() == "temperature" and hasattr(self.source_item, "material"):
+                        material = getattr(self.source_item, "material")
+                        temp_range = get_temp_range(material)
+                        d.color = get_temperature_color(d.value, temp_range)
+
+                elif d.data_type == "bar":
+                    d.value = max(0.0, min(1.0, float(raw_value)))
+
 
 def create_tool_hover_info(name, description, data_list, reduced_list=None):
     return HoverInfo(

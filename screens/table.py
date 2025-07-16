@@ -96,5 +96,6 @@ def table(screen, instance_manager, prev_screen = None):
         previous_screen=main_menu,  # Reference to the previous screen function
         instance_manager = instance_manager
     )
+    makeItem(base.item_manager, "copper_ingot",(200,200), "table")
 
     base.run()

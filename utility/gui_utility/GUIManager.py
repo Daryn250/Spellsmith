@@ -110,8 +110,8 @@ class GUIManager:
         func = screen_manager.get_screen_function(screen_name)
         switcher = screen.switcher
         switcher.start(
-            next_screen_func=lambda: func(screen.screen),
-            save_callback=lambda: screen.save_items("saves/save1.json")
+            next_screen_func=lambda: func(screen.screen, screen.instance_manager),
+            save_callback=lambda: screen.save_items(screen.instance_manager.save_file)
         )
 
 
@@ -147,10 +147,10 @@ class GUIManager:
             self.bag_manager.update(mouse_pos)
 
             # Optional hover info
-            if self.bag_manager.hover_info:
-                info_pos = (bottom_left_pos[0] + bag_scaled[0] + 10, bottom_left_pos[1])
-                self.bag_manager.hover_info.mode = "default" if self.inspecting else "reduced"
-                self.bag_manager.hover_info.draw(screen, info_pos, self.settings)
+        if self.bag_manager.hover_info:
+            info_pos = (bottom_left_pos[0] + bag_scaled[0] + 10, bottom_left_pos[1])
+            self.bag_manager.hover_info.mode = "default" if self.inspecting else "reduced"
+            self.bag_manager.hover_info.draw(screen, info_pos, self.settings)
 
         # ---- Draw Charm Nails ----
         for img, x, y in self.nails:
@@ -159,20 +159,20 @@ class GUIManager:
 
         # ---- Draw Top-Level Windows (like the Bag) ----
         if self.windows:
-            window = self.windows[0]
+            for window in self.windows:
 
-            # Allow window to update its position if animating
-            if hasattr(window, "update_position"):
-                window.update_position()
+                # Allow window to update its position if animating
+                if hasattr(window, "update_position"):
+                    window.update_position()
 
-            # Special-case for BagWindow: pass dragged item for interaction
-            if window == self.bag_window:
-                window.draw(screen, window.pos, mouse_pos, screensize, dragged_item)
-            elif isinstance(window, HoverInfo):
-                window.draw(screen, mouse_pos, self.settings)
+                # Special-case for BagWindow: pass dragged item for interaction
+                if window == self.bag_window:
+                    window.draw(screen, window.pos, mouse_pos, screensize, dragged_item)
+                elif isinstance(window, HoverInfo):
+                    window.draw(screen, mouse_pos, self.settings)
 
-            else:
-                window.draw(screen)
+                else:
+                    window.draw(screen)
 
         # ---- Draw screen switcher menu ----
         if self.draw_screennav:

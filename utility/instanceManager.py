@@ -3,5 +3,5 @@ class instanceManager:
     def __init__(self, screen, settings):
         self.screen = screen
         self.settings = settings
-        self.save_file = None # change to be the location of the save file
+        self.save_file = "saves/save1.json" # change to be the location of the save file
         main_menu(screen, self)
