@@ -46,14 +46,11 @@ class HoverInfo:
     def draw(self, surface, pos, settings, color=(255, 255, 255), bg_color=(0, 0, 0, 180)):
         font = pygame.font.Font(settings.font, settings.font_hover_size)
         small_font = pygame.font.Font(settings.font, settings.gui_size)
-
         reduced = self.mode == "reduced"
         small_font_reduced = pygame.font.Font(settings.font, int(12 * 0.75))
 
         data_to_draw = self.reduced_data if reduced else self.data
-
         highlights = [d for d in data_to_draw if d.data_type == "highlight" and d.anim_tile is not None]
-
         numbers = [d for d in data_to_draw if d.data_type in ("number", "percent") and d.value is not None]
         bars = [d for d in data_to_draw if d.data_type == "bar" and d.value is not None]
 
@@ -80,15 +77,11 @@ class HoverInfo:
 
         for d in numbers:
             label = d.label
+            value = f"{int(d.value * 100)}%" if d.data_type == "percent" else str(d.value)
             if label.lower() == "temperature":
-                value = f"{d.value} degrees"
-            elif d.data_type == "percent":
-                value = f"{int(d.value * 100)}%"
-            else:
-                value = str(d.value)
+                value += " degrees"
             text = f"{label}: {value}"
             text_width = tmp_font.size(text)[0]
-
             if current_width + text_width > wrap_width and row:
                 number_lines.append(row)
                 row = []
@@ -98,34 +91,35 @@ class HoverInfo:
         if row:
             number_lines.append(row)
 
-        bar_lines = []
-        for d in bars:
-            bar_val = min(max(d.value, 0), 1)
-            bar_lines.append((d.label, bar_val, d.color))
-            line_widths.append(small_font.size(d.label)[0])
-
+        bar_lines = [(d.label, min(max(d.value, 0), 1), d.color) for d in bars]
         for d in highlights:
             tmp_font = small_font_reduced if reduced else small_font
             line_widths.append(tmp_font.size(d.label)[0])
 
-        highlight_size = 40
-        highlight_padding = 8
+        # Highlight layout
+        highlight_width = 60
+        highlight_height = 30
+        highlight_padding = 10
         highlight_rows = math.ceil(len(highlights) / self.columns)
-        highlight_height = highlight_rows * (highlight_size + highlight_padding)
+        highlight_area_height = highlight_rows * (highlight_height + highlight_padding)
 
         number_height = len(number_lines) * (small_font.get_height() + 4)
         bar_height = len(bar_lines) * (small_font.get_height() + 4)
 
         content_max_width = max(line_widths + [title_width])
-        box_width = content_max_width + self.padding * 2
+        if reduced:
+            box_width = title_width + self.padding * 2
+        else:
+            box_width = max(content_max_width, self.columns * (highlight_width + highlight_padding)) + self.padding * 2
+
 
         text_height = sum(line.get_height() for line in lines)
         box_height = (
             self.padding * 2 +
             text_height + (4 if lines and not reduced else 0) +
-            highlight_height + (8 if highlights else 0) +
+            highlight_area_height + (8 if highlights else 0) +
             number_height + (8 if number_lines else 0) +
-            bar_height + (8 if bar_lines else 0)
+            bar_height + (30 if bar_lines else 0)
         )
 
         box_rect = pygame.Rect(pos[0], pos[1], box_width, box_height)
@@ -133,7 +127,7 @@ class HoverInfo:
 
         y = pos[1] + self.padding
 
-        for i, line in enumerate(lines):
+        for line in lines:
             surface.blit(line, (pos[0] + self.padding, y))
             y += line.get_height()
 
@@ -142,23 +136,21 @@ class HoverInfo:
             pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
             y += 4
 
-        # Draw highlight entries
+        # Draw highlight entries (3 per row)
         for i, d in enumerate(highlights):
             col = i % self.columns
             row = i // self.columns
-            x = pos[0] + self.padding + col * (highlight_size + highlight_padding)
-            y_offset = y + row * (highlight_size + highlight_padding)
+            x = pos[0] + self.padding + col * (highlight_width + highlight_padding)
+            y_offset = y + row * (highlight_height + highlight_padding)
 
             if isinstance(d.anim_tile, AnimatedTile):
-                d.anim_tile.update(0)  # optional: you may want to pass actual dt here
-                d.anim_tile.draw(surface, (x, y_offset), scale_to=(highlight_size*2, highlight_size))
+                d.anim_tile.update(0)  # you may pass dt if needed
+                d.anim_tile.draw(surface, (x, y_offset), scale_to=(highlight_width, highlight_height))
             else:
-                pygame.draw.rect(surface, d.color, (x, y_offset, highlight_size, highlight_size), border_radius=6)
-
-
+                pygame.draw.rect(surface, d.color, (x, y_offset, highlight_width, highlight_height), border_radius=4)
 
         if highlights:
-            y += highlight_rows * (highlight_size + highlight_padding) + 4
+            y += highlight_area_height + 4
             pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
             y += 4
 
@@ -174,17 +166,34 @@ class HoverInfo:
         if number_lines:
             y += 4
             pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
-            y += 4
+            y += 6
 
         for i, (label, val, color_val) in enumerate(bar_lines):
-            bar_w = box_width - self.padding * 2
-            bar_h = 12
-            bar_x = pos[0] + self.padding
-            bar_y = y + i * (bar_h + 4)
-            pygame.draw.rect(surface, (80, 80, 80), (bar_x, bar_y, bar_w, bar_h))
-            pygame.draw.rect(surface, color_val, (bar_x, bar_y, int(bar_w * val), bar_h))
-            bar_label = small_font.render(label, False, (255, 255, 255))
-            surface.blit(bar_label, (bar_x, bar_y - bar_label.get_height()))
+            bar_w = int(box_width * 0.6)  # 60% width
+            bar_h = 20
+            bar_x = pos[0] + (box_width - bar_w) // 2  # Center horizontally
+            bar_y = y + i * (bar_h + 14)
+
+            # Bar background
+            pygame.draw.rect(surface, (60, 60, 60), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
+
+            # Bar fill
+            fill_width = int(bar_w * val)
+            pygame.draw.rect(surface, color_val, (bar_x, bar_y, fill_width, bar_h), border_radius=6)
+
+            # Centered text inside bar
+            bar_label_text = f"{label}: {int(val * 100)}%"
+            bar_label = small_font.render(bar_label_text, False, (0, 0, 0))
+            label_x = bar_x + (bar_w - bar_label.get_width()) // 2
+            label_y = bar_y + (bar_h - bar_label.get_height()) // 2
+            surface.blit(bar_label, (label_x, label_y))
+
+        if bar_lines:
+            y += len(bar_lines) * (bar_h + 14)
+            pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
+            y += 4
+
+
     
     def update(self, dt):
         """
@@ -214,6 +223,23 @@ class HoverInfo:
 
                 elif d.data_type == "bar":
                     d.value = max(0.0, min(1.0, float(raw_value)))
+
+
+                    if d.label.lower() == "rarity":
+                        # Rarity: should be white to blue to 
+                        d.color = (
+                            int(255 * (1 - d.value)),
+                            int(255 * d.value),
+                            0
+                        )
+                    elif d.label.lower() == "quality":
+                        # Magic: blue to violet
+                        d.color = (
+                            int(255 * d.value),
+                            0,
+                            255
+                        )
+
 
 
 def create_tool_hover_info(name, description, data_list, reduced_list=None):

@@ -7,6 +7,9 @@ from utility.screen_utility.screenManager import get_screen_function
 import json
 from utility.item_utility.item_flag_handlers import *
 from utility.particle import make_tiny_sparkle
+import os
+import time
+
 
 def get_shadow_offset(screen_width, item_x, intensity=0.3, vertical_push=10):
     # Light sources at 2/6 and 4/6 of screen width
@@ -83,8 +86,14 @@ class BaseItem:
             "manager", "pos", "type", "is_hovered", "img", "floor", "ovx", "ovy",
             "dragging", "nbt", "window", "NAIL_IMAGE", "trick", "particles", "locked",
             "liquid_anim", "cork_img", "original_mask_img", "cached_mask_surface", "cached_mask",
-            "shine_img", "glow_img"
+            "shine_img", "glow_img", "layer_surfaces", "_base_combined_surface", "_cached_image", "_cached_rotation", "_cached_scale",
+            "_cached_scaled_img", "_cached_mask", "_last_cache_key", "_cached_shadow_img", "_cached_hitbox_rect", "_cached_shadow_offset",
+            "window_last_pos",
         ]
+        # Exclude all callables (functions/methods)
+        for k, v in list(self.__dict__.items()):
+            if callable(v) and k not in base_exclude:
+                base_exclude.append(k)
         safe_nbt = {}
         for k, v in self.__dict__.items():
             if k in base_exclude or k in exclude:
@@ -228,6 +237,20 @@ class BaseItem:
         width = int(self.image.get_width() * scale)
         height = int(self.image.get_height() * scale)
 
+        pos = pos_override if pos_override else self.pos
+        return pygame.Rect(pos[0] - width // 2, pos[1] - height // 2, width, height)
+
+    def get_fast_bbox(self, screensize, pos_override=None):
+        """
+        Returns a fast, axis-aligned bounding box for quick collision checks.
+        This uses the unrotated, scaled image size and current (or override) position.
+        """
+        s = self.scale
+        x_scale = screensize[0] / 480 * s[0]
+        y_scale = screensize[1] / 270 * s[1]
+        scale = min(x_scale, y_scale)
+        width = int(self.image.get_width() * scale)
+        height = int(self.image.get_height() * scale)
         pos = pos_override if pos_override else self.pos
         return pygame.Rect(pos[0] - width // 2, pos[1] - height // 2, width, height)
 
@@ -392,8 +415,7 @@ class PartItem(BaseItem):
 
 class SlotItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
-        super().__init__(manager, type, pos, nbt_data)
-        
+        super().__init__(manager, type, pos, nbt_data)    
 class GemItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
         super().__init__(manager, type, pos, nbt_data)
@@ -537,5 +559,296 @@ class IslandItem(BaseItem):
         self.name = getattr(self, "name", "???")
         self.description = getattr(self, "description", "*insert cool description here*")
 
+class ToolItem(BaseItem):
+    LAYER_ORDER = ["blade", "guard", "pommel", "handle", "effect"]
+    TOOLITEM_DEBUG = False  # Set to True for debug output
+    # Profiling counters
+    _profile_counts = {"_update_cache": 0, "get_scaled_hitbox": 0, "get_scaled_mask": 0}
+    _profile_times = {"_update_cache": 0.0, "get_scaled_hitbox": 0.0, "get_scaled_mask": 0.0}
+    _profile_frame = 0
 
+    def __init__(self, manager, type, pos, nbt_data={}):
+        super().__init__(manager, type, pos, nbt_data)
+        # Shrink default scale
+        self.scale = getattr(self, "scale", [0.7, 0.7])
+        self.nbt = dict(nbt_data)
+        self._cached_shadow_img = None
+        self._cached_shadow_offset = None
+
+    # Class-level cache for part images
+    _part_image_cache = {}
+
+    def _get_part_image(self, part_type, material):
+        key = (part_type, material)
+        if key in ToolItem._part_image_cache:
+            return ToolItem._part_image_cache[key]
+        path = f"assets/tools/parts/{part_type}/{material}.png"
+        if os.path.exists(path):
+            surf = pygame.image.load(path).convert_alpha()
+            ToolItem._part_image_cache[key] = surf
+            return surf
+        ToolItem._part_image_cache[key] = None
+        return None
+
+    def _compose_tool_surface(self):
+        # Compose the tool image (unscaled, unrotated) with new alignment logic and decorations
+        part_surfs = {}
+        part_sizes = {}
+        decorations = {}
+        # Load part images and decorations
+        for part in ["blade", "handle", "pommel", "guard"]:
+            part_info = self.nbt.get(part)
+            if not part_info or not isinstance(part_info, dict):
+                continue
+            material = part_info.get("material")
+            part_type = part_info.get("type", part)
+            if not material:
+                continue
+            surf = self._get_part_image(part_type, material)
+            part_surfs[part] = surf
+            part_sizes[part] = surf.get_size() if surf else (0, 0)
+            # Check for decoration
+            deco_folder = f"assets/tools/parts/decoration_{part_type}"
+            if os.path.isdir(deco_folder):
+                # Find first png in folder (or you can extend to support multiple)
+                for fname in os.listdir(deco_folder):
+                    if fname.endswith(".png"):
+                        deco_path = os.path.join(deco_folder, fname)
+                        try:
+                            decorations[part] = pygame.image.load(deco_path).convert_alpha()
+                        except Exception as e:
+                            print(f"[ToolItem] Failed to load decoration for {part}: {e}")
+                        break
+
+        blade_w, blade_h = part_sizes.get("blade", (0, 0))
+        handle_w, handle_h = part_sizes.get("handle", (0, 0))
+        pommel_w, pommel_h = part_sizes.get("pommel", (0, 0))
+        guard_w, guard_h = part_sizes.get("guard", (0, 0))
+
+        # --- Calculate positions ---
+        # Blade: center left at (0, center_y)
+        blade_pos = (0, 0)
+        # Handle: right at (0, center_y)
+        handle_pos = (-handle_w, 0)
+        # Pommel: left of handle
+        pommel_pos = (-handle_w - pommel_w, 0)
+
+        # Find total width and height for surface
+        min_x = min(0, handle_pos[0], pommel_pos[0])
+        total_w = blade_w + handle_w + pommel_w
+        max_h = max(blade_h, handle_h, pommel_h, guard_h)
+        total_h = max_h
+        center_y_img = total_h // 2
+        composed = pygame.Surface((total_w, total_h), pygame.SRCALPHA)
+
+        # Calculate offsets for each part
+        # Blade: center left at (handle_w + pommel_w, center_y_img)
+        blade_draw_x = handle_w + pommel_w
+        blade_draw_y = center_y_img - blade_h // 2
+        # Handle: right at (handle_w + pommel_w, center_y_img)
+        handle_draw_x = pommel_w
+        handle_draw_y = center_y_img - handle_h // 2
+        # Pommel: left at (0, center_y_img)
+        pommel_draw_x = 0
+        pommel_draw_y = center_y_img - pommel_h // 2
+        # Guard: center between blade's left and handle's right
+        guard_center_x = (blade_draw_x + handle_draw_x + handle_w) // 2
+        guard_draw_x = guard_center_x - guard_w // 2
+        guard_draw_y = center_y_img - guard_h // 2
+
+        # --- Draw order: pommel, handle, blade, guard ---
+        if pommel_w and pommel_h and part_surfs.get("pommel"):
+            composed.blit(part_surfs["pommel"], (pommel_draw_x, pommel_draw_y))
+            if decorations.get("pommel"):
+                composed.blit(decorations["pommel"], (pommel_draw_x, pommel_draw_y))
+        if handle_w and handle_h and part_surfs.get("handle"):
+            composed.blit(part_surfs["handle"], (handle_draw_x, handle_draw_y))
+            if decorations.get("handle"):
+                composed.blit(decorations["handle"], (handle_draw_x, handle_draw_y))
+        if blade_w and blade_h and part_surfs.get("blade"):
+            composed.blit(part_surfs["blade"], (blade_draw_x, blade_draw_y))
+            if decorations.get("blade"):
+                composed.blit(decorations["blade"], (blade_draw_x, blade_draw_y))
+        if guard_w and guard_h and part_surfs.get("guard"):
+            composed.blit(part_surfs["guard"], (guard_draw_x, guard_draw_y))
+            if decorations.get("guard"):
+                composed.blit(decorations["guard"], (guard_draw_x, guard_draw_y))
+
+        if self.TOOLITEM_DEBUG:
+            print(f"[ToolItem] part_sizes: {part_sizes}")
+            print(f"[ToolItem] draw_x: blade={blade_draw_x}, handle={handle_draw_x}, pommel={pommel_draw_x}, guard={guard_draw_x}")
+            print(f"[ToolItem] nbt_data: {self.nbt}")
+        return composed, (pommel_draw_x, center_y_img, guard_draw_x, handle_draw_x, pommel_draw_x, blade_draw_x)
+
+    def _update_cache(self, screensize, rotation_scale, angle):
+        if self.TOOLITEM_DEBUG:
+            t0 = time.perf_counter()
+        # Only update if something changed (do NOT include position in cache key)
+        cache_key = (tuple(sorted(self.nbt.items())), tuple(self.scale), screensize, rotation_scale, angle)
+        if getattr(self, '_last_cache_key', None) == cache_key:
+            if self.TOOLITEM_DEBUG:
+                ToolItem._profile_counts["_update_cache"] += 1
+                ToolItem._profile_times["_update_cache"] += time.perf_counter() - t0
+            return
+        composed, _ = self._compose_tool_surface()
+        scale_x = (screensize[0] / 480) * 1 * self.scale[0] / rotation_scale
+        scale_y = (screensize[1] / 270) * 1 * self.scale[1] / rotation_scale
+        upscaled_size = (
+            int(composed.get_width() * rotation_scale),
+            int(composed.get_height() * rotation_scale),
+        )
+        highres_img = pygame.transform.scale(composed, upscaled_size)
+        rotated_img = pygame.transform.rotate(highres_img, angle)
+        final_width = int(rotated_img.get_width() * abs(scale_x))
+        final_height = int(rotated_img.get_height() * abs(scale_y))
+        scaled_img = pygame.transform.scale(rotated_img, (final_width, final_height))
+        if scale_x < 0 or scale_y < 0:
+            scaled_img = pygame.transform.flip(scaled_img, scale_x < 0, scale_y < 0)
+        self._cached_scaled_img = scaled_img
+        self._cached_mask = pygame.mask.from_surface(scaled_img)
+        # After computing self._cached_mask
+        rects = self._cached_mask.get_bounding_rects()
+        self._cached_hitbox_rect = rects[0] if rects else pygame.Rect(0, 0, 1, 1)
+
+        # Cache the shadow image as well
+        shadow_img = scaled_img.copy()
+        shadow_alpha = 100
+        shadow_img.fill((0, 0, 0, shadow_alpha), special_flags=pygame.BLEND_RGBA_MULT)
+        self._cached_shadow_img = shadow_img
+        self._cached_shadow_offset = (0, 10)  # Default shadow offset
+        self._last_cache_key = cache_key
+        if self.TOOLITEM_DEBUG:
+            ToolItem._profile_counts["_update_cache"] += 1
+            ToolItem._profile_times["_update_cache"] += time.perf_counter() - t0
+
+    def get_scaled_mask(self, screensize, rotation_scale=1.0):
+        if self.TOOLITEM_DEBUG:
+            t0 = time.perf_counter()
+        angle = -getattr(self, "rotation", 0)
+        self._update_cache(screensize, rotation_scale, angle)
+        if self.TOOLITEM_DEBUG:
+            ToolItem._profile_counts["get_scaled_mask"] += 1
+            ToolItem._profile_times["get_scaled_mask"] += time.perf_counter() - t0
+        return self._cached_mask
+
+    def get_scaled_hitbox(self, screensize, pos_override=None, rotation_scale=1.0):
+        if self.TOOLITEM_DEBUG:
+            t0 = time.perf_counter()
+        angle = -getattr(self, "rotation", 0)
+        self._update_cache(screensize, rotation_scale, angle)
+        bounding = self._cached_hitbox_rect.copy()
+        center_x, center_y = self.pos if pos_override is None else pos_override
+        bounding.center = (center_x, center_y)
+        if self.TOOLITEM_DEBUG:
+            ToolItem._profile_counts["get_scaled_hitbox"] += 1
+            ToolItem._profile_times["get_scaled_hitbox"] += time.perf_counter() - t0
+            ToolItem._profile_frame += 1
+            if ToolItem._profile_frame % 120 == 0:
+                print("[ToolItem PROFILE] Calls (120f):", dict(ToolItem._profile_counts))
+                print("[ToolItem PROFILE] Time (s, 120f):", {k: round(v, 4) for k, v in ToolItem._profile_times.items()})
+                # Reset for next window
+                for k in ToolItem._profile_counts:
+                    ToolItem._profile_counts[k] = 0
+                for k in ToolItem._profile_times:
+                    ToolItem._profile_times[k] = 0.0
+        return bounding
+
+    def get_fast_bbox(self, screensize, pos_override=None):
+        """
+        Returns a fast, axis-aligned bounding box for quick collision checks for ToolItem.
+        Uses the cached scaled image size if available, otherwise falls back to BaseItem logic.
+        """
+        if hasattr(self, '_cached_scaled_img') and self._cached_scaled_img is not None:
+            width = self._cached_scaled_img.get_width()
+            height = self._cached_scaled_img.get_height()
+        else:
+            s = self.scale
+            x_scale = screensize[0] / 480 * s[0]
+            y_scale = screensize[1] / 270 * s[1]
+            scale = min(x_scale, y_scale)
+            width = int(64 * scale)  # fallback guess
+            height = int(64 * scale)
+        pos = pos_override if pos_override else self.pos
+        return pygame.Rect(pos[0] - width // 2, pos[1] - height // 2, width, height)
+
+    def draw(self, surface, screensize, gui_manager, item_manager, rotation_scale, pos_override=None):
+        angle = -getattr(self, "rotation", 0)
+        self._update_cache(screensize, rotation_scale, angle)
+        center_x, center_y = self.pos if pos_override is None else pos_override
+        scaled_img = self._cached_scaled_img
+        draw_x = center_x - scaled_img.get_width() // 2
+        draw_y = center_y - scaled_img.get_height() // 2
+        # Draw shadow (cached)
+        if self._cached_shadow_img is not None:
+            shadow_x = draw_x + self._cached_shadow_offset[0]
+            shadow_y = draw_y + self._cached_shadow_offset[1]
+            surface.blit(self._cached_shadow_img, (shadow_x, shadow_y))
+        # Draw actual item
+        surface.blit(scaled_img, (draw_x, draw_y))
+        # Optionally print debug info
+        if self.TOOLITEM_DEBUG:
+            print(f"[ToolItem] draw at ({draw_x}, {draw_y}), size {scaled_img.get_size()}")
+
+    @property
+    def rarity(self):
+        from utility.item_utility.itemMaker import ITEM_BASES
+        # get all pieces and their rarity scores and then average them
+        a = 0
+        b = 0
+        rarity_map = {
+            "common": 0.1, "uncommon": 0.2, "rare": 0.4, "rare+": 0.5,
+            "unique": 0.6, "elite": 0.7, "legendary": 0.85, "mythic": 0.95, "fabled": 1.0
+        }
+        parts = [self.blade, self.guard, self.handle, self.pommel] # parts of weapon
+
+        try:
+            for part in parts:
+                data = ITEM_BASES.get(part.get("type"))
+                if data == None:
+                    continue
+                rarity_str = data.get("nbt").get("rarity") # returns a str, eg. "common"
+                a += rarity_map[rarity_str]
+                b +=1
+            return a/b
+
+        except Exception as e:
+            raise KeyError(f"tool {self} with itemtype {self.type} couldnt return rarity: {e}")
+
+    @property
+    def magic(self):
+        from utility.item_utility.itemMaker import ITEM_BASES
+        # get all pieces and their magic scores and then average them
+        a = 0
+        b = 0
+        parts = [self.blade, self.guard, self.handle, self.pommel] # parts of weapon
+
+        try:
+            for part in parts:
+                data = ITEM_BASES.get(part.get("type"))
+                if data == None:
+                    continue
+                magic_int = data.get("nbt").get("magic") # returns an int 0-1, eg. 0.1
+                a += magic_int
+                b +=1
+            return a/b
+
+        except Exception as e:
+            raise KeyError(f"tool {self} with itemtype {self.type} couldnt return magic: {e}")
     
+    @property
+    def quality(self):
+        a = 0
+        b = 0
+        parts = [self.blade, self.guard, self.handle, self.pommel] # parts of weapon
+
+        try:
+            for part in parts:
+                a += part.get("quality")
+                b +=1
+            return round(a/b, 3)
+
+        except Exception as e:
+            raise KeyError(f"tool {self} with itemtype {self.type} couldnt return magic: {e}")
+
+
+

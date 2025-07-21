@@ -574,9 +574,237 @@ ITEM_BASES = {
             "scale":(1.5,1.5),
             "default_scale":(1.5,1.5),
             "temperature": 0,
+            "rarity":"common",
+        }
+    },
+    "spiked_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"uncommon",
+        }
+    },
+    "blunt_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"rare",
+        }
+    },
+    "crystal_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "gem":None,
+            "rarity":"rare+",
+        }
+    },
+    "dagger_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"unique",
+        }
+    },
+    "orb_pommel": {
+        "class":"PartItem",
+        "type":"pommel",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "gem":None,
+            "rarity":"elite",
+        }
+    },
+    ### GUARDS ###
+    "cross_guard": {
+        "class":"PartItem",
+        "type":"guard",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"common",
+        }
+    },
+    "quillon_guard": {
+        "class":"PartItem",
+        "type":"guard",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"uncommon",
+        }
+    },
+    "basket_guard": {
+        "class":"PartItem",
+        "type":"guard",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"rare+",
+        }
+    },
+    "mortuary_guard": {
+        "class":"PartItem",
+        "type":"guard",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"unique",
+        }
+    },
+    ### HANDLES ###
+    "one_hand_handle": {
+        "class":"PartItem",
+        "type":"handle",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"common",
+        }
+    },
+    "two_handed_handle": {
+        "class":"PartItem",
+        "type":"handle",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"uncommon",
+        }
+    },
+    ### BLADES ###
+    "longsword_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"common",
+        }
+    },
+    "falchion_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"uncommon",
+        }
+    },
+    "greatsword_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"rare",
+        }
+    },
+    "jian_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"rare+",
+        }
+    },
+    "rapier_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"unique",
+        }
+    },
+    "tachi_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"elite",
+        }
+    },
+    "cinquedea_blade": {
+        "class":"PartItem",
+        "type":"blade",
+        "nbt": {
+            # pass in img_path as extra nbt ^^^
+            "flags": ["draggable", "inspectable"],
+            "scale":(1.5,1.5),
+            "default_scale":(1.5,1.5),
+            "temperature": 0,
+            "rarity":"elite",
+        }
+    },
+    "sword": {
+        "class":"ToolItem",
+        "type":"sword",
+        "nbt": {
+            "flags": ["draggable", "inspectable"]
         }
     }
-
 }
 
 item_class_map = {
@@ -586,6 +814,7 @@ item_class_map = {
     "CharmItem": CharmItem,
     "PartItem": PartItem,
     "GemItem": GemItem,
+    "ToolItem": ToolItem
 }
 
 class makeItem:

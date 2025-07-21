@@ -42,13 +42,6 @@ class ItemManager:
                     "pos": list(item.pos),
                     **item.to_nbt()
                 }
-            elif hasattr(item, "tool_type"):
-                data = {
-                    "class": "Tool",
-                    "tool_type": item.tool_type,
-                    "pos": list(item.pos),
-                    **item.to_nbt()
-                }
             else:
                 continue
 
@@ -90,22 +83,19 @@ class ItemManager:
             "CharmItem": CharmItem,
             "PartItem": PartItem,
             "GemItem": GemItem,
-            "Tool": Tool
+            "ToolItem": ToolItem
         }
 
         for entry in screen_data:
             try:
                 pos = tuple(entry["pos"])
                 class_name = entry.get("class", "BaseItem")
-                nbt = {k: v for k, v in entry.items() if k not in {"class", "type", "tool_type", "pos"}}
+                nbt = {k: v for k, v in entry.items() if k not in {"class", "type", "pos"}}
 
-                if class_name == "Tool":
-                    tool_type = entry["tool_type"]
-                    item = Tool(self, tool_type, pos, nbt)
-                else:
-                    item_type = entry["type"]
-                    item_class = item_class_map.get(class_name, BaseItem)
-                    item = item_class(self, item_type, pos, nbt)
+
+                item_type = entry["type"]
+                item_class = item_class_map.get(class_name, BaseItem)
+                item = item_class(self, item_type, pos, nbt)
 
                 self.items.append(item)
 

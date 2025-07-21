@@ -96,6 +96,13 @@ def table(screen, instance_manager, prev_screen = None):
         previous_screen=main_menu,  # Reference to the previous screen function
         instance_manager = instance_manager
     )
-    makeItem(base.item_manager, "copper_ingot",(200,200), "table")
+    nbt_data = {
+    "blade": {"type": "longsword_blade", "material": "iron", "quality": .95, "enchantment": None, "curse": None, "effect": None},
+    "guard": {"type": "cross_guard", "material": "iron", "quality": .95, "enchantment": None, "curse": None, "effect": None},
+    "handle": {"type": "handle", "material": "wood", "quality": 1, "enchantment": None, "curse": None, "effect": None},
+    "pommel": {"type": "rounded_pommel", "material": "iron", "quality": 1, "enchantment": None, "curse": None, "effect": None}
+    }
+    makeItem(base.item_manager, "sword", (200,200), "table", nbt_data)
+
 
     base.run()

@@ -191,6 +191,8 @@ class BaseScreen:
         self.load_items(self.instance_manager.save_file)
         while True:
             dt = self.clock.tick(60)
+            # Print FPS to the same line
+            print(f"FPS: {self.clock.get_fps():.1f}", end="\r", flush=True)
             virtual_mouse = self.vscreen.get_virtual_mouse(self.screen.get_size())
             self.handle_events(virtual_mouse)
             self.update(dt, virtual_mouse)

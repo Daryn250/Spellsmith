@@ -222,6 +222,16 @@ window_data = {
         "description": "A basic pommel.",
         "data": {"material":"highlight", "temperature":"number", "quality":"percent"},
     },
+    #### TOOLS ####
+    "sword": {
+        "title": "Sword",
+        "description": "A basic sword.",
+        "data": {"blade.material":"highlight", "blade.quality":"percent",
+                 "guard.material":"highlight", "guard.quality":"percent",
+                 "handle.material":"highlight", "handle.quality":"percent",
+                 "pommel.material":"highlight", "pommel.quality":"percent",
+                 "rarity":"bar", "quality":"bar"},
+    },
 }
 from utility.animated_sprite import AnimatedTile
 from utility.gui_utility.hoverWindow import *
@@ -249,7 +259,7 @@ def item_to_info(item, inspecting):
     # Parse data dictionary into HoverData
     item_data = data_entry.get("data", {})
     for label, dtype in item_data.items():
-        value = getattr(item, label, "N/A")
+        value = get_nested_attr(item, label, default="N/A")
         if value == "N/A":
             continue
 
@@ -267,14 +277,18 @@ def item_to_info(item, inspecting):
             else:
                 print(f"[ITEM_TO_INFO.py] Invalid highlight value for '{label}': {value}")
 
-            hover_data.append(HoverData(label=label, data_type="highlight", anim_tile=anim_tile))
+            display_label = label.replace(".", " ").title()
+            hover_data.append(HoverData(label=display_label, data_type="highlight", anim_tile=anim_tile))
+
 
         elif dtype in ("number", "percent", "bar"):
-            hover_data.append(HoverData(label=label, value=round(value, 1), data_type=dtype))
+            display_label = label.replace(".", " ").title()
+            hover_data.append(HoverData(label=display_label, value=round(value, 3), data_type=dtype))
 
         else:
             # Fallback generic representation
-            hover_data.append(HoverData(label=label, value=value, data_type="number"))
+            display_label = label.replace(".", " ").title()
+            hover_data.append(HoverData(label=display_label, value=value, data_type="number"))
 
     return HoverInfo(
         title=title,
@@ -296,3 +310,14 @@ def get_highlight(name):
     if name in highlights:
         return AnimatedTile(highlights[name], 100)
     return AnimatedTile(highlights["default"], 100)
+
+def get_nested_attr(obj, attr_path, default=None):
+    parts = attr_path.split(".")
+    for part in parts:
+        if isinstance(obj, dict):
+            obj = obj.get(part, default)
+        else:
+            obj = getattr(obj, part, default)
+        if obj == default:
+            break
+    return obj

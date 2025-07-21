@@ -1,6 +1,7 @@
 import pygame
 from utility.gui_utility.quicktrick import QuickMenu
 from utility.item_utility.trickAnimation import *
+from utility.item_utility.baseItem import *
 
 class DraggableFlag:
     dragging_item = None
@@ -11,31 +12,31 @@ class DraggableFlag:
     def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager):
         mx, my = mouse_pos
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            for item in reversed(item_list):
-                if "draggable" in getattr(item, "flags", []):
-
-                    if hasattr(item, "type"):
+            if item_manager.get_dragged() == None:
+                for item in reversed(item_list):
+                    if "draggable" in getattr(item, "flags", []):
+                        # Fast bbox check before expensive hitbox
+                        if hasattr(item, "get_fast_bbox"):
+                            if not item.get_fast_bbox(virtual_size).collidepoint(mx, my):
+                                continue
                         rect = item.get_scaled_hitbox(virtual_size)
                         colliding = rect.collidepoint(mx, my)
-                    elif hasattr(item, "tool_type"):
-                        colliding = item.is_point_inside((mx, my), virtual_size)
-
-                    if colliding:
-                        DraggableFlag.dragging_item = item
-                        DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
-                        DraggableFlag.last_pos = item.pos
-                        for slot in item_list:
-                            if "slot" not in slot.flags:
-                                continue
-                            if slot.contains == DraggableFlag.dragging_item.uuid:
-                                if getattr(slot, "locked", False) == False:
-                                    slot.contains = None
-                                else:
-                                    DraggableFlag.dragging_item = None
-                                    DraggableFlag.offset = None
-                                    DraggableFlag.last_pos = None
-                                break
-                        break
+                        if colliding:
+                            DraggableFlag.dragging_item = item
+                            DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
+                            DraggableFlag.last_pos = item.pos
+                            for slot in item_list:
+                                if "slot" not in slot.flags:
+                                    continue
+                                if slot.contains == DraggableFlag.dragging_item.uuid:
+                                    if getattr(slot, "locked", False) == False:
+                                        slot.contains = None
+                                    else:
+                                        DraggableFlag.dragging_item = None
+                                        DraggableFlag.offset = None
+                                        DraggableFlag.last_pos = None
+                                    break
+                            break
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if DraggableFlag.dragging_item is not None:
@@ -96,10 +97,11 @@ class DraggableFlag:
                 item.pos = new_pos
                 item.currentGravity = 0
 
-                if hasattr(item, "type"):
+
+                if isinstance(item, ToolItem):
+                    item.rotational_velocity += vx * 0.01
+                else:
                     item.rotational_velocity += vx * 0.05
-                elif hasattr(item, "tool_type"):
-                    item.rotational_velocity += vx * 0.005
 
                 item.ovx = vx
                 item.ovy = vy
@@ -116,6 +118,10 @@ class ScreenChangeFlag:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             for item in reversed(item_list):  # Topmost items get priority
                 if "screen_change" in getattr(item, "flags", []):
+                    # Fast bbox check before expensive hitbox
+                    if hasattr(item, "get_fast_bbox"):
+                        if not item.get_fast_bbox(virtual_size).collidepoint(mx, my):
+                            continue
                     override_pos = getattr(item, "pos_override", item.pos)
                     rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
                     if rect.collidepoint(mx, my):
@@ -132,9 +138,12 @@ class CharmFlag:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for item in reversed(itemlist):  # Reversed in case of overlap, top items get priority
                 if "charm" in getattr(item, "flags", []):
+                    # Fast bbox check before expensive hitbox
+                    if hasattr(item, "get_fast_bbox"):
+                        if not item.get_fast_bbox(virtual_size).collidepoint(mx, my):
+                            continue
                     rect = item.get_scaled_hitbox(virtual_size)
                     inside = rect.collidepoint(mx, my)
-
                     if inside and not getattr(item, "is_clicked", False):
                         item.is_clicked = True
                         item.img.frames = item.img._load_frames_from_folder(f"assets/gui/charm_board/{item.charmType}/active", item.scale)
@@ -244,8 +253,6 @@ class SlotFlag:
             for slot in [i for i in items if "slot" in getattr(i, "flags", [])]:
                 slot_rect = slot.get_scaled_hitbox(virtual_size)
                 if slot_rect.collidepoint(mouse_pos):
-                    accepted = getattr(slot, "slot_accepts", [])
-                    dragged_type = getattr(dragged, "type", getattr(dragged, "tool_type", None))
                     if is_valid_for_slot(slot, dragged) and slot.contains is None:
 
                         dragged.set_position(slot.pos)
@@ -307,18 +314,18 @@ def is_valid_for_slot(slot, item):
     slot_name = getattr(slot, "slot_name", None)
     accepted = getattr(slot, "slot_accepts", [])
 
-    item_type = getattr(item, "type", getattr(item, "tool_type", None))
+    item_type = getattr(item, "type", None)
 
     # Fuel slot restriction
     if slot_name == "fuel_input" and item_type != "fuel":
         return False
     
     if slot_name == "weapon_slot1" or slot_name == "weapon_slot2":
-        if hasattr(item, "type"):
+        if not isinstance(item, ToolItem):
             return False
     
     if slot_name in ["furnace_input_1","furnace_input_2","furnace_input_3","furnace_input_4","furnace_input_5"]:
-        if hasattr(item, "tool_type"):
+        if isinstance(item, ToolItem):
             return False
         
 
@@ -351,7 +358,7 @@ class TrickFlag:
                             radius=35*(virtual_size[0]/480), 
                             total_slots=6, 
                             unlocked_slots=3, 
-                            images_folder=f"assets/tools/{item.tool_type}/tricks")
+                            images_folder=f"assets/tools/{item.type}/tricks")
 
                         break
 
@@ -384,16 +391,19 @@ class TrickFlag:
 
 from utility.item_utility.item_to_info import item_to_info
 
+
 class InspectableFlag:
     @staticmethod
     def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
+        
         keys = pygame.key.get_pressed()
         inspecting = keys[pygame.K_q]
 
-        hovered_windows = []
         active_items = []
-
-        for item in item_list:
+        # Sort items by descending .pos[1] (Y position)
+        sorted_items = sorted(item_list, key=lambda item: getattr(item, 'pos', (0, 0))[1], reverse=True)
+        item_selected = False
+        for item in sorted_items:
             if "inspectable" not in getattr(item, "flags", []):
                 continue
             if getattr(item, "dragging", False) == True:
@@ -403,6 +413,14 @@ class InspectableFlag:
                 continue
 
             item.highlight = False
+
+            # Fast bbox check before expensive hitbox
+            if hasattr(item, "get_fast_bbox"):
+                if not item.get_fast_bbox(virtual_size).collidepoint(mouse_pos):
+                    if hasattr(item, "window") and item.window in gui_manager.windows:
+                        gui_manager.windows.remove(item.window)
+                        item.window = None
+                    continue
 
             # Get override position if it exists
             override_pos = getattr(item, "pos_override", item.pos)
@@ -425,6 +443,8 @@ class InspectableFlag:
                 item.window.mode = "default" if inspecting else "reduced"
                 item.highlight = True
                 active_items.append(item)
+                item_selected = True
+                break  # Stop checking further items for this frame
             else:
                 if hasattr(item, "window") and item.window in gui_manager.windows:
                     gui_manager.windows.remove(item.window)

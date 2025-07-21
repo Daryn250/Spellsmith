@@ -41,7 +41,20 @@ copper, silver, lomium, thanium, titanium, lead, gold, iron
 Gems
 Citrine, Rhotochrosite, Aquamarine, Emerald, Tourmaline
 
+Enchantments: # "modifiers" that bring up one stat. one per part.
+
+
+Curses: # high-tier modifiers that can bring up multiple stats at the cost of others. one per part.
+
+
+Effects: # glyph driven blade modification soup. for the nerds.
+Protocol:
+first, have a combination of letters and numbers that represent glyph fragments. next, make it like code. finally, run the code and determine the output spell.
+ex:
+the string "a1e" could translate into 'a' for fire, '1' for ranged, and 'e' for a focus on speed.
+
+
+
 # credits
 Jessica & Katelyn: art
 Haleigh: story
-Javier maybe: spanish translation

@@ -4,6 +4,11 @@
 # blade => guard => pommel => handle => effects
 # in the future, I want to add things like strings that hang from the weapon that you can add.
 
+
+###### THIS CODE IS DEPRICATED #######
+# now uses toolitem in baseitem.py
+
+
 import pygame
 import os
 import random
