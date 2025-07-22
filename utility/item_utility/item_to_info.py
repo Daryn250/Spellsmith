@@ -260,7 +260,7 @@ def item_to_info(item, inspecting):
     item_data = data_entry.get("data", {})
     for label, dtype in item_data.items():
         value = get_nested_attr(item, label, default="N/A")
-        if value == "N/A":
+        if value == "N/A" or value == None:
             continue
 
         # If highlight, we expect the value to be an AnimatedTile or a path to one

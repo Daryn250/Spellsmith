@@ -143,7 +143,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/copper/copper1.png",
+            "img_path": "assets/items/materials/copper/copper1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
@@ -153,7 +153,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/copper/copper2.png",
+            "img_path": "assets/items/materials/copper/copper2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
@@ -163,7 +163,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/iron/iron1.png",
+            "img_path": "assets/items/materials/iron/iron1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "iron"
@@ -173,7 +173,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/iron/iron2.png",
+            "img_path": "assets/items/materials/iron/iron2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "iron"
@@ -183,7 +183,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/lead/lead1.png",
+            "img_path": "assets/items/materials/lead/lead1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
@@ -193,7 +193,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/lead/lead2.png",
+            "img_path": "assets/items/materials/lead/lead2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
@@ -203,7 +203,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/lomium/lomium1.png",
+            "img_path": "assets/items/materials/lomium/lomium1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lomium"
@@ -213,7 +213,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/lomium/lomium2.png",
+            "img_path": "assets/items/materials/lomium/lomium2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lomium"
@@ -223,7 +223,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/silver/silver1.png",
+            "img_path": "assets/items/materials/silver/silver1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
@@ -233,7 +233,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/silver/silver2.png",
+            "img_path": "assets/items/materials/silver/silver2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
@@ -243,7 +243,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/titanium/titanium1.png",
+            "img_path": "assets/items/materials/titanium/titanium1.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"
@@ -253,20 +253,30 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/titanium/titanium2.png",
+            "img_path": "assets/items/materials/titanium/titanium2.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"
         }
     },
-    "anodized_titanium_ingot": {
+    "thanium_ingot": {
+        "class": "MaterialItem",
+        "type": "ore",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/titanium1.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "thanium"
+        }
+    },
+    "thanium_ingot": {
         "class": "MaterialItem",
         "type": "ingot",
         "nbt": {
-            "img_path": "assets/items/titanium/titanium3.png",
+            "img_path": "assets/items/materials/thanium/thanium_ingot.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
-            "material": "titanium"
+            "material": "thanium"
         }
     },
     ### FUEL TYPES ###
