@@ -2,7 +2,6 @@ import pygame
 import random
 import math
 from utility.animated_sprite import AnimatedTile
-from utility.item_utility.charmWindows import returnCharmWindow
 from utility.screen_utility.screenManager import get_screen_function
 import json
 from utility.item_utility.item_flag_handlers import *
@@ -63,9 +62,6 @@ class BaseItem:
             self.floor = pos[1]
             self.dragging = False
 
-        # for the charm class:
-        if "charm" in self.flags:
-            self.is_clicked = False
 
         # for the hanging class
         if "hangable" in self.flags:
@@ -108,9 +104,6 @@ class BaseItem:
 
         if "draggable" in self.flags:
             handle_draggable(self, screen, gui_manager, virtual_size, bounds)
-
-        if "charm" in self.flags:
-            handle_charm(self, screen, gui_manager)
 
         if "hangable" in self.flags:
             handle_hangable(self, screen)
@@ -176,7 +169,7 @@ class BaseItem:
 
 
 
-        if getattr(self, "is_clicked", False) or getattr(self, "highlighted", False):
+        if getattr(self, "highlighted", False):
             mask = pygame.mask.from_surface(rotated_img)
             outline_points = mask.outline()
             if outline_points:
@@ -395,17 +388,6 @@ class CharmItem(BaseItem):
             self.flags.append("charm")
         self.is_clicked = False
         self.window = None
-
-    def update(self, screen, gui_manager, *args, **kwargs):
-        super().update(screen, gui_manager, *args, **kwargs)
-        if self.is_clicked:
-            if self.window is None:
-                self.window = returnCharmWindow(self)
-                gui_manager.windows.append(self.window)
-        elif self.window:
-            if self.window in gui_manager.windows:
-                gui_manager.windows.remove(self.window)
-            self.window = None
 
 class PartItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):

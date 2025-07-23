@@ -394,52 +394,49 @@ from utility.item_utility.item_to_info import item_to_info
 
 class InspectableFlag:
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager):
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings):
         keys = pygame.key.get_pressed()
         inspecting = keys[pygame.K_q]
 
+        # Only one window at a time
+        selected_item = None
         # Sort items by descending .pos[1] (Y position)
         sorted_items = sorted(item_list, key=lambda item: getattr(item, 'pos', (0, 0))[1], reverse=True)
-        selected_item = None
-        for item in sorted_items:
-            if "inspectable" not in getattr(item, "flags", []):
-                continue
-            if getattr(item, "dragging", False) == True:
-                if hasattr(item, "window") and item.window in gui_manager.windows:
-                    gui_manager.windows.remove(item.window)
-                    item.window = None
-                continue
-            item.highlight = False
-            # Fast bbox check before expensive hitbox
-            if hasattr(item, "get_fast_bbox"):
-                if not item.get_fast_bbox(virtual_size).collidepoint(mouse_pos):
-                    if hasattr(item, "window") and item.window in gui_manager.windows:
-                        gui_manager.windows.remove(item.window)
-                        item.window = None
+        # Only create window if requirements are met
+        if item_manager.get_dragged() is None:
+            for item in sorted_items:
+                if "inspectable" not in getattr(item, "flags", []):
                     continue
-            # Get override position if it exists
-            override_pos = getattr(item, "pos_override", item.pos)
-            rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
-            is_hovering_item = rect.collidepoint(mouse_pos)
-            is_hovering_window = False
-            if hasattr(item, "window") and item.window:
-                win_rect = pygame.Rect(item.window_last_pos, (item.window.width, item.window.height)) \
-                    if hasattr(item.window, "width") and hasattr(item.window, "height") else None
-                if win_rect and win_rect.collidepoint(mouse_pos):
-                    is_hovering_window = True
-            if is_hovering_item or is_hovering_window:
+                # Fast bbox check
+                if hasattr(item, "get_fast_bbox") and not item.get_fast_bbox(virtual_size).collidepoint(mouse_pos):
+                    continue
+                # Heavy bbox check
+                override_pos = getattr(item, "pos_override", item.pos)
+                rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
+                if not rect.collidepoint(mouse_pos):
+                    continue
+                # All requirements met
                 selected_item = item
-                break  # Only pick the topmost item
+                break
         # Hide all windows except the selected one
         for item in item_list:
             if "inspectable" in getattr(item, "flags", []):
                 if item is selected_item:
+                    # Only create window if not already present
                     if not hasattr(item, "window") or item.window is None:
-                        item.window = item_to_info(item, inspecting)
+                        item.window = item_to_info(item, inspecting, settings.language)
                         item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)
                         gui_manager.windows.append(item.window)
-                    item.window.mode = "default" if inspecting else "reduced"
-                    item.highlight = True
+                    else:
+                        # Only update window position and mode if already present
+                        item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)
+                        item.window.mode = "default" if inspecting else "reduced"
+                        # If the window has an update method, call it
+                        if hasattr(item.window, "update"):
+                            dt = getattr(event, 'dt', 0) if hasattr(event, 'dt') else 0
+                            item.window.update(dt)
+                    # Highlight only if window is in default mode
+                    item.highlight = item.window.mode == "default"
                 else:
                     if hasattr(item, "window") and item.window in gui_manager.windows:
                         gui_manager.windows.remove(item.window)

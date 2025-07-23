@@ -1,0 +1,375 @@
+{
+    "items": {
+        "furnace": {
+            "title": "Horno",
+            "description": "Un horno ardiente. ¡Haz clic derecho para ir al horno!",
+            "data": []
+        },
+        "anvil": {
+            "title": "Yunque",
+            "description": "Un yunque brillante. ¡Haz clic derecho para acceder al yunque!",
+            "data": []
+        },
+        "map": {
+            "title": "Mapa",
+            "description": "Permite viajar a las islas. Haz clic derecho para abrir el mapa.",
+            "data": []
+        },
+        "craft": {
+            "title": "Artesanía",
+            "description": "¡Haga clic derecho para ir a la estación de trabajo!",
+            "data": []
+        },
+        "map_boat": {
+            "title": "Tu barco",
+            "description": "Este es tu barco.",
+            "data": []
+        },
+        "island1": {
+            "title": "placeholder island",
+            "description": "island where dreams come true i think",
+            "data": []
+        },
+        "copper_ore": {
+            "title": "Mineral de Cobre",
+            "description": "El mineral de cobre es un metal nativo, lo que significa que puede usarse sin refinar. Es bastante blando, pero fácil de forjar y perfecto para principiantes.",
+            "labels": {
+                "mass": "Masa",
+                "impurities": "Impurezas"
+            }
+        },
+        "copper_ingot": {
+            "title": "Lingote de Cobre",
+            "description": "Una barra sólida de cobre. Puede forjarse después de calentarla.",
+            "labels": {
+                "mass": "Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "iron_ore": {
+            "title": "Mineral de hierro",
+            "description": "El mineral de hierro es un metal común, con mayor resistencia que el cobre. Sin embargo, requiere temperaturas más altas para su forja, lo que requiere más combustible o una mayor eficiencia de forja.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "iron_ingot": {
+            "title": "Lingote de hierro",
+            "description": "Una barra sólida de hierro. Al añadir carbono, aumenta su resistencia, formando acero con alto contenido de carbono. Añadir demasiado puede debilitar el compuesto.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "lead_ore": {
+            "title": "Mineral de plomo",
+            "description": "El plomo es un metal muy denso. Es el extremo de muchas cadenas nucleares importantes y puede retener la magia con mayor facilidad gracias a su alto conteo de protones.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "lead_ingot": {
+            "title": "Lingote de plomo",
+            "description": "Los metales más densos retienen la magia con mayor facilidad. Por lo tanto, el plomo es perfecto para objetos con infusión mágica.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "lomium_ore": {
+            "title": "Mineral de lomio",
+            "description": "El lomio, a pesar de su apariencia, presenta una estructura cristalina robusta. Es un metal con un dulce aroma a azúcar y una alta resistencia a la tracción en su base sin necesidad de tratamiento.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "lomium_ingot": {
+            "title": "Lingote de lomio",
+            "description": "Un metal fuerte y ligero. Forjarlo puede resultar difícil, pero el resultado es un hermoso metal azul cielo que resiste golpes mortales.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "silver_ore": {
+            "title": "Mineral de plata",
+            "description": "La plata es un metal brillante y lustroso, más fuerte que el cobre e increíblemente valioso.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "silver_ingot": {
+            "title": "Lingote de plata",
+            "description": "Un lingote de plata maciza. Su rareza y belleza lo hacen perfecto para joyería y piezas decorativas, además de tener un gran efecto sobre ciertos monstruos.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "titanium_ore": {
+            "title": "Mineral de titanio",
+            "description": "El titanio tiene la mayor relación resistencia-peso de todos los metales, sin embargo carece de la dureza necesaria para mantener el filo.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            } 
+        },
+        "titanium_ingot": {
+            "title": "Lingote de titanio",
+            "description": "El titanio es un metal resistente, pero no conserva el filo. También se puede anodizar, lo que aumenta considerablemente su valor.",
+            "labels": {
+                "mass":"Masa",
+                "temperature": "Temperatura",
+                "impurities": "Impurezas"
+            }
+        },
+        "large_coal": {
+            "title": "Carbón grande",
+            "description": "Un gran depósito de carbón. Puede colocarse en el horno.",
+            "labels": {
+                "fuel":"Combustible"
+            }
+        },
+        "medium_coal": {
+            "title": "Carbón Medio",
+            "description": "Un depósito mediano de carbón. Puede colocarse en el horno.",
+            "labels": {
+                "fuel":"Combustible"
+            }
+        },
+        "small_coal": {
+            "title": "Carbón pequeño",
+            "description": "Un pequeño depósito de carbón. Puede colocarse en el horno.",
+            "labels": {
+                "fuel":"Combustible"
+            }
+        },
+        "log": {
+            "title": "Tronco de árbol",
+            "description": "Un tronco robusto. Se puede meter en el horno.",
+            "labels": {
+                "fuel":"Combustible"
+            }
+        },
+        "large_bottle": {
+            "title": "Botella grande",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "hexagon_bottle": {
+            "title": "Botella hexagonal",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "gold_bottle": {
+            "title": "botella de oro",
+            "description": "Una botella encantada. Puede contener cualquier líquido.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "crescent_bottle": {
+            "title": "Botella creciente",
+            "description": "Una botella con una amatista incrustada. Puede contener la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "circle_bottle": {
+            "title": "Botella circular",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "spiked_bottle": {
+            "title": "botella con púas",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "uranium_bottle": {
+            "title": "Botella de uranio",
+            "description": "Una botella de vidrio de uranio. Puede contener la mayoría de los líquidos. Puede tener leves efectos secundarios.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "tall_bottle": {
+            "title": "Botella alta",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "small_uranium_bottle": {
+            "title": "Pequeña botella de uranio",
+            "description": "Una botella de vidrio de uranio. Puede contener la mayoría de los líquidos. Puede tener leves efectos secundarios.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "small_bottle": {
+            "title": "Botella pequeña",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "red_bottle": {
+            "title": "Botella roja",
+            "description": "Una botella elaborada. Puede contener la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "mini_bottle": {
+            "title": "Mini botella",
+            "description": "Una botella muy pequeña. Puede contener la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "brown_bottle": {
+            "title": "Botella Marrón",
+            "description": "Una botella. Puede almacenar la mayoría de los líquidos.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "chain_bottle": {
+            "title": "Botella de cadena",
+            "description": "Una botella encantada. Puede contener la mayoría de los líquidos. También puede capturar bestias míticas.",
+            "labels": {
+                "capacity":"Capacidad",
+                "contents":"Contenido",
+                "liquid":"Líquida"
+            }
+        },
+        "aquamarine": {
+            "title": "Aguamarina",
+            "description": "Una gema azul claro brillante.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "citrine": {
+            "title": "Citrino",
+            "description": "Una gema brillante de color naranja pálido.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "emerald": {
+            "title": "Esmeralda",
+            "description": "Una gema verde brillante.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "rhotochrosite": {
+            "title": "Rodocrosita",
+            "description": "Una gema brillante de color rosa claro.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "tourmaline": {
+            "title": "Turmalina",
+            "description": "Una gema roja brillante.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "flawless_tourmaline": {
+            "title": "Turmalina impecable",
+            "description": "Una piedra preciosa tallada por un maestro artesano.",
+            "labels": {
+                "mass":"Masa",
+                "quality":"Calidad",
+                "element":"Elemento"
+            }
+        },
+        "rounded_pommel": {
+            "title": "Pomo redondeado",
+            "description": "Un pomo básico.",
+            "labels": {
+                "material":"Material",
+                "temperature":"Temperatura",
+                "quality":"Calidad"
+            }
+        },
+        "sword": {
+            "title": "Espada",
+            "description": "Una espada básica.",
+            "labels": {
+                "blade.quality": "Calidad de la hoja",
+                "guard.quality": "Calidad de guardia",
+                "handle.quality": "Manejar la calidad",
+                "pommel.quality": "Calidad del pomo",
+                "rarity": "Rareza",
+                "quality": "Calidad"
+            }
+        }
+    },
+    "other": {
+        "play":"jugar",
+        "settings":"configuración",
+        "quit":"dejar"
+    }
+}

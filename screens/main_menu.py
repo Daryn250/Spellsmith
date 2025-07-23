@@ -20,6 +20,8 @@ class MainMenuHelper:
         self.screen_size = screen_size
         self.tiles = []  # Each tile: {"tile": AnimatedTile, "duration": int, "offset": float, "phase": float}
         self.instance_manager = instance_manager
+        self.language = instance_manager.settings.language
+        self.settings = instance_manager.settings
         self.font = instance_manager.settings.font
         self._init_ocean_tiles()
         self._init_buttons()
@@ -49,11 +51,15 @@ class MainMenuHelper:
     def _init_buttons(self):
         sw, sh = self.screen_size
         center_x = sw // 20 + 50
+        font = pygame.font.Font(self.font, 20)
         self.buttons = [
-            Button(None, (center_x, sh * 2 // 5), "play", pygame.font.Font(self.font, 20), "White", "gray"),
-            Button(None, (center_x, sh // 2), "settings", pygame.font.Font(self.font, 20), "White", "gray"),
-            Button(None, (center_x, int(sh * 0.9)), "quit", pygame.font.Font(self.font, 20), "White", "indianred1")
+            Button(None, (center_x, sh * 2 // 5), self.settings.translated_text("play"), font, "White", "gray"),
+            Button(None, (center_x, sh // 2), self.settings.translated_text("settings"), font, "White", "gray"),
+            Button(None, (center_x, int(sh * 0.9)), self.settings.translated_text("quit"), font, "White", "indianred1")
         ]
+        # Calculate menu bar width based on longest button text
+        self.menu_bar_font = font
+        self.menu_bar_width = max(font.size(btn.text_input)[0] for btn in self.buttons) + 40  # 40px padding
 
     def update(self, dt, item_manager, mouse, screen):
         self.time_elapsed += dt / 1000
@@ -91,13 +97,25 @@ class MainMenuHelper:
         self.boat_sprite.draw(surface, boat_rect)
 
         # Menu bar
-        menu_surface = pygame.Surface((sw, sh), pygame.SRCALPHA)
-        pygame.draw.rect(menu_surface, (0, 0, 0, 128), (sw // 20, 0, 100, sh))
-        surface.blit(menu_surface, (0, 0))
+        menu_surface = pygame.Surface((self.menu_bar_width, sh), pygame.SRCALPHA)
+        pygame.draw.rect(menu_surface, (0, 0, 0, 128), (0, 0, self.menu_bar_width, sh))
+        surface.blit(menu_surface, (sw // 20, 0))
 
-        # Buttons
+        # Buttons (center text in menu bar)
         for btn in self.buttons:
-            btn.update(surface)
+            # Center the text in the menu bar
+            font = btn.font
+            text = btn.text_input
+            text_surf = font.render(text, False, btn.base_color)
+            text_rect = text_surf.get_rect()
+            # Center horizontally in menu bar
+            text_rect.centerx = sw // 20 + self.menu_bar_width // 2
+            # Keep the y position as before
+            text_rect.centery = btn.y_pos
+            surface.blit(text_surf, text_rect)
+            # Update button hitbox to match centered text
+            btn.rect = text_rect.copy()
+            # Optionally, draw button background/hover effect if needed
 
     def handle_event(self, event, virtual_mouse, switcher, screen):
         for btn in self.buttons:

@@ -263,7 +263,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/titanium1.png",
+            "img_path": "assets/items/materials/thanium/thanium_ore.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "thanium"

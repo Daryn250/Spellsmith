@@ -3,7 +3,6 @@ import json
 import os
 import pygame
 from utility.item_utility.baseItem import *
-from utility.tool_utility.tool import Tool
 from utility.screen_utility.screenManager import *
 
 class ItemManager:
@@ -45,8 +44,15 @@ class ItemManager:
             else:
                 continue
 
-            if "next_screen" in data and callable(data["next_screen"]):
-                data["next_screen"] = data["next_screen"].__name__
+            # Fix: next_screen may be in item, not in data yet
+            if hasattr(item, "next_screen"):
+                if callable(getattr(item, "next_screen", None)):
+                    data["next_screen"] = item.next_screen.__name__
+                else:
+                    data["next_screen"] = item.next_screen
+            elif "next_screen" in data:
+                if callable(data["next_screen"]):
+                    data["next_screen"] = data["next_screen"].__name__
 
             screen_items.append(data)
 

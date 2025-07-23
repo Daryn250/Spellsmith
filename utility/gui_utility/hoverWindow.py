@@ -6,12 +6,19 @@ from utility.tool_utility.temperatureHandler import get_temp_range
 from utility.gui_utility.color_utils import get_temperature_color
 
 class HoverData:
-    def __init__(self, label, value=None, data_type="number", anim_tile=None, color=(255, 255, 255)):
+    def __init__(self, label, value=None, data_type="number", anim_tile=None, color=(255, 255, 255), lookup_label = None):
         self.label = label
         self.value = value
         self.data_type = data_type  # "number", "percent", "highlight", "bar"
         self.anim_tile = anim_tile  # For highlight types
         self.color = color
+        self.lookup_label = lookup_label
+    def debug_print(self):
+        print(f"label: {self.label}")
+        print(f"value: {self.value}")
+        print(f"data_type: {self.data_type}")
+        print(f"color: {self.color}")
+        print(f"lookup_label: {self.lookup_label}")
 
 class HoverInfo:
     def __init__(self, title="", description="", icon=None, data=None, reduced_data=None, mode="default", source_item=None):
@@ -25,7 +32,6 @@ class HoverInfo:
         self.padding = 4
         self.columns = 3
         self.source_item = source_item  # tracks the item for updating information about the item so you dont gotta keep hovering over it lol
-
 
     def wrap_text(self, text, font, max_width):
         words = text.split()
@@ -207,38 +213,44 @@ class HoverInfo:
                 d.anim_tile.update(dt)
 
             # Live-update value from the source item if applicable
-            if self.source_item and hasattr(self.source_item, d.label):
-                raw_value = getattr(self.source_item, d.label)
-
-                if d.data_type == "percent":
-                    d.value = round(float(raw_value), 3)
-                elif d.data_type == "number":
-                    d.value = round(float(raw_value), 1)
-
-                    # Special temperature color logic
-                    if d.label.lower() == "temperature" and hasattr(self.source_item, "material"):
-                        material = getattr(self.source_item, "material")
-                        temp_range = get_temp_range(material)
-                        d.color = get_temperature_color(d.value, temp_range)
-
-                elif d.data_type == "bar":
-                    d.value = max(0.0, min(1.0, float(raw_value)))
-
-
-                    if d.label.lower() == "rarity":
-                        # Rarity: should be white to blue to 
-                        d.color = (
-                            int(255 * (1 - d.value)),
-                            int(255 * d.value),
-                            0
-                        )
-                    elif d.label.lower() == "quality":
-                        # Magic: blue to violet
-                        d.color = (
-                            int(255 * d.value),
-                            0,
-                            255
-                        )
+            lookup_label = getattr(d, "lookup_label", None)
+            if self.source_item and lookup_label:
+                # Support nested attributes (e.g., blade.material)
+                value = self.source_item
+                for part in lookup_label.split("."):
+                    if isinstance(value, dict):
+                        value = value.get(part, None)
+                    else:
+                        value = getattr(value, part, None)
+                if value is not None:
+                    if d.data_type == "percent":
+                        d.value = round(float(value), 3)
+                    elif d.data_type == "number":
+                        d.value = round(float(value), 1)
+                        # Special temperature color logic
+                        if lookup_label.lower() == "temperature" and hasattr(self.source_item, "material"):
+                            material = getattr(self.source_item, "material")
+                            temp_range = get_temp_range(material)
+                            d.color = get_temperature_color(d.value, temp_range)
+                    elif d.data_type == "bar":
+                        d.value = max(0.0, min(1.0, float(value)))
+                        if lookup_label.lower() == "rarity":
+                            d.color = (
+                                int(255 * (1 - d.value)),
+                                int(255 * d.value),
+                                0
+                            )
+                        elif lookup_label.lower() == "quality":
+                            d.color = (
+                                int(255 * d.value),
+                                0,
+                                255
+                            )
+            else:
+                if not lookup_label:
+                    print(f"[HoverWindow] Missing lookup_label for HoverData: label={getattr(d, 'label', None)}, data_type={getattr(d, 'data_type', None)}")
+                elif not self.source_item:
+                    print("[HoverWindow] source_item is None, cannot update window!")
 
 
 

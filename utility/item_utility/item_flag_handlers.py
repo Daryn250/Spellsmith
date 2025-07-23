@@ -1,6 +1,5 @@
 import pygame
 import random
-from utility.item_utility.charmWindows import returnCharmWindow
 from utility.particle import make_scale
 from utility.screen_utility.screenManager import get_screen_function
 
@@ -80,17 +79,6 @@ def handle_draggable(item, screen, gui_manager, virtual_size, bounds=None):
 
     item.pos = (currentX, currentY)
 
-
-
-def handle_charm(item, screen, gui_manager):
-    if item.is_clicked:
-        if not hasattr(item, "window") or item.window is None:
-            item.window = returnCharmWindow(item)
-            gui_manager.windows.append(item.window)
-    elif hasattr(item, "window") and item.window:
-        if item.window in gui_manager.windows:
-            gui_manager.windows.remove(item.window)
-        item.window = None
 
 
 def handle_hangable(item, screen):
