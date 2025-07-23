@@ -19,6 +19,14 @@ window_data = {
         "description": "Right click to go to the Workstation!",
         "data": [],
     },
+    "coal_pile": {
+        "title": "Coal Pile",
+        "description": "A pile of fuel for the furnace.",
+        "data": [
+            {"lookup_label": "draining", "display_label": "Drain per second", "data_type": "percent"},
+            {"lookup_label": "fuel_level", "display_label": "Fuel Level", "data_type": "bar"}
+        ],
+    },
     "map_boat": {
         "title": "Your Boat",
         "description": "This is your boat.",
@@ -31,7 +39,7 @@ window_data = {
     },
     "copper_ore": {
         "title": "Copper Ore",
-        "description": "Copper ore is a native metal, which means it can be used without importantoying or refining. It is rather soft, but can be easily forged and therefore is a perfect starter metal for beginners.",
+        "description": "Copper ore is a native metal, which means it can be used witho alloying or refining. It is rather soft, but can be easily forged and therefore is a perfect starter metal for beginners.",
         "data": [
             {"lookup_label": "mass", "display_label": "Mass", "data_type": "number"},
             {"lookup_label": "impurities", "display_label": "Impurities", "data_type": "percent"}

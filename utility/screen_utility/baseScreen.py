@@ -47,8 +47,8 @@ class BaseScreen:
         
 
     def load_items(self, save_path):
-        data = self.item_manager.load_items(save_path, self.screen_name)
-        # data should be the full save dict, including helper data
+        screen_helper_data = self.item_manager.load_items(save_path, self.screen_name)
+        # screen_helper_data is the _screen_data dict for this screen (or {})
 
         if self.draw_bag:
             self.gui_manager.bag_manager.load_bag(save_path, self.item_manager)
@@ -56,13 +56,11 @@ class BaseScreen:
         if not self.item_manager.items and self.default_items_func:
             self.default_items_func(self.item_manager)
 
-        if self.helper and data:
-            screen_data = data.get(self.screen_name, {})  # extra helper data here
+        if self.helper and screen_helper_data is not None:
             if hasattr(self.helper, "restore"):
-                self.helper.restore(screen_data)
-                print(screen_data)
+                self.helper.restore(screen_helper_data)
             elif hasattr(self.helper, "load_from_data"):
-                self.helper.load_from_data(screen_data)
+                self.helper.load_from_data(screen_helper_data)
             else:
                 print(f"⚠️ Helper for {self.screen_name} has no 'restore' or 'load_from_data' method.")
 
@@ -112,9 +110,11 @@ class BaseScreen:
 
             # Combine items and bag contents for drag handling:
             combined_items = list(self.item_manager.items)
+            
             # Add only items that are NOT already in item_manager.items to avoid duplicates
             combined_items.extend([item for item in self.gui_manager.bag_manager.contents if item not in self.item_manager.items])
-
+            if hasattr(self.helper, "items"):
+                combined_items.extend([item for item in self.helper.items if item not in self.item_manager.items])
             DraggableFlag.handle_event(event, combined_items, virtual_mouse, self.virtual_size, self.gui_manager, self.item_manager)
 
             # Adjust cursor based on dragging item temperature

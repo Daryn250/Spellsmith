@@ -128,25 +128,29 @@ class HoverInfo:
             bar_height + (30 if bar_lines else 0)
         )
 
-        box_rect = pygame.Rect(pos[0], pos[1], box_width, box_height)
+        # Clamp position so the window is always fully onscreen
+        surf_w, surf_h = surface.get_width(), surface.get_height()
+        clamped_x = max(0, min(pos[0], surf_w - box_width))
+        clamped_y = max(0, min(pos[1], surf_h - box_height))
+        box_rect = pygame.Rect(clamped_x, clamped_y, box_width, box_height)
         pygame.draw.rect(surface, bg_color, box_rect, border_radius=6)
 
-        y = pos[1] + self.padding
+        y = clamped_y + self.padding
 
         for line in lines:
-            surface.blit(line, (pos[0] + self.padding, y))
+            surface.blit(line, (clamped_x + self.padding, y))
             y += line.get_height()
 
         if lines and not reduced:
             y += 4
-            pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
+            pygame.draw.line(surface, (100, 100, 100), (clamped_x + self.padding, y), (clamped_x + box_width - self.padding, y))
             y += 4
 
         # Draw highlight entries (3 per row)
         for i, d in enumerate(highlights):
             col = i % self.columns
             row = i // self.columns
-            x = pos[0] + self.padding + col * (highlight_width + highlight_padding)
+            x = clamped_x + self.padding + col * (highlight_width + highlight_padding)
             y_offset = y + row * (highlight_height + highlight_padding)
 
             if isinstance(d.anim_tile, AnimatedTile):
@@ -157,11 +161,11 @@ class HoverInfo:
 
         if highlights:
             y += highlight_area_height + 4
-            pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
+            pygame.draw.line(surface, (100, 100, 100), (clamped_x + self.padding, y), (clamped_x + box_width - self.padding, y))
             y += 4
 
         for row_data in number_lines:
-            x = pos[0] + self.padding
+            x = clamped_x + self.padding
             for label, value, color_val in row_data:
                 line_text = f"{label}: {value}"
                 text_surface = tmp_font.render(line_text, False, color_val)
@@ -171,13 +175,13 @@ class HoverInfo:
 
         if number_lines:
             y += 4
-            pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
+            pygame.draw.line(surface, (100, 100, 100), (clamped_x + self.padding, y), (clamped_x + box_width - self.padding, y))
             y += 6
 
         for i, (label, val, color_val) in enumerate(bar_lines):
             bar_w = int(box_width * 0.6)  # 60% width
             bar_h = 20
-            bar_x = pos[0] + (box_width - bar_w) // 2  # Center horizontally
+            bar_x = clamped_x + (box_width - bar_w) // 2  # Center horizontally
             bar_y = y + i * (bar_h + 14)
 
             # Bar background
@@ -196,7 +200,7 @@ class HoverInfo:
 
         if bar_lines:
             y += len(bar_lines) * (bar_h + 14)
-            pygame.draw.line(surface, (100, 100, 100), (pos[0] + self.padding, y), (pos[0] + box_width - self.padding, y))
+            pygame.draw.line(surface, (100, 100, 100), (clamped_x + self.padding, y), (clamped_x + box_width - self.padding, y))
             y += 4
 
 

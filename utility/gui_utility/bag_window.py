@@ -129,7 +129,7 @@ class BagWindow:
                     {"time": 0.0, "scale": s},
                     {"time": 0.15, "scale": (s[0]/2, s[1]/2)},
                 ])
-                item.trick.on_complete = lambda item: item_manager.remove_item(item.uuid)
+                item.trick.on_complete = lambda item: item_manager.remove_item(item.uuid, self.bag.gui_manager)
                 item.trick.reset()
             return success
 

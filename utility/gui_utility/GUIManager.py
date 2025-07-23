@@ -17,7 +17,7 @@ class GUIManager:
         self.draw_screennav = True # make this hide screennav when false please and don't forget about not sending updates dude
 
         self.drawBag = bag
-        self.bag_manager = BagManager(capacity=50)
+        self.bag_manager = BagManager(self, capacity=50)
         self.bag_window = BagWindow(self.bag_manager, screen)
         self.screen = screen
         self.settings = screen.instance_manager.settings

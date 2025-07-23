@@ -56,10 +56,11 @@ class ItemManager:
 
             screen_items.append(data)
 
-        existing_data[current_screen] = screen_items
-
-        if extra_screen_data:
-            existing_data["_screen_data"] = extra_screen_data
+        # Save as a dict with 'items' and '_screen_data' for the current screen
+        screen_dict = {"items": screen_items}
+        if extra_screen_data is not None:
+            screen_dict["_screen_data"] = extra_screen_data
+        existing_data[current_screen] = screen_dict
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
@@ -79,7 +80,19 @@ class ItemManager:
             print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
             return False
 
-        saved_uuids = {entry.get("uuid") for entry in screen_data if "uuid" in entry}
+        # Support both new (dict) and old (list) formats
+        if isinstance(screen_data, dict):
+            items_data = screen_data.get("items", [])
+            screen_meta = screen_data.get("_screen_data", {})
+        elif isinstance(screen_data, list):
+            items_data = screen_data
+            # Try to get legacy _screen_data from root
+            screen_meta = data.get("_screen_data", {})
+        else:
+            items_data = []
+            screen_meta = {}
+
+        saved_uuids = {entry.get("uuid") for entry in items_data if "uuid" in entry}
         self.items = [item for item in self.items if getattr(item, "uuid", None) not in saved_uuids]
 
         item_class_map = {
@@ -92,7 +105,7 @@ class ItemManager:
             "ToolItem": ToolItem
         }
 
-        for entry in screen_data:
+        for entry in items_data:
             try:
                 pos = tuple(entry["pos"])
                 class_name = entry.get("class", "BaseItem")
@@ -108,10 +121,17 @@ class ItemManager:
             except Exception as e:
                 print(f"[ItemManager] Failed to load item: {entry.get('uuid', 'unknown')} - {e}")
 
-        screen_meta = data.get("_screen_data", {}).get(current_screen)
         return screen_meta or {}
 
-    def remove_item(self, uuid):
+    def remove_item(self, uuid, gui_manager = None):
+        # Remove the item and its window if present
+        items_to_remove = [item for item in self.items if getattr(item, "uuid", None) == uuid]
+        for item in items_to_remove:
+            if hasattr(item, "window"):
+                if gui_manager == None:
+                    raise ValueError("paramater gui manager is none, this is an issue please pass it in homeboy")
+                gui_manager.windows.remove(item.window)
+                item.window = None
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid]
         for item in self.items:
             if getattr(item, "contains", None) == uuid:

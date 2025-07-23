@@ -397,7 +397,6 @@ class InspectableFlag:
     def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings):
         keys = pygame.key.get_pressed()
         inspecting = keys[pygame.K_q]
-
         # Only one window at a time
         selected_item = None
         # Sort items by descending .pos[1] (Y position)
@@ -407,9 +406,11 @@ class InspectableFlag:
             for item in sorted_items:
                 if "inspectable" not in getattr(item, "flags", []):
                     continue
+                
                 # Fast bbox check
                 if hasattr(item, "get_fast_bbox") and not item.get_fast_bbox(virtual_size).collidepoint(mouse_pos):
                     continue
+                
                 # Heavy bbox check
                 override_pos = getattr(item, "pos_override", item.pos)
                 rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)

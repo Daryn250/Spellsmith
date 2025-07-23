@@ -4,12 +4,13 @@ from .hoverWindow import *
 from utility.item_utility.baseItem import *
 
 class BagManager:
-    def __init__(self, capacity=10):
+    def __init__(self, gui_manager, capacity=10):
         self.capacity = capacity
         self.contents = []
         self.hovered = False
         self.hover_info = None
         self.bag_rect = None
+        self.gui_manager = gui_manager
 
     def upgrade(self, new_capacity):
         if new_capacity > self.capacity:

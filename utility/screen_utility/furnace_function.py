@@ -1,17 +1,17 @@
 import pygame
 import random
+from utility.item_utility.baseItem import BaseItem
 
 class FurnaceHelper:
-    def __init__(self, item_manager):
+    def __init__(self, item_manager, fuel_level=0):
         self.item_manager = item_manager
         self.heat_active = False
-        self.fuel_level = 1  # Goes from 0 to 1
+        self.fuel_level = fuel_level  # Always a float, never None
 
         # Load images
         self.img_border = pygame.image.load("assets/screens/furnace/border.png").convert_alpha()
         self.img_icons = pygame.image.load("assets/screens/furnace/icons.png").convert_alpha()
         self.img_glow = pygame.image.load("assets/screens/furnace/glow.png").convert_alpha()
-        self.img_coal = pygame.image.load("assets/screens/furnace/coal.png").convert_alpha()
 
         self.base_virtual = (480, 270)  # Reference resolution
 
@@ -23,6 +23,15 @@ class FurnaceHelper:
         self.coal_lerp_offset = 0   # easing offset when fuel is added
         self.coal_lerp_speed = 0.005  # lower is slower easing
 
+        # Create CoalItem for display, use current fuel_level
+        self.coal_item = CoalItem(
+            manager=None,  # Not managed by item_manager
+            pos=(0, 0),
+            img_path="assets/screens/furnace/coal.png",
+            fuel_level=self.fuel_level
+        )
+        self.items = [self.coal_item]
+        
 
 
     def update(self, dt, item_manager, mouse, base_screen):
@@ -42,7 +51,7 @@ class FurnaceHelper:
                     self.fuel_level += fuel_item.fuel
                     self.fuel_level = min(MAX_FUEL, self.fuel_level)
 
-                    item_manager.remove_item(fuel_item.uuid)
+                    item_manager.remove_item(fuel_item.uuid, base_screen.gui_manager)
                     fuel_slot.contains = None
                     print(f"[Furnace] Consumed fuel item for {fuel_item.fuel} energy. New level: {self.fuel_level:.2f}")
 
@@ -78,7 +87,8 @@ class FurnaceHelper:
 
         # ----- DRAIN FUEL BASED ON ACTIVE HEATED SLOTS -----
         if self.fuel_level > 0 and active_heating_items > 0:
-            drain_amount = BASE_DRAIN_RATE * active_heating_items
+            drain_amount = (BASE_DRAIN_RATE * active_heating_items)
+            self.coal_item.draining = drain_amount*dt
             self.fuel_level -= drain_amount
             self.fuel_level = max(0.0, self.fuel_level)
 
@@ -101,8 +111,38 @@ class FurnaceHelper:
             self.coal_lerp_offset -= dt * self.coal_lerp_speed
             self.coal_lerp_offset = max(0, self.coal_lerp_offset)
 
+        # ----- COAL OFFSET CALCULATION FOR DRAWING -----
+        # Compute vertical offset from full (0) to empty (max_offset)
+        coal_start_y = 62
+        max_offset = coal_start_y
+        offset_y_virtual = int((1 - self.fuel_level) * max_offset)
 
+        # Add easing (coal shifts slightly upward after adding fuel)
+        eased_offset = int(-10 * (1 - (self.coal_lerp_offset ** 2)))  # smooth ease up
 
+        # Add jitter if shaking
+        shake_x = shake_y = 0
+        if self.coal_shake_timer > 0:
+            shake_x = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
+            shake_y = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
+
+        sy = base_screen.virtual_size[1] / self.base_virtual[1] if hasattr(base_screen, 'virtual_size') else 1
+        screen_offset_y = int((offset_y_virtual + eased_offset) * sy)
+
+        # Update CoalItem state
+        self.coal_item.update(
+            screen=base_screen.virtual_surface,
+            gui_manager=base_screen.gui_manager,
+            virtual_size=base_screen.virtual_size,
+            dt=dt,
+            fuel_level=self.fuel_level,
+            shake_x=shake_x,
+            shake_y=shake_y,
+            offset_y=screen_offset_y,
+            eased_offset=0
+        )
+        # Set coal_item.pos to match draw position for correct hitbox/event logic
+        self.coal_item.pos = (shake_x, screen_offset_y + 0 + shake_y)
 
 
     def draw(self, surface, virtual_size):
@@ -122,43 +162,77 @@ class FurnaceHelper:
             glow.set_alpha(int(self.glow_alpha))
             surface.blit(glow, (0, 0))
 
-
-        # ----- COAL DRAW (coal lowers as fuel lowers) -----
-        coal_img_scaled = pygame.transform.scale(self.img_coal, virtual_size)
-
-        # Total vertical travel range of coal (in virtual pixels)
-        coal_start_y = 62
-        max_offset = coal_start_y
-
-        # Compute vertical offset from full (0) to empty (max_offset)
-        offset_y_virtual = int((1 - self.fuel_level) * max_offset)
-
-        # Add easing (coal shifts slightly upward after adding fuel)
-        eased_offset = int(-10 * (1 - (self.coal_lerp_offset ** 2)))  # smooth ease up
-
-        # Add jitter if shaking
-        shake_x = shake_y = 0
-        if self.coal_shake_timer > 0:
-            shake_x = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
-            shake_y = random.randint(-self.coal_shake_amount, self.coal_shake_amount)
-
-        # Convert to screen offset
-        screen_offset_y = int((offset_y_virtual + eased_offset) * sy)
-
-        # Draw the entire coal image, just offset down based on fuel level
-        surface.blit(coal_img_scaled, (shake_x, screen_offset_y + shake_y))
-
-
-
+        # Draw CoalItem (handles its own offset, shake, etc)
+        self.coal_item.draw(surface, virtual_size)
 
         draw_scaled(self.img_border)
 
     def get_save_data(self):
-        return {"furnaceScreen": {
+        return  {
         "fuel_level": self.fuel_level
         }
-    }
+    
     def load_from_data(self, data):
         self.fuel_level = data.get("fuel_level", 1.0)
+        # Also update coal_item's fuel_level to match
+        self.coal_item.fuel_level = self.fuel_level
+
+class CoalItem(BaseItem):
+    def __init__(self, manager, pos, img_path, fuel_level=1.0):
+        super().__init__(manager, "coal", pos, {"flags":["inspectable"]})
+        self.img_path = img_path
+        self.img = pygame.image.load(img_path).convert_alpha()
+        self.fuel_level = fuel_level
+        self.draining = 0
+        self.shake_x = 0
+        self.shake_y = 0
+        self.offset_y = 0
+        self.eased_offset = 0
+        self.isCoal = True
+        self.item_name = "coal_pile"
+        
+        
+
+    def update(self, screen, gui_manager, virtual_size, dt, fuel_level, shake_x, shake_y, offset_y, eased_offset):
+        super().update(screen, gui_manager, virtual_size, dt=dt)
+        self.fuel_level = fuel_level
+        self.shake_x = shake_x
+        self.shake_y = shake_y
+        self.offset_y = offset_y
+        self.eased_offset = eased_offset
+
+    def draw(self, surface, virtual_size):
+        base_w, base_h = 132, 28  # new coal image size
+        scale_x = virtual_size[0] / 160
+        scale_y = virtual_size[1] / 90
+        scaled_w = int(base_w * scale_x)
+        scaled_h = int(base_h * scale_y)
+        coal_img_scaled = pygame.transform.scale(self.img, (scaled_w, scaled_h))
+        # Center X, bottom of image at bottom of screen, offset_y moves the image up
+        x = virtual_size[0] // 2
+        y = virtual_size[1] - scaled_h + self.offset_y + self.eased_offset + self.shake_y
+        draw_x = x - scaled_w // 2
+        draw_y = y
+        surface.blit(coal_img_scaled, (draw_x, draw_y))
+
+    def get_scaled_hitbox(self, screensize, pos_override=None):
+        base_w, base_h = 132, 28
+        scale_x = screensize[0] / 160
+        scale_y = screensize[1] / 90
+        scaled_w = int(base_w * scale_x)
+        scaled_h = int(base_h * scale_y)
+        x = screensize[0] // 2
+        y = screensize[1] - scaled_h + self.offset_y + self.eased_offset + self.shake_y
+        return pygame.Rect(x - scaled_w // 2, y, scaled_w, scaled_h)
+
+    def get_fast_bbox(self, screensize, pos_override=None):
+        base_w, base_h = 132, 28
+        scale_x = screensize[0] / 160
+        scale_y = screensize[1] / 90
+        scaled_w = int(base_w * scale_x)
+        scaled_h = int(base_h * scale_y)
+        x = screensize[0] // 2
+        y = screensize[1] - scaled_h + self.offset_y + self.eased_offset + self.shake_y
+        return pygame.Rect(x - scaled_w // 2, y, scaled_w, scaled_h)
 
 
