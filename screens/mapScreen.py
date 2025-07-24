@@ -156,10 +156,11 @@ class MapHelper:
         }}
 
     def load_from_data(self, data):
-        self.zoom = data.get("zoom", 1.0)
-        self.pan = data.get("pan", [0, 0])
-        self.target_zoom = self.zoom
-        self.target_pan = list(self.pan)
+        if data!=False:
+            self.zoom = data.get("zoom", 1.0)
+            self.pan = data.get("pan", [0, 0])
+            self.target_zoom = self.zoom
+            self.target_pan = list(self.pan)
 
 def default_items(manager):
     makeItem(manager, "map_boat", (0, 0), "map")

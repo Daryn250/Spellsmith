@@ -5,8 +5,8 @@
                 "class": "BaseItem",
                 "type": "paper",
                 "pos": [
-                    477.4037275827557,
-                    234
+                    593.5471028739908,
+                    231.80000000000007
                 ],
                 "flags": [
                     "draggable",
@@ -26,12 +26,12 @@
                 "item_name": "map",
                 "rotation": 0.0,
                 "rotational_velocity": 0.0,
-                "vx": 5e-324,
-                "vy": 0,
+                "vx": -8.962803818667348e-73,
+                "vy": 0.3,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
                 "dragging_for": 0,
-                "uuid": "bffc1f35-2aee-4f6f-88f8-cb56c72394f3",
+                "uuid": "4fb5e46e-f461-4d23-bcfe-582489ac8d6c",
                 "highlight": false,
                 "next_screen": "mapScreen"
             },
@@ -39,8 +39,8 @@
                 "class": "BaseItem",
                 "type": "paper",
                 "pos": [
-                    620.7522109541952,
-                    221
+                    764.542337333429,
+                    234.01818181818146
                 ],
                 "flags": [
                     "draggable",
@@ -60,31 +60,31 @@
                 "item_name": "craft",
                 "rotation": 0.0,
                 "rotational_velocity": 0.0,
-                "vx": -5e-324,
-                "vy": 0.3,
+                "vx": 0.0,
+                "vy": 0,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
                 "dragging_for": 0,
-                "uuid": "a540466b-dc97-47d1-9efe-f9275f5ef1f6",
-                "highlight": false,
+                "uuid": "1edeb8a7-45b8-4d6c-8091-0b677dc05acf",
+                "highlight": true,
                 "next_screen": "workstation"
             },
             {
                 "class": "MaterialItem",
-                "type": "ore",
+                "type": "rock",
                 "pos": [
-                    318.9346836008569,
-                    354
+                    365.62890168857047,
+                    208
                 ],
-                "img_path": "assets/items/materials/iron/iron1.png",
+                "img_path": "assets/items/materials/thanium/thanium_rock.png",
                 "flags": [
                     "draggable",
                     "inspectable"
                 ],
                 "temperature": 0,
-                "material": "iron",
+                "material": "thanium",
                 "origin_screen": "table",
-                "item_name": "iron_ore",
+                "item_name": "thanium_rock",
                 "animated": false,
                 "scale": [
                     1,
@@ -92,117 +92,56 @@
                 ],
                 "rotation": 0.0,
                 "rotational_velocity": 0.0,
-                "vx": -5e-324,
-                "vy": 0.3,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "mass": 1,
-                "uuid": "da3d9430-9438-492b-a8ab-abf5e4cf1419",
-                "highlight": false
-            },
-            {
-                "class": "MaterialItem",
-                "type": "ingot",
-                "pos": [
-                    301.39607694224844,
-                    256
-                ],
-                "img_path": "assets/items/materials/iron/iron2.png",
-                "flags": [
-                    "draggable",
-                    "inspectable"
-                ],
-                "temperature": 0,
-                "material": "iron",
-                "origin_screen": "table",
-                "item_name": "iron_ingot",
-                "animated": false,
-                "scale": [
-                    1,
-                    1
-                ],
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": 5e-324,
-                "vy": 0.3,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "mass": 1,
-                "uuid": "ff7e0ae6-f3bd-4a20-be61-1b2bdee04077",
-                "highlight": false
-            },
-            {
-                "class": "MaterialItem",
-                "type": "ore",
-                "pos": [
-                    291.9851159620223,
-                    184
-                ],
-                "img_path": "assets/items/materials/iron/iron1.png",
-                "flags": [
-                    "draggable",
-                    "inspectable"
-                ],
-                "temperature": 0,
-                "material": "iron",
-                "origin_screen": "table",
-                "item_name": "iron_ore",
-                "animated": false,
-                "scale": [
-                    1,
-                    1
-                ],
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": 5e-324,
+                "vx": 2.74356481761615e-90,
                 "vy": 0,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
                 "dragging_for": 0,
                 "mass": 1,
-                "uuid": "17fab475-a916-465d-b19c-4aa18268a17f",
+                "uuid": "666857e5-36f4-4c3d-be65-08e863b0cb88",
                 "highlight": false
-            },
+            }
+        ]
+    },
+    "bag_contents": [],
+    "map": {
+        "items": [
             {
-                "class": "MaterialItem",
-                "type": "ingot",
+                "class": "BaseItem",
+                "type": "island",
                 "pos": [
-                    67.96368377160869,
-                    195
+                    0,
+                    0
                 ],
-                "img_path": "assets/items/materials/iron/iron2.png",
+                "island_name": "boat",
                 "flags": [
-                    "draggable",
+                    "screen_change",
+                    "island",
+                    "no_shadow",
                     "inspectable"
                 ],
-                "temperature": 0,
-                "material": "iron",
-                "origin_screen": "table",
-                "item_name": "iron_ingot",
-                "animated": false,
+                "img_path": "assets/screens/map/boat",
+                "animated": true,
                 "scale": [
                     1,
                     1
                 ],
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": -5e-324,
-                "vy": 0,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "mass": 1,
-                "uuid": "c114d85e-aa6e-4ee1-b555-0e5dac552644",
-                "highlight": false
+                "origin_screen": "map",
+                "item_name": "map_boat",
+                "frameDuration": 100,
+                "uuid": "57ff09a8-2f62-4b7f-a6ae-6576b6d6968e",
+                "pos_override": [
+                    469.0,
+                    -47.0
+                ],
+                "next_screen": "main_menu"
             },
             {
                 "class": "BaseItem",
                 "type": "island",
                 "pos": [
-                    200,
-                    200
+                    75,
+                    242
                 ],
                 "island_name": "island1",
                 "flags": [
@@ -217,87 +156,94 @@
                     1,
                     1
                 ],
-                "origin_screen": "table",
+                "origin_screen": "map",
                 "item_name": "island1",
-                "uuid": "9e94e376-e010-49a4-a208-e9283da63bdc",
+                "uuid": "617182b4-1075-4b09-81b2-a7ac35efa5db",
+                "pos_override": [
+                    544.0,
+                    195.0
+                ],
                 "next_screen": "main_menu",
                 "highlight": false
             },
             {
-                "class": "MaterialItem",
-                "type": "rock",
+                "class": "BaseItem",
+                "type": "island",
                 "pos": [
-                    576.3902426970208,
-                    225
+                    150,
+                    -364
                 ],
-                "img_path": "assets/items/materials/thanium/thanium_rock.png",
+                "island_name": "island2",
                 "flags": [
-                    "draggable",
+                    "screen_change",
+                    "island",
+                    "no_shadow",
                     "inspectable"
                 ],
-                "temperature": 0,
-                "material": "thanium",
-                "origin_screen": "table",
-                "item_name": "thanium_rock",
+                "img_path": "assets/screens/map/islands/beach_island.png",
                 "animated": false,
                 "scale": [
                     1,
                     1
                 ],
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": -5e-324,
-                "vy": 0,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "mass": 1,
-                "uuid": "137607c9-8378-4895-b1f1-170e46b95c9f",
-                "highlight": false
+                "origin_screen": "map",
+                "item_name": "island2",
+                "uuid": "553d0d92-d64a-48ca-b793-a63094f821a8",
+                "pos_override": [
+                    619.0,
+                    -411.0
+                ],
+                "next_screen": "main_menu"
             },
             {
-                "class": "MaterialItem",
-                "type": "rock",
+                "class": "BaseItem",
+                "type": "island",
                 "pos": [
-                    163.3306592152967,
-                    332
+                    225,
+                    364
                 ],
-                "img_path": "assets/items/materials/thanium/thanium_rock.png",
+                "island_name": "island3",
                 "flags": [
-                    "draggable",
+                    "screen_change",
+                    "island",
+                    "no_shadow",
                     "inspectable"
                 ],
-                "temperature": 0,
-                "material": "thanium",
-                "scale": [
-                    0.1,
-                    0.1
-                ],
-                "origin_screen": "table",
-                "item_name": "thanium_rock",
+                "img_path": "assets/screens/map/islands/mountain_island.png",
                 "animated": false,
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": -5e-324,
-                "vy": 0,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "mass": 1,
-                "uuid": "968dff2d-e731-4b18-afbd-0676a793be4c",
+                "scale": [
+                    1,
+                    1
+                ],
+                "origin_screen": "map",
+                "item_name": "island3",
+                "uuid": "0cf31816-4def-4136-8745-6b894f93ca40",
+                "pos_override": [
+                    694.0,
+                    317.0
+                ],
+                "next_screen": "main_menu",
                 "highlight": false
             }
-        ]
+        ],
+        "_screen_data": {
+            "map": {
+                "zoom": 1.0,
+                "pan": [
+                    -11,
+                    -317
+                ]
+            }
+        }
     },
-    "bag_contents": [],
     "workstation": {
         "items": [
             {
                 "class": "BaseItem",
                 "type": "furnace",
                 "pos": [
-                    200.0,
-                    300
+                    777.2527354887492,
+                    249
                 ],
                 "flags": [
                     "draggable",
@@ -316,19 +262,20 @@
                 "rotation": 0.0,
                 "rotational_velocity": 0.0,
                 "vx": 0.0,
-                "vy": 0.3,
+                "vy": 0,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
                 "dragging_for": 0,
-                "uuid": "06934918-47c3-4725-a60e-f94445154e1c",
+                "uuid": "79d5c9c8-4036-4bcc-b0e7-4d3a916c585c",
+                "highlight": false,
                 "next_screen": "furnaceScreen"
             },
             {
                 "class": "BaseItem",
                 "type": "anvil",
                 "pos": [
-                    400.0,
-                    300
+                    182.49615270322792,
+                    397
                 ],
                 "flags": [
                     "draggable",
@@ -351,9 +298,325 @@
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
                 "dragging_for": 0,
-                "uuid": "d03a7b0d-3b87-4055-b2e0-d24cf589df76",
+                "uuid": "f72bf290-8461-47c1-bf69-8177b0f73c41",
+                "highlight": false,
                 "next_screen": "anvilScreen"
             }
         ]
+    },
+    "furnaceScreen": {
+        "items": [
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    192.0,
+                    138.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "furnace_input_1",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "ae67c822-8b3d-48a9-bde7-af1a2b59c00d"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    336.0,
+                    138.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "furnace_input_2",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "9c48bc76-f627-4cf3-add1-a13c0440e376"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    480.0,
+                    138.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "furnace_input_3",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "2231f90c-9a0e-40df-99af-4f9ccedb6857"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    624.0,
+                    138.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "furnace_input_4",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "fc3097b1-11ba-4f97-a466-6c2c85640cac"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    768.0,
+                    138.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "furnace_input_5",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "ebb48ad3-b3f4-4c62-90ec-b90e5e045e3a"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    480.0,
+                    450.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "fuel_input",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "233df8d1-f200-4b32-9c24-72c6dba82a99"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    252.0,
+                    270.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "weapon_slot1",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "03e21fcd-f1e9-492b-8ddf-8d0cd5c31b6f"
+            },
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    720.0,
+                    270.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "weapon_slot2",
+                "origin_screen": "furnaceScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "0de8741e-087a-4c66-aa56-d3e9deccc19d"
+            },
+            {
+                "class": "GemItem",
+                "type": "gem",
+                "pos": [
+                    613.8708425258914,
+                    221.0
+                ],
+                "img_path": "assets/items/gems/aquamarine/gem.png",
+                "shine_path": "assets/items/gems/aquamarine/shine.png",
+                "flags": [
+                    "draggable",
+                    "shiny",
+                    "inspectable"
+                ],
+                "scale": [
+                    1.0,
+                    1.0
+                ],
+                "origin_screen": "furnaceScreen",
+                "item_name": "aquamarine",
+                "animated": false,
+                "rotation": 0.0,
+                "rotational_velocity": 0.0,
+                "vx": -5.024639135673274e-14,
+                "vy": 0.3,
+                "currentGravity": 0.3,
+                "storedGravity": 0.3,
+                "dragging_for": 0,
+                "shine_alpha": 2,
+                "shine_time": 211.90959899997284,
+                "shine_speed": 0.3,
+                "is_shiny": true,
+                "glow_path": "assets/misc/glow_img2.png",
+                "uuid": "a5c2d5be-fb6b-4a6c-b45c-c1d537a6bcc5",
+                "highlight": false,
+                "state": "free"
+            }
+        ],
+        "_screen_data": {
+            "fuel_level": 0.19898999999999842
+        }
+    },
+    "anvilScreen": {
+        "items": [
+            {
+                "class": "BaseItem",
+                "type": "slot",
+                "pos": [
+                    396.0,
+                    102.0
+                ],
+                "flags": [
+                    "slot",
+                    "invisible",
+                    "no_shadow"
+                ],
+                "slot_accepts": [],
+                "img_path": "assets/very_important/cat.png",
+                "animated": false,
+                "contains": null,
+                "slot_name": "anvil_input_1",
+                "origin_screen": "anvilScreen",
+                "item_name": "slot_node",
+                "scale": [
+                    1,
+                    1
+                ],
+                "uuid": "e1377eec-8329-41a6-8e97-5ec4346e4e56"
+            },
+            {
+                "class": "PartItem",
+                "type": "pommel",
+                "pos": [
+                    313.86017462665876,
+                    288.0
+                ],
+                "flags": [
+                    "draggable",
+                    "inspectable"
+                ],
+                "scale": [
+                    1.5,
+                    1.5
+                ],
+                "default_scale": [
+                    1.5,
+                    1.5
+                ],
+                "temperature": 410.68084656957456,
+                "rarity": "common",
+                "img_path": "assets/tools/parts/rounded_pommel/lomium.png",
+                "material": "lomium",
+                "mass": 1,
+                "quality": 1.0,
+                "origin_screen": "anvilScreen",
+                "item_name": "rounded_pommel",
+                "animated": false,
+                "rotation": 0.0,
+                "rotational_velocity": 0.0,
+                "vx": -5.882491048696668e-84,
+                "vy": 0,
+                "currentGravity": 0.3,
+                "storedGravity": 0.3,
+                "dragging_for": 0,
+                "part_type": "handle",
+                "uuid": "352e73f8-6101-4711-883a-cf273cf3fd49",
+                "highlight": false
+            }
+        ],
+        "_screen_data": {
+            "anvilScreen": {}
+        }
     }
 }

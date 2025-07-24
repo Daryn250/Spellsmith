@@ -71,6 +71,8 @@ class BaseItem:
 
         self.particles = []
 
+        self.is_hovered = False  # Track hover state for all items
+
     @property
     def image(self):
         return self.img.get_current_frame() if self.animated else self.img
@@ -259,6 +261,19 @@ class BaseItem:
             self.next_screen = get_screen_function(self.next_screen)
         screenSwitcher.start(lambda: self.next_screen(screen, baseScreen.instance_manager),
                              save_callback=lambda: baseScreen.save_items(baseScreen.instance_manager.save_file))
+
+    def update_hover(self, mouse_pos, virtual_size, use_pos_override=True):
+        """
+        Update self.is_hovered based on mouse position and bounding box checks.
+        If use_pos_override is True, use self.pos_override if present; otherwise use self.pos.
+        """
+        pos_to_use = getattr(self, "pos_override", self.pos) if use_pos_override else self.pos
+        # Fast bbox check
+        if hasattr(self, "get_fast_bbox") and self.get_fast_bbox(virtual_size, pos_override=pos_to_use).collidepoint(mouse_pos):
+            rect = self.get_scaled_hitbox(virtual_size, pos_override=pos_to_use)
+            self.is_hovered = rect.collidepoint(mouse_pos)
+        else:
+            self.is_hovered = False
 
 class BottleItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):

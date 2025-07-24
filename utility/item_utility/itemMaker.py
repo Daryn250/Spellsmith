@@ -143,7 +143,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/copper_rock.png",
+            "img_path": "assets/items/materials/copper/copper_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
@@ -173,7 +173,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/iron_rock.png",
+            "img_path": "assets/items/materials/iron/iron_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "iron"
@@ -203,7 +203,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/lead_rock.png",
+            "img_path": "assets/items/materials/lead/lead_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
@@ -233,7 +233,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/lomium_rock.png",
+            "img_path": "assets/items/materials/lomium/lomium_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lomium"
@@ -263,7 +263,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/silver_rock.png",
+            "img_path": "assets/items/materials/silver/silver_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
@@ -293,7 +293,7 @@ ITEM_BASES = {
         "class": "MaterialItem",
         "type": "rock",
         "nbt": {
-            "img_path": "assets/items/materials/thanium/titanium_rock.png",
+            "img_path": "assets/items/materials/titanium/titanium_rock.png",
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "titanium"

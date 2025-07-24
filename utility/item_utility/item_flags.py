@@ -394,29 +394,25 @@ from utility.item_utility.item_to_info import item_to_info
 
 class InspectableFlag:
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings):
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings, use_update_hover=True, use_pos_override=True):
         keys = pygame.key.get_pressed()
         inspecting = keys[pygame.K_q]
-        # Only one window at a time
         selected_item = None
-        # Sort items by descending .pos[1] (Y position)
+        # Optionally update hover state for all items only on mouse movement
+        if use_update_hover and event.type == pygame.MOUSEMOTION:
+            for item in item_list:
+                if hasattr(item, "update_hover"):
+                    item.update_hover(mouse_pos, virtual_size, use_pos_override=use_pos_override)
+        # Only one window at a time
         sorted_items = sorted(item_list, key=lambda item: getattr(item, 'pos', (0, 0))[1], reverse=True)
         # Only create window if requirements are met
         if item_manager.get_dragged() is None:
             for item in sorted_items:
                 if "inspectable" not in getattr(item, "flags", []):
                     continue
-                
-                # Fast bbox check
-                if hasattr(item, "get_fast_bbox") and not item.get_fast_bbox(virtual_size).collidepoint(mouse_pos):
+                # Use cached hover state
+                if not getattr(item, "is_hovered", False):
                     continue
-                
-                # Heavy bbox check
-                override_pos = getattr(item, "pos_override", item.pos)
-                rect = item.get_scaled_hitbox(virtual_size, pos_override=override_pos)
-                if not rect.collidepoint(mouse_pos):
-                    continue
-                # All requirements met
                 selected_item = item
                 break
         # Hide all windows except the selected one

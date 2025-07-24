@@ -173,9 +173,10 @@ class FurnaceHelper:
         }
     
     def load_from_data(self, data):
-        self.fuel_level = data.get("fuel_level", 1.0)
-        # Also update coal_item's fuel_level to match
-        self.coal_item.fuel_level = self.fuel_level
+        if data !=False:
+            self.fuel_level = data.get("fuel_level", 1.0)
+            # Also update coal_item's fuel_level to match
+            self.coal_item.fuel_level = self.fuel_level
 
 class CoalItem(BaseItem):
     def __init__(self, manager, pos, img_path, fuel_level=1.0):

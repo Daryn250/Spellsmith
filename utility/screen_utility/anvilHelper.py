@@ -79,7 +79,7 @@ class AnvilHelper:
             if self.minigame_manager.finished:
                 # delete the item on the anvil and then replace it with the new item, add smoke particles.
                 s = self.item_in_slot # if breaks then serious issue cuz how you do that
-                item_manager.remove_item(self.item_in_slot.uuid)
+                item_manager.remove_item(self.item_in_slot.uuid, self.base_screen.gui_manager)
                 i = self.minigame_manager.selected
                 name = i.get("key")
                 makeItem(item_manager, name, (slot.pos), screen.screen_name, 

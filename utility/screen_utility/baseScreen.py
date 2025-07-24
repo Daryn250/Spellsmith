@@ -8,7 +8,7 @@ from utility.screen_utility.screenwrapper import VirtualScreen
 from utility.cursor_utility.cursorManager import CursorManager
 from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import * # import all item flags
-from utility.gui_utility.guiManager import GUIManager
+from utility.gui_utility.GUIManager import GUIManager
 from utility.item_utility.itemMaker import makeItem
 from utility.gui_utility.console import DebugConsole  # <-- Add this import
 
@@ -47,6 +47,12 @@ class BaseScreen:
         
 
     def load_items(self, save_path):
+        # check if save is empty, if is then set it to have {}
+        import os
+        if not os.path.exists(save_path) or os.path.getsize(save_path) == 0:
+            with open(save_path, 'w', encoding='utf-8') as f:
+                f.write('{}')
+        
         screen_helper_data = self.item_manager.load_items(save_path, self.screen_name)
         # screen_helper_data is the _screen_data dict for this screen (or {})
 

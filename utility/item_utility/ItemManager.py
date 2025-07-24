@@ -130,7 +130,8 @@ class ItemManager:
             if hasattr(item, "window"):
                 if gui_manager == None:
                     raise ValueError("paramater gui manager is none, this is an issue please pass it in homeboy")
-                gui_manager.windows.remove(item.window)
+                if item.window in gui_manager.windows:
+                    gui_manager.windows.remove(item.window)
                 item.window = None
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid]
         for item in self.items:
@@ -172,11 +173,6 @@ class ItemManager:
             for p in item.particles:
                 p.draw(virtual_surface)
 
-        # Finally draw dragged item on top if it exists
-        if dragged_item:
-            dragged_item.draw(virtual_surface, VIRTUAL_SIZE, gui_manager, self, rotation_scale)
-            for p in dragged_item.particles:
-                p.draw(virtual_surface)
 
 
     def draw_dragged_item(self, virtual_surface, VIRTUAL_SIZE, gui_manager, rotation_scale=1):
