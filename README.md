@@ -1,4 +1,4 @@
-this is version 1.1.0
+this is version pre-alpha 0.1.1
 
 needed currently:
 
