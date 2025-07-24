@@ -9,6 +9,33 @@ class settingsManager:
         self.gui_size = 12
         self.input_type = "mouse"
         self.discovered_islands = ["island1", "island2"]
+        self.settings_path = os.path.join("saves", "settings.json")
+        self.load()
+
+    def save(self):
+        data = {
+            "font": self.font,
+            "language": self.language,
+            "font_hover_size": self.font_hover_size,
+            "gui_size": self.gui_size,
+            "input_type": self.input_type
+        }
+        os.makedirs(os.path.dirname(self.settings_path), exist_ok=True)
+        with open(self.settings_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+
+    def load(self):
+        if os.path.exists(self.settings_path):
+            try:
+                with open(self.settings_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                self.font = data.get("font", self.font)
+                self.language = data.get("language", self.language)
+                self.font_hover_size = data.get("font_hover_size", self.font_hover_size)
+                self.gui_size = data.get("gui_size", self.gui_size)
+                self.input_type = data.get("input_type", self.input_type)
+            except Exception as e:
+                print(f"[settingsManager] Error loading settings: {e}")
 
     def translated_text(self, text, lowercase = True):
         # Build the path to the language file

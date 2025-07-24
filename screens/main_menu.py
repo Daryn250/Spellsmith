@@ -5,6 +5,7 @@ from utility.screen_utility.baseScreen import BaseScreen
 from utility.cursor_utility.cursorManager import CursorManager
 from utility.cursor_utility.cursor import HammerCursor
 from utility.screen_utility.screenswitcher import ScreenSwitcher
+from utility.screen_utility.settingsHelper import SettingsHelper
 from utility.button import Button
 import math
 import random
@@ -23,6 +24,7 @@ class MainMenuHelper:
         self.language = instance_manager.settings.language
         self.settings = instance_manager.settings
         self.font = instance_manager.settings.font
+        self.settings_helper = SettingsHelper(screen_size, self.settings, self)
         self._init_ocean_tiles()
         self._init_buttons()
         self.time_elapsed = 0
@@ -48,10 +50,10 @@ class MainMenuHelper:
                 })
             self.tiles.append(row)
 
-    def _init_buttons(self):
+    def _init_buttons(self, newfont = None):
         sw, sh = self.screen_size
         center_x = sw // 20 + 50
-        font = pygame.font.Font(self.font, 20)
+        font = pygame.font.Font(self.font if newfont==None else newfont, 20)
         self.buttons = [
             Button(None, (center_x, sh * 2 // 5), self.settings.translated_text("play"), font, "White", "gray"),
             Button(None, (center_x, sh // 2), self.settings.translated_text("settings"), font, "White", "gray"),
@@ -60,6 +62,7 @@ class MainMenuHelper:
         # Calculate menu bar width based on longest button text
         self.menu_bar_font = font
         self.menu_bar_width = max(font.size(btn.text_input)[0] for btn in self.buttons) + 40  # 40px padding
+
 
     def update(self, dt, item_manager, mouse, screen):
         self.time_elapsed += dt / 1000
@@ -116,8 +119,13 @@ class MainMenuHelper:
             # Update button hitbox to match centered text
             btn.rect = text_rect.copy()
             # Optionally, draw button background/hover effect if needed
+        self.settings_helper.draw(surface)
 
     def handle_event(self, event, virtual_mouse, switcher, screen):
+        if self.settings_helper.active:
+            self.settings_helper.handle_event(event, virtual_mouse)
+            return  # prevent menu input while settings open
+
         for btn in self.buttons:
             btn.changeColor(virtual_mouse)
 
@@ -125,10 +133,11 @@ class MainMenuHelper:
             if self.buttons[0].checkForInput(virtual_mouse):  # Play
                 switcher.start(lambda: table(screen, self.instance_manager), None)
             elif self.buttons[1].checkForInput(virtual_mouse):  # Settings
-                pass  # placeholder
+                self.settings_helper.toggle()
             elif self.buttons[2].checkForInput(virtual_mouse):  # Quit
                 pygame.quit()
                 sys.exit()
+
 
 
 
