@@ -214,7 +214,11 @@ class HoverInfo:
         for d in data_to_update:
             # Update animation if it's a highlight
             if d.data_type == "highlight" and isinstance(d.anim_tile, AnimatedTile):
-                d.anim_tile.update(dt)
+                try:
+                    d.anim_tile.update(dt)
+                except Exception as e:
+                    
+                    pass
 
             # Live-update value from the source item if applicable
             lookup_label = getattr(d, "lookup_label", None)

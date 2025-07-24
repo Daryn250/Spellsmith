@@ -139,6 +139,16 @@ ITEM_BASES = {
         }
     },
     #### MATERIALS ####
+    "copper_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/copper_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "copper"
+        }
+    },
     "copper_ore": {
         "class": "MaterialItem",
         "type": "ore",
@@ -157,6 +167,16 @@ ITEM_BASES = {
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "copper"
+        }
+    },
+    "iron_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/iron_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "iron"
         }
     },
     "iron_ore": {
@@ -179,6 +199,16 @@ ITEM_BASES = {
             "material": "iron"
         }
     },
+    "lead_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/lead_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "lead"
+        }
+    },
     "lead_ore": {
         "class": "MaterialItem",
         "type": "ore",
@@ -197,6 +227,16 @@ ITEM_BASES = {
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "lead"
+        }
+    },
+    "lomium_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/lomium_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "lomium"
         }
     },
     "lomium_ore": {
@@ -219,6 +259,16 @@ ITEM_BASES = {
             "material": "lomium"
         }
     },
+    "silver_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/silver_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "silver"
+        }
+    },
     "silver_ore": {
         "class": "MaterialItem",
         "type": "ore",
@@ -237,6 +287,16 @@ ITEM_BASES = {
             "flags": ["draggable", "inspectable"],
             "temperature": 0,
             "material": "silver"
+        }
+    },
+    "titanium_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/titanium_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "titanium"
         }
     },
     "titanium_ore": {
@@ -259,7 +319,17 @@ ITEM_BASES = {
             "material": "titanium"
         }
     },
-    "thanium_ingot": {
+    "thanium_rock": {
+        "class": "MaterialItem",
+        "type": "rock",
+        "nbt": {
+            "img_path": "assets/items/materials/thanium/thanium_rock.png",
+            "flags": ["draggable", "inspectable"],
+            "temperature": 0,
+            "material": "thanium"
+        }
+    },
+    "thanium_ore": {
         "class": "MaterialItem",
         "type": "ore",
         "nbt": {

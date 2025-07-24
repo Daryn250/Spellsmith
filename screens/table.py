@@ -96,6 +96,5 @@ def table(screen, instance_manager, prev_screen = None):
         previous_screen=main_menu,  # Reference to the previous screen function
         instance_manager = instance_manager
     )
-    item_debug(base.item_manager)
 
     base.run()

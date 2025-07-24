@@ -9,9 +9,8 @@ from utility.cursor_utility.cursorManager import CursorManager
 from utility.item_utility.ItemManager import ItemManager
 from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.guiManager import GUIManager
-
 from utility.item_utility.itemMaker import makeItem
-
+from utility.gui_utility.console import DebugConsole  # <-- Add this import
 
 class BaseScreen:
     def __init__(self, screen, virtual_size, screen_name, switcher, helper=None,
@@ -44,6 +43,7 @@ class BaseScreen:
         self.cursor_manager = CursorManager(self.virtual_surface)
         self.gui_manager = GUIManager(self, charmboard=draw_charmboard)
         self.clock = pygame.time.Clock()
+        self.debug_console = DebugConsole(self)  # <-- Initialize DebugConsole
         
 
     def load_items(self, save_path):
@@ -77,6 +77,13 @@ class BaseScreen:
 
     def handle_events(self, virtual_mouse):
         for event in pygame.event.get():
+            if self.debug_console.active:
+                self.debug_console.handle_event(event)
+                # Allow closing with close button or ESC, but block other game input if console is open
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    continue
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    continue
             if event.type == pygame.QUIT:
                 self.save_items(self.instance_manager.save_file)
                 print("saving")
@@ -107,6 +114,9 @@ class BaseScreen:
                         print("⚠️ No previous screen set.")
                         pygame.quit()
                         sys.exit()
+                # Toggle debug console with '/'
+                if event.key == pygame.K_SLASH:
+                    self.debug_console.toggle()
 
             # Combine items and bag contents for drag handling:
             combined_items = list(self.item_manager.items)
@@ -146,6 +156,8 @@ class BaseScreen:
             for p in item.particles:
                 p.update()
             item.particles = [p for p in item.particles if p.is_alive()]
+        
+        self.debug_console.update(dt)
 
         self.gui_manager.update(dt / 1000, virtual_mouse, self.virtual_size)
         self.switcher.update(dt)
@@ -178,10 +190,15 @@ class BaseScreen:
 
 
         self.item_manager.draw_dragged_item(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
+        
+        self.debug_console.draw(self.virtual_surface)
+
         self.cursor_manager.draw(self.virtual_surface, virtual_mouse)
 
-        self.vscreen.draw_to_screen(self.screen)
+        # Draw debug console on top
+        
 
+        self.vscreen.draw_to_screen(self.screen)
         self.switcher.draw(self.screen)
         pygame.display.flip()
 

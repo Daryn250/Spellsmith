@@ -144,15 +144,6 @@ window_data = {
             {"lookup_label": "impurities", "display_label": "Impurities", "data_type": "percent"}
         ],
     },
-    "anodized_titanium_ingot": {
-        "title": "Anodized Titanium Ingot",
-        "description": "A titanium ingot anodized with heat or electricity. It has bright colors and is strongly sought after because of it.",
-        "data": [
-            {"lookup_label": "mass", "display_label": "Mass", "data_type": "number"},
-            {"lookup_label": "temperature", "display_label": "Temperature", "data_type": "number"},
-            {"lookup_label": "impurities", "display_label": "Impurities", "data_type": "percent"}
-        ],
-    },
     "large_coal": {
         "title": "Large Coal",
         "description": "A large deposit of coal. Can be put in the furnace.",
@@ -180,7 +171,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "hexagon_bottle": {
@@ -189,7 +180,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "gold_bottle": {
@@ -198,7 +189,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "crescent_bottle": {
@@ -207,7 +198,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "circle_bottle": {
@@ -216,7 +207,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "spiked_bottle": {
@@ -225,7 +216,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "uranium_bottle": {
@@ -234,7 +225,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "tall_bottle": {
@@ -243,7 +234,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "small_uranium_bottle": {
@@ -252,7 +243,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "small_bottle": {
@@ -261,7 +252,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "red_bottle": {
@@ -270,7 +261,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "mini_bottle": {
@@ -279,7 +270,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "brown_bottle": {
@@ -288,7 +279,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     "chain_bottle": {
@@ -297,7 +288,7 @@ window_data = {
         "data": [
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "number"},
             {"lookup_label": "contents", "display_label": "Contents", "data_type": "number"},
-            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "number"}
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "highlight"}
         ],
     },
     ###### GEMS #########
@@ -473,9 +464,10 @@ highlights = {
 }
 
 def get_highlight(name):
-    if name in highlights:
-        return AnimatedTile(highlights[name], 100)
-    return AnimatedTile(highlights["default"], 100)
+    # Always use default if name is None, 'N/A', or not in highlights
+    if not name or name == "N/A" or name not in highlights:
+        name = "default"
+    return AnimatedTile(highlights[name], 100)
 
 def get_nested_attr(obj, attr_path, default=None):
     parts = attr_path.split(".")
