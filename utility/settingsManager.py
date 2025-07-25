@@ -39,6 +39,8 @@ class settingsManager:
 
     def translated_text(self, text, lowercase = True):
         # Build the path to the language file
+        if text == None:
+            return
         text = text.lower() if lowercase else text
         lang_file = os.path.join("assets", "translations", f"{self.language}.json")
         if not os.path.exists(lang_file):
@@ -49,6 +51,7 @@ class settingsManager:
             # Look for the "other" section
             other = data.get("other", {})
             return other.get(text, text)
+
         except Exception as e:
             print(f"[settingsManager] Error loading language file: {e}")
             return text

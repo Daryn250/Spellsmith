@@ -2,14 +2,30 @@ import os
 import pygame
 
 class Dropdown:
-    def __init__(self, rect, options, selected, font, label, id):
+    def __init__(self, rect, options, selected, font, label, id, settings=None):
         self.rect = pygame.Rect(rect)
-        self.options = options
-        self.selected = selected
-        self.font = font
+        self.settings = settings
         self.label = label
-        self.open = False
         self.id = id
+        self.open = False
+        self.font = font
+
+        # Internal option keys and selected key
+        self.options = options  # ["on", "off"] etc.
+        self.selected = selected  # "on"
+
+        # Get translated labels if settings passed
+        self.display_labels = [
+            settings.translated_text(opt) if settings else opt
+            for opt in options
+        ]
+
+        # Compute width based on max translated label
+        label_texts = [f"{label}: {lbl}" for lbl in self.display_labels]
+        max_width = max([font.size(txt)[0] for txt in label_texts]) if label_texts else 140
+        self.rect.width = max(140, max_width + 10)
+
+
 
     def handle_event(self, event, mouse_pos):
         if event.type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(mouse_pos):
@@ -35,16 +51,23 @@ class Dropdown:
 
     def draw(self, surface):
         pygame.draw.rect(surface, (40, 40, 40, 220), self.rect, border_radius=4)
-        label_surf = self.font.render(f"{self.label}: {self.selected}", False, (255, 255, 255))
-        surface.blit(label_surf, (self.rect.x + 5, self.rect.y + 4))
-        pygame.draw.rect(surface, (200, 200, 200), self.rect, 1, border_radius=4)
+        label_index = self.options.index(self.selected)
+        label_text = f"{self.label}: {self.display_labels[label_index]}"
+        label_surf = self.font.render(label_text, False, (255, 255, 255))
+        text_rect = label_surf.get_rect(midleft=(self.rect.x + 5, self.rect.centery))
+        surface.blit(label_surf, text_rect)
+
+        # ...
         if self.open:
             for i, opt in enumerate(self.options):
                 opt_rect = pygame.Rect(self.rect.x, self.rect.y + (i+1)*self.rect.height, self.rect.width, self.rect.height)
                 pygame.draw.rect(surface, (60, 60, 60, 220), opt_rect, border_radius=4)
-                opt_surf = self.font.render(opt, False, (255, 255, 255))
-                surface.blit(opt_surf, (opt_rect.x + 5, opt_rect.y + 4))
+
+                opt_surf = self.font.render(self.display_labels[i], False, (255, 255, 255))
+                opt_rect_inner = opt_surf.get_rect(midleft=(opt_rect.x + 5, opt_rect.centery))
+                surface.blit(opt_surf, opt_rect_inner)
                 pygame.draw.rect(surface, (200, 200, 200), opt_rect, 1, border_radius=4)
+
 
 class Slider:
     def __init__(self, rect, min_val, max_val, value, font, label, id):
@@ -81,9 +104,10 @@ class SettingsHelper:
         self.screen_size = screen_size
         self.settings = settings_manager
         self.helper = helper
-        self.font = pygame.font.Font(self.settings.font, 15)
+        self.font = pygame.font.Font(self.settings.font, 13)
         self.active = False
         self.tabs = ["Video", "Audio", "Controls", "Misc"]
+        #self.tabs = [self.settings.translated_text(t) for t in self.tabs]
         self.active_tab = 0
         self.scroll_offset = 0
         self.scroll_target = 0
@@ -95,6 +119,7 @@ class SettingsHelper:
         self.start_y = self.margin + 40
         self.start_x = self.tab_width + self.margin
         self._init_ui()
+        self._refresh_ui_fonts_and_labels()
 
     def _scan_languages(self):
         folder = os.path.join("assets", "translations")
@@ -118,19 +143,19 @@ class SettingsHelper:
         self.elements_by_tab = {
             # add translations with self.settings.get_translated_text() or whatever teh function is
             0: [  # Video
-                Dropdown((start_x, start_y, element_width, element_height), self._scan_languages(), self.settings.language, self.font, "Language", "label.language"),
-                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, "Font", "label.font"),
-                Slider((start_x, start_y + spacing * 2, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, "Font Hover Size", "label.font_hover_size"),
+                Dropdown((start_x, start_y, element_width, element_height), self._scan_languages(), self.settings.language, self.font, self.settings.translated_text("Language"), "label.language"),
+                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, self.settings.translated_text("Font"), "label.font"),
+                Slider((start_x, start_y + spacing * 2, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, self.settings.translated_text("Font Hover Size"), "label.font_hover_size"),
             ],
             1: [  # Audio
-                Slider((start_x, start_y, element_width, 20), 0, 100, 50, self.font, "Music Volume", "label.music_volume"),
-                Slider((start_x, start_y + spacing, element_width, 20), 0, 100, 70, self.font, "SFX Volume", "label.sfx_volume"),
+                Slider((start_x, start_y, element_width, 20), 0, 100, 50, self.font, self.settings.translated_text("Music Volume"), "label.music_volume"),
+                Slider((start_x, start_y + spacing, element_width, 20), 0, 100, 70, self.font, self.settings.translated_text("SFX Volume"), "label.sfx_volume"),
             ],
             2: [  # Controls
-                Dropdown((start_x, start_y, element_width, element_height), ["mouse", "controller"], self.settings.input_type, self.font, "Input Type", "label.input_type"),
+                Dropdown((start_x, start_y, element_width, element_height), ["mouse", "controller"], self.settings.input_type, self.font, self.settings.translated_text("Input Type"), "label.input_type"),
             ],
             3: [  # Misc
-                Dropdown((start_x, start_y, element_width, element_height), ["on", "off"], "on", self.font, "Tooltips", "label.tooltips"),
+                Dropdown((start_x, start_y, element_width, element_height), ["on", "off"], "on", self.font, self.settings.translated_text("Tooltips"), "label.tooltips"),
             ],
         }
 
@@ -206,8 +231,8 @@ class SettingsHelper:
                         self.settings.font = os.path.join("assets", elem.selected)
                     elif elem.id == "label.input_type":
                         self.settings.input_type = elem.selected
-                    elif elem.id == "label.tooltips":
-                        # Example toggle for misc tab
+                    if elem.id == "label.tooltips":
+                        self.settings.tooltips = elem.selected
                         pass
                 elif isinstance(elem, Slider):
                     if elem.id == "label.font_hover_size":
@@ -225,11 +250,19 @@ class SettingsHelper:
             self._refresh_ui_fonts_and_labels() # this function is breaking it
     
     def _refresh_ui_fonts_and_labels(self):
-        self.font = pygame.font.Font(self.settings.font, 15)
+        self.font = pygame.font.Font(self.settings.font, 13)
         for tab_id, elements in self.elements_by_tab.items():
             for elem in elements:
                 elem.font = self.font
                 elem.label = self.settings.translated_text(elem.label)
+                if isinstance(elem, Dropdown):
+                    elem.display_labels = [self.settings.translated_text(opt) for opt in elem.options]
+
+                    # Recalculate width to fit updated translations
+                    label_texts = [f"{elem.label}: {lbl}" for lbl in elem.display_labels]
+                    max_width = max([self.font.size(txt)[0] for txt in label_texts]) if label_texts else 140
+                    elem.rect.width = max(140, max_width + 10)
+
 
     def draw(self, surface):
         if not self.active:

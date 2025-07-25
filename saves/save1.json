@@ -9,8 +9,8 @@
                 "class": "BaseItem",
                 "type": "paper",
                 "pos": [
-                    200.0,
-                    200
+                    398.7918673004437,
+                    194
                 ],
                 "flags": [
                     "draggable",
@@ -28,9 +28,9 @@
                 ],
                 "origin_screen": "table",
                 "item_name": "map",
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": 0.0,
+                "rotation": 1.035457650439325,
+                "rotational_velocity": 0.00665837932336123,
+                "vx": 0.035929724650189086,
                 "vy": 0.3,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,
@@ -43,8 +43,8 @@
                 "class": "BaseItem",
                 "type": "paper",
                 "pos": [
-                    371.4120521470312,
-                    215
+                    845.8685565621006,
+                    202
                 ],
                 "flags": [
                     "draggable",
@@ -64,7 +64,7 @@
                 "item_name": "craft",
                 "rotation": 0.0,
                 "rotational_velocity": 0.0,
-                "vx": 2.4396721900427165e-232,
+                "vx": 0.0011761526179285763,
                 "vy": 0.3,
                 "currentGravity": 0.3,
                 "storedGravity": 0.3,

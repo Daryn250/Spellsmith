@@ -370,6 +370,21 @@
     "other": {
         "play":"jugar",
         "settings":"configuración",
-        "quit":"dejar"
+        "quit":"dejar",
+        "language":"language",
+        "video":"video",
+        "audio":"audio",
+        "controls":"controles",
+        "misc":"miscelánea",
+        "font":"el tipo de letra",
+        "font hover size":"tamaño de fuente al pasar el cursor",
+        "music volume":"volumen de música",
+        "sfx volume":"volumen de efectos de sonido",
+        "input type":"tipo de entrada",
+        "tooltips":"información sobre herramientas",
+        "on":"prender",
+        "off":"apagado",
+        "mouse":"ratón",
+        "controller":"regulador"
     }
 }
