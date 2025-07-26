@@ -1,7 +1,8 @@
 {
-  "font": "assets\\Tiny5-Regular.ttf",
+  "font": "assets\\hydrophilia.iced-regular.ttf",
   "language": "english",
   "font_hover_size": 15,
   "gui_size": 12,
-  "input_type": "mouse"
+  "input_type": "mouse",
+  "save_file": "saves\\save1.json"
 }

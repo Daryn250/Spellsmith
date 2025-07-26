@@ -124,6 +124,15 @@ class SettingsHelper:
     def _scan_languages(self):
         folder = os.path.join("assets", "translations")
         return [f[:-5] for f in os.listdir(folder) if f.endswith(".json")]
+    
+    def _scan_saves(self):
+        folder = "saves"
+        files = []
+        for f in os.listdir(folder):
+            if f.endswith(".json") and f != "settings.json":
+                files.append(os.path.splitext(f)[0])  # removes ".json"
+        return files
+
 
     def _scan_fonts(self):
         folder = "assets"
@@ -143,9 +152,10 @@ class SettingsHelper:
         self.elements_by_tab = {
             # add translations with self.settings.get_translated_text() or whatever teh function is
             0: [  # Video
-                Dropdown((start_x, start_y, element_width, element_height), self._scan_languages(), self.settings.language, self.font, self.settings.translated_text("Language"), "label.language"),
-                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, self.settings.translated_text("Font"), "label.font"),
-                Slider((start_x, start_y + spacing * 2, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, self.settings.translated_text("Font Hover Size"), "label.font_hover_size"),
+                Dropdown((start_x, start_y, element_width, element_height), self._scan_saves(), os.path.basename(self.settings.save_file).removesuffix(".json"), self.font, self.settings.translated_text("Save File"), "label.save_file"),
+                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_languages(), self.settings.language, self.font, self.settings.translated_text("Language"), "label.language"),
+                Dropdown((start_x, start_y + spacing * 2, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, self.settings.translated_text("Font"), "label.font"),
+                Slider((start_x, start_y + spacing * 3, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, self.settings.translated_text("Font Hover Size"), "label.font_hover_size"),
             ],
             1: [  # Audio
                 Slider((start_x, start_y, element_width, 20), 0, 100, 50, self.font, self.settings.translated_text("Music Volume"), "label.music_volume"),
@@ -227,6 +237,9 @@ class SettingsHelper:
                 if isinstance(elem, Dropdown):
                     if elem.id == "label.language":
                         self.settings.language = elem.selected
+                    elif elem.id == "label.save_file":
+                        self.settings.instance_manager.save_file = os.path.join("saves", elem.selected+ ".json")
+                        self.settings.save_file = self.settings.instance_manager.save_file
                     elif elem.id == "label.font":
                         self.settings.font = os.path.join("assets", elem.selected)
                     elif elem.id == "label.input_type":

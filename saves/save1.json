@@ -1,78 +1,82 @@
 {
-    "main_menu": {
-        "items": []
+    "screens": {
+        "main_menu": {
+            "items": []
+        },
+        "bag_contents": [],
+        "table": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "paper",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "background",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/table/paper1.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "map",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "uuid": "4e34cd2a-102f-435e-93c2-b6ccb8957cc3",
+                    "highlight": false,
+                    "next_screen": "mapScreen"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "paper",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "background",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/table/paper2.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "craft",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "uuid": "1b4610ae-c614-4120-a1eb-b48fb7bb9917",
+                    "next_screen": "workstation"
+                }
+            ]
+        }
     },
-    "bag_contents": [],
-    "table": {
-        "items": [
-            {
-                "class": "BaseItem",
-                "type": "paper",
-                "pos": [
-                    398.7918673004437,
-                    194
-                ],
-                "flags": [
-                    "draggable",
-                    "screen_change",
-                    "unbaggable",
-                    "background",
-                    "no_shadow",
-                    "inspectable"
-                ],
-                "img_path": "assets/screens/table/paper1.png",
-                "animated": false,
-                "scale": [
-                    2,
-                    2
-                ],
-                "origin_screen": "table",
-                "item_name": "map",
-                "rotation": 1.035457650439325,
-                "rotational_velocity": 0.00665837932336123,
-                "vx": 0.035929724650189086,
-                "vy": 0.3,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "uuid": "4bf8a870-13e2-45e6-b2d3-9c93280bb900",
-                "next_screen": "mapScreen",
-                "highlight": false
-            },
-            {
-                "class": "BaseItem",
-                "type": "paper",
-                "pos": [
-                    845.8685565621006,
-                    202
-                ],
-                "flags": [
-                    "draggable",
-                    "screen_change",
-                    "unbaggable",
-                    "background",
-                    "no_shadow",
-                    "inspectable"
-                ],
-                "img_path": "assets/screens/table/paper2.png",
-                "animated": false,
-                "scale": [
-                    2,
-                    2
-                ],
-                "origin_screen": "table",
-                "item_name": "craft",
-                "rotation": 0.0,
-                "rotational_velocity": 0.0,
-                "vx": 0.0011761526179285763,
-                "vy": 0.3,
-                "currentGravity": 0.3,
-                "storedGravity": 0.3,
-                "dragging_for": 0,
-                "uuid": "36f6b80a-6fe8-402d-bd9e-2ea39eee1e3e",
-                "next_screen": "workstation",
-                "highlight": false
-            }
-        ]
-    }
+    "weather": {},
+    "stats": {},
+    "bag_contents": []
 }

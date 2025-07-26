@@ -19,6 +19,7 @@ class ItemManager:
         self.items = [item for item in self.items if getattr(item, "uuid", None) != uuid_to_remove]
 
     def save_items(self, file_path, current_screen, extra_screen_data=None):
+        # Load existing file (if any)
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
                 try:
@@ -28,44 +29,53 @@ class ItemManager:
         else:
             existing_data = {}
 
+        # Ensure new structure
+        if "screens" not in existing_data:
+            existing_data = {
+                "screens": existing_data if isinstance(existing_data, dict) else {},
+                "weather": {},
+                "stats": {}
+            }
+
+        # Create current screen's items block
         screen_items = []
         for item in self.items:
-            screen_name = getattr(item, "origin_screen", "unknown")
-            if screen_name != current_screen:
+            if getattr(item, "origin_screen", "unknown") != current_screen:
                 continue
 
-            if hasattr(item, "type"):
-                data = {
-                    "class": item.__class__.__name__,
-                    "type": item.type,
-                    "pos": list(item.pos),
-                    **item.to_nbt()
-                }
-            else:
+            if not hasattr(item, "type"):
                 continue
 
-            # Fix: next_screen may be in item, not in data yet
+            data = {
+                "class": item.__class__.__name__,
+                "type": item.type,
+                "pos": list(item.pos),
+                **item.to_nbt()
+            }
+
+            # Handle callable next_screen
             if hasattr(item, "next_screen"):
-                if callable(getattr(item, "next_screen", None)):
-                    data["next_screen"] = item.next_screen.__name__
-                else:
-                    data["next_screen"] = item.next_screen
-            elif "next_screen" in data:
-                if callable(data["next_screen"]):
-                    data["next_screen"] = data["next_screen"].__name__
+                next_screen = item.next_screen
+                data["next_screen"] = next_screen.__name__ if callable(next_screen) else next_screen
 
             screen_items.append(data)
 
-        # Save as a dict with 'items' and '_screen_data' for the current screen
+        # Store under 'screens' tab
         screen_dict = {"items": screen_items}
         if extra_screen_data is not None:
             screen_dict["_screen_data"] = extra_screen_data
-        existing_data[current_screen] = screen_dict
 
+        existing_data["screens"][current_screen] = screen_dict
+
+        # Ensure other tabs exist
+        existing_data.setdefault("weather", {})
+        existing_data.setdefault("stats", {})
+
+        # Write back
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
         with open(file_path, "w") as f:
             json.dump(existing_data, f, indent=4)
+
 
     def load_items(self, file_path, current_screen):
         if not os.path.exists(file_path):
@@ -75,7 +85,8 @@ class ItemManager:
         with open(file_path, "r") as f:
             data = json.load(f)
 
-        screen_data = data.get(current_screen)
+        screen_data = data.get("screens", {}).get(current_screen)
+
         if not screen_data:
             print(f"[ItemManager] No data for screen '{current_screen}' in {file_path}")
             return False

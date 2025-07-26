@@ -9,8 +9,9 @@ class settingsManager:
         self.gui_size = 12
         self.input_type = "mouse"
         self.discovered_islands = ["island1", "island2"]
+        self.save_file = None
+        self.instance_manager = None # insert from instance manager
         self.settings_path = os.path.join("saves", "settings.json")
-        self.load()
 
     def save(self):
         data = {
@@ -18,7 +19,8 @@ class settingsManager:
             "language": self.language,
             "font_hover_size": self.font_hover_size,
             "gui_size": self.gui_size,
-            "input_type": self.input_type
+            "input_type": self.input_type,
+            "save_file": self.save_file
         }
         os.makedirs(os.path.dirname(self.settings_path), exist_ok=True)
         with open(self.settings_path, "w", encoding="utf-8") as f:
@@ -34,6 +36,9 @@ class settingsManager:
                 self.font_hover_size = data.get("font_hover_size", self.font_hover_size)
                 self.gui_size = data.get("gui_size", self.gui_size)
                 self.input_type = data.get("input_type", self.input_type)
+                self.save_file = data.get("save_file", "saves/save1.json")
+                if self.instance_manager !=None:
+                    self.instance_manager.save_file = self.save_file
             except Exception as e:
                 print(f"[settingsManager] Error loading settings: {e}")
 
