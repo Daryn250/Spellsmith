@@ -158,7 +158,7 @@ class BaseScreen:
                 item.trick.update(dt / 1000.0, item, self.virtual_size)
                 if item.trick.finished:
                     item.trick = None
-            item.update(self.virtual_surface, self.gui_manager, self.virtual_size, dt=dt)
+            item.update(self.virtual_surface, self.gui_manager, self.virtual_size, self.instance_manager.sfx_manager, dt=dt)
             for p in item.particles:
                 p.update()
             item.particles = [p for p in item.particles if p.is_alive()]

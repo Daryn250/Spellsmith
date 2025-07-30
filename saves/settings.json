@@ -1,8 +1,12 @@
 {
   "font": "assets\\hydrophilia.iced-regular.ttf",
   "language": "english",
-  "font_hover_size": 15,
+  "font_hover_size": 36,
   "gui_size": 12,
   "input_type": "mouse",
-  "save_file": "saves\\save1.json"
+  "save_file": "saves\\save1.json",
+  "sfx_volume": 100,
+  "music_volume": 100,
+  "ambience_volume": 100,
+  "npc_volume": 100
 }

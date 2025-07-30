@@ -59,6 +59,8 @@ class BaseItem:
                 self.ovy = getattr(self, "ovy", 0)
                 self.dragging_for = 0
 
+                self.item_hit_floor = False
+
             self.floor = pos[1]
             self.dragging = False
 
@@ -100,12 +102,12 @@ class BaseItem:
         return safe_nbt
 
 
-    def update(self, screen, gui_manager, virtual_size, bounds=None, dt=None):
+    def update(self, screen, gui_manager, virtual_size, sfx_manager, bounds=None, dt=None):
         if self.animated and dt:
             self.img.update(dt)
 
         if "draggable" in self.flags:
-            handle_draggable(self, screen, gui_manager, virtual_size, bounds)
+            handle_draggable(self, screen, gui_manager, virtual_size, sfx_manager, bounds)
 
         if "hangable" in self.flags:
             handle_hangable(self, screen)

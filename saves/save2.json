@@ -1,1 +1,10 @@
-{}
+{
+    "screens": {
+        "main_menu": {
+            "items": []
+        }
+    },
+    "weather": {},
+    "stats": {},
+    "bag_contents": []
+}

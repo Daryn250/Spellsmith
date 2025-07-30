@@ -1,17 +1,13 @@
 {
     "screens": {
-        "main_menu": {
-            "items": []
-        },
-        "bag_contents": [],
         "table": {
             "items": [
                 {
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        200.0,
-                        200
+                        748.8138987350331,
+                        301.6000000000002
                     ],
                     "flags": [
                         "draggable",
@@ -31,12 +27,13 @@
                     "item_name": "map",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 0.0,
-                    "vy": 0,
+                    "vx": -5.2138210692133684e-08,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
-                    "uuid": "4e34cd2a-102f-435e-93c2-b6ccb8957cc3",
+                    "item_hit_floor": false,
+                    "uuid": "ba6c31d1-31dd-4a32-99ea-960f0d715e4b",
                     "highlight": false,
                     "next_screen": "mapScreen"
                 },
@@ -44,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        200.0,
-                        200
+                        477.1205853535856,
+                        246.49999999999994
                     ],
                     "flags": [
                         "draggable",
@@ -65,15 +62,20 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 0.0,
-                    "vy": 0,
+                    "vx": -4.48632516031505e-06,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
-                    "uuid": "1b4610ae-c614-4120-a1eb-b48fb7bb9917",
+                    "item_hit_floor": false,
+                    "uuid": "91bb99d2-da9a-4851-ab14-4394602d4d15",
+                    "highlight": false,
                     "next_screen": "workstation"
                 }
             ]
+        },
+        "main_menu": {
+            "items": []
         }
     },
     "weather": {},

@@ -25,6 +25,8 @@ class DraggableFlag:
                             DraggableFlag.dragging_item = item
                             DraggableFlag.offset = (mx - item.pos[0], my - item.pos[1])
                             DraggableFlag.last_pos = item.pos
+                            item.dragging = True
+                            DraggableFlag.dragging_item.item_hit_floor = True
                             for slot in item_list:
                                 if "slot" not in slot.flags:
                                     continue

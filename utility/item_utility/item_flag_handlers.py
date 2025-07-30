@@ -5,7 +5,7 @@ from utility.screen_utility.screenManager import get_screen_function
 
 
 
-def handle_draggable(item, screen, gui_manager, virtual_size, bounds=None):
+def handle_draggable(item, screen, gui_manager, virtual_size, sfx_manager, bounds=None):
     item.rotation += getattr(item, "rotational_velocity", 0)
     item.rotational_velocity *= 0.85
     if abs(item.rotation) < 0.1:
@@ -56,26 +56,33 @@ def handle_draggable(item, screen, gui_manager, virtual_size, bounds=None):
         item.liquid_rotation = max(-max_rotation, min(max_rotation, item.liquid_rotation))
 
 
-
     if not item.dragging and item.vy > 0:
         if currentY > getattr(item, "floor", currentY):
             currentY = item.floor
+            if item.item_hit_floor == True and item.dragging == False:
+                sfx_manager.play_sound("drop", material = getattr(item, "sound_mapping", "general"), volume=min(1.0, item.vy / 20)) # return default if there is no soundmapping
+                item.item_hit_floor = False
             item.vy = 0
             item.vx /= 1.5
+            
 
     if not item.dragging:
         if currentX - half_width < screenX:
             currentX = screenX + half_width
             item.vx = abs(item.vx) / 1.1
+            sfx_manager.play_sound("bounce_bounce", None, volume=min(1.0, item.vx / 20))
         if currentX + half_width > screenX + screenW:
             currentX = screenX + screenW - half_width
             item.vx = -abs(item.vx) / 1.1
+            sfx_manager.play_sound("bounce_bounce", None, volume=min(1.0, item.vx / 20))
         if currentY - half_height < screenY:
             currentY = screenY + half_height
             item.vy = abs(item.vy) / 1.1
+            sfx_manager.play_sound("bounce_bounce", None, volume=min(1.0, item.vy / 20))
         if currentY + half_height > screenY + screenH:
             currentY = screenY + screenH - half_height
             item.vy = abs(item.vy) / 1.1
+            sfx_manager.play_sound("bounce_bounce", None, volume=min(1.0, item.vy / 20))
 
     item.pos = (currentX, currentY)
 

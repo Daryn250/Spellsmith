@@ -24,7 +24,7 @@ class MainMenuHelper:
         self.language = instance_manager.settings.language
         self.settings = instance_manager.settings
         self.font = instance_manager.settings.font
-        self.settings_helper = SettingsHelper(screen_size, self.settings, self)
+        self.settings_helper = SettingsHelper(screen_size, self.settings, self, instance_manager.sfx_manager)
         self._init_ocean_tiles()
         self._init_buttons()
         self.time_elapsed = 0
@@ -133,8 +133,10 @@ class MainMenuHelper:
             if self.buttons[0].checkForInput(virtual_mouse):  # Play
                 switcher.start(lambda: table(screen, self.instance_manager), None)
             elif self.buttons[1].checkForInput(virtual_mouse):  # Settings
+                self.instance_manager.sfx_manager.play_sound("gui_button")
                 self.settings_helper.toggle()
             elif self.buttons[2].checkForInput(virtual_mouse):  # Quit
+                self.instance_manager.sfx_manager.play_sound("gui_button")
                 pygame.quit()
                 sys.exit()
 

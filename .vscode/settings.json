@@ -32,6 +32,10 @@
         {
             "folderPath": "spellsmithAgain\\utility\\minigame_utility\\",
             "color": "foldercolorizer.color_cc6600"
+        },
+        {
+            "folderPath": "spellsmithAgain\\utility\\audio_utility\\",
+            "color": "foldercolorizer.color_cc33cc"
         }
     ]
 }

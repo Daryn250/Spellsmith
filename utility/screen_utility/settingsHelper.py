@@ -1,14 +1,18 @@
 import os
 import pygame
+import time
+
+
 
 class Dropdown:
-    def __init__(self, rect, options, selected, font, label, id, settings=None):
+    def __init__(self, rect, options, selected, font, label, id, settings=None, sfx_manager=None):
         self.rect = pygame.Rect(rect)
         self.settings = settings
         self.label = label
         self.id = id
         self.open = False
         self.font = font
+        self.sfx_manager = sfx_manager
 
         # Internal option keys and selected key
         self.options = options  # ["on", "off"] etc.
@@ -36,15 +40,11 @@ class Dropdown:
                 if opt_rect.collidepoint(mouse_pos):
                     self.selected = opt
                     self.open = False
+                    self.sfx_manager.play_sound("gui_click", None)
                     return opt
             self.open = False
 
-        # NEW: Only allow changing selection on scroll if open and mouse is over dropdown
-        if event.type == pygame.MOUSEWHEEL and self.open and self.rect.collidepoint(mouse_pos):
-            idx = self.options.index(self.selected)
-            idx = (idx - event.y) % len(self.options)  # Scroll up/down changes index
-            self.selected = self.options[idx]
-            return self.selected
+
 
         return None
 
@@ -70,7 +70,7 @@ class Dropdown:
 
 
 class Slider:
-    def __init__(self, rect, min_val, max_val, value, font, label, id):
+    def __init__(self, rect, min_val, max_val, value, font, label, id, sfx_manager):
         self.rect = pygame.Rect(rect)
         self.min_val = min_val
         self.max_val = max_val
@@ -79,6 +79,8 @@ class Slider:
         self.label = label
         self.dragging = False
         self.id = id
+        self.sfx_manager = sfx_manager
+
 
     def handle_event(self, event, mouse_pos):
         if event.type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(mouse_pos):
@@ -88,7 +90,11 @@ class Slider:
         elif event.type == pygame.MOUSEMOTION and self.dragging:
             rel_x = mouse_pos[0] - self.rect.x
             rel_x = max(0, min(rel_x, self.rect.width))
-            self.value = int(self.min_val + (rel_x / self.rect.width) * (self.max_val - self.min_val))
+            a = int(self.min_val + (rel_x / self.rect.width) * (self.max_val - self.min_val))
+            if a != self.value:
+                self.sfx_manager.play_sound("gui_click", None)
+
+            self.value = a
         return self.value
 
     def draw(self, surface):
@@ -100,7 +106,7 @@ class Slider:
         surface.blit(label_surf, (self.rect.x + 5, self.rect.y - 18))
 
 class SettingsHelper:
-    def __init__(self, screen_size, settings_manager, helper):
+    def __init__(self, screen_size, settings_manager, helper, sfx_manager):
         self.screen_size = screen_size
         self.settings = settings_manager
         self.helper = helper
@@ -113,6 +119,8 @@ class SettingsHelper:
         self.scroll_target = 0
         self.scroll_speed = 20  # how much scroll wheel changes scroll_target per tick
         self.scroll_lerp_speed = 0.2  # lerp speed for smooth scrolling
+
+        self.sfx_manager = sfx_manager
 
         self.margin = 20
         self.tab_width = 140
@@ -152,20 +160,22 @@ class SettingsHelper:
         self.elements_by_tab = {
             # add translations with self.settings.get_translated_text() or whatever teh function is
             0: [  # Video
-                Dropdown((start_x, start_y, element_width, element_height), self._scan_saves(), os.path.basename(self.settings.save_file).removesuffix(".json"), self.font, self.settings.translated_text("Save File"), "label.save_file"),
-                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_languages(), self.settings.language, self.font, self.settings.translated_text("Language"), "label.language"),
-                Dropdown((start_x, start_y + spacing * 2, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, self.settings.translated_text("Font"), "label.font"),
-                Slider((start_x, start_y + spacing * 3, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, self.settings.translated_text("Font Hover Size"), "label.font_hover_size"),
+                Dropdown((start_x, start_y, element_width, element_height), self._scan_saves(), os.path.basename(self.settings.save_file).removesuffix(".json"), self.font, self.settings.translated_text("Save File"), "label.save_file", None, self.sfx_manager),
+                Dropdown((start_x, start_y + spacing, element_width, element_height), self._scan_languages(), self.settings.language, self.font, self.settings.translated_text("Language"), "label.language", None, self.sfx_manager),
+                Dropdown((start_x, start_y + spacing * 2, element_width, element_height), self._scan_fonts(), os.path.basename(self.settings.font), self.font, self.settings.translated_text("Font"), "label.font", None, self.sfx_manager),
+                Slider((start_x, start_y + spacing * 3, element_width, 20), 8, 40, self.settings.font_hover_size, self.font, self.settings.translated_text("Font Hover Size"), "label.font_hover_size", self.sfx_manager),
             ],
             1: [  # Audio
-                Slider((start_x, start_y, element_width, 20), 0, 100, 50, self.font, self.settings.translated_text("Music Volume"), "label.music_volume"),
-                Slider((start_x, start_y + spacing, element_width, 20), 0, 100, 70, self.font, self.settings.translated_text("SFX Volume"), "label.sfx_volume"),
+                Slider((start_x, start_y, element_width, 20), 0, 100, self.settings.music_volume, self.font, self.settings.translated_text("Music Volume"), "label.music_volume", self.sfx_manager),
+                Slider((start_x, start_y + spacing, element_width, 20), 0, 100, self.settings.sfx_volume, self.font, self.settings.translated_text("SFX Volume"), "label.sfx_volume", self.sfx_manager),
+                Slider((start_x, start_y + spacing *2, element_width, 20), 0, 100, self.settings.ambience_volume, self.font, self.settings.translated_text("Ambience Volume"), "label.ambience_volume", self.sfx_manager),
+                Slider((start_x, start_y + spacing *3, element_width, 20), 0, 100, self.settings.npc_volume, self.font, self.settings.translated_text("NPC Volume"), "label.npc_volume", self.sfx_manager),
             ],
             2: [  # Controls
-                Dropdown((start_x, start_y, element_width, element_height), ["mouse", "controller"], self.settings.input_type, self.font, self.settings.translated_text("Input Type"), "label.input_type"),
+                Dropdown((start_x, start_y, element_width, element_height), ["mouse", "controller"], self.settings.input_type, self.font, self.settings.translated_text("Input Type"), "label.input_type", None, self.sfx_manager),
             ],
             3: [  # Misc
-                Dropdown((start_x, start_y, element_width, element_height), ["on", "off"], "on", self.font, self.settings.translated_text("Tooltips"), "label.tooltips"),
+                Dropdown((start_x, start_y, element_width, element_height), ["on", "off"], "on", self.font, self.settings.translated_text("Tooltips"), "label.tooltips", None, self.sfx_manager),
             ],
         }
 
@@ -191,11 +201,17 @@ class SettingsHelper:
         else:
             self.open()
 
+    def update(self):
+        # Smoothly interpolate current scroll offset to target scroll
+        self.scroll_offset += (self.scroll_target - self.scroll_offset) * self.scroll_lerp_speed
+
     def handle_event(self, event, mouse_pos):
         if not self.active:
             return
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            # check if gui has changed
+            self.sfx_manager.play_sound("gui_tab", None)
             self.close()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -208,11 +224,14 @@ class SettingsHelper:
                 if tab_rect.collidepoint(mouse_pos):
                     self.active_tab = i
                     self.scroll_offset = 0
+                    self.scroll_target = 0
+                    self.sfx_manager.play_sound("gui_tab")
                     self._init_ui()
 
         if event.type == pygame.MOUSEWHEEL:
             # Update scroll target smoothly and clamp later
             self.scroll_target += -event.y * self.scroll_speed
+            self.sfx_manager.play_sound("gui_scroll")
 
             # Calculate max scroll based on content height
             visible_height = self.screen_size[1] - self.start_y - 40
@@ -221,8 +240,7 @@ class SettingsHelper:
             max_scroll = max(0, content_height - visible_height)
             self.scroll_target = max(0, min(self.scroll_target, max_scroll))
 
-        # Smoothly interpolate current scroll offset to target scroll
-        self.scroll_offset += (self.scroll_target - self.scroll_offset) * self.scroll_lerp_speed
+        
 
         # Update UI element positions using current scroll_offset (smooth)
         for i, elem in enumerate(self.get_active_elements()):
@@ -250,16 +268,22 @@ class SettingsHelper:
                 elif isinstance(elem, Slider):
                     if elem.id == "label.font_hover_size":
                         self.settings.font_hover_size = elem.value
+                    elif elem.id == "label.sfx_volume":
+                        self.settings.sfx_volume = elem.value
                     elif elem.id == "label.music_volume":
                         self.settings.music_volume = elem.value
-                    elif elem.id == "label.music_volume":
-                        self.settings.sfx_volume = elem.value
+                    elif elem.id == "label.ambience_volume":
+                        self.settings.ambience_volume = elem.value
+                    elif elem.id == "label.npc_volume":
+                        self.settings.npc_volume = elem.value
+                
 
 
         if changed:
             self.settings.save()
             self.helper._init_buttons(self.settings.font)
             self.font = pygame.font.Font(self.settings.font, 15)
+            self.sfx_manager.update_volume(self.settings.sfx_volume, self.settings.music_volume, self.settings.ambience_volume, self.settings.npc_volume)
             self._refresh_ui_fonts_and_labels() # this function is breaking it
     
     def _refresh_ui_fonts_and_labels(self):

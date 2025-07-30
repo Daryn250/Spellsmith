@@ -12,6 +12,10 @@ class settingsManager:
         self.save_file = None
         self.instance_manager = None # insert from instance manager
         self.settings_path = os.path.join("saves", "settings.json")
+        self.sfx_volume = 0.5
+        self.music_volume = 0.5
+        self.ambience_volume = 0.5
+        self.npc_volume = 0.5
 
     def save(self):
         data = {
@@ -20,7 +24,11 @@ class settingsManager:
             "font_hover_size": self.font_hover_size,
             "gui_size": self.gui_size,
             "input_type": self.input_type,
-            "save_file": self.save_file
+            "save_file": self.save_file,
+            "sfx_volume": self.sfx_volume,
+            "music_volume": self.music_volume,
+            "ambience_volume": self.ambience_volume,
+            "npc_volume": self.npc_volume,
         }
         os.makedirs(os.path.dirname(self.settings_path), exist_ok=True)
         with open(self.settings_path, "w", encoding="utf-8") as f:
@@ -37,6 +45,10 @@ class settingsManager:
                 self.gui_size = data.get("gui_size", self.gui_size)
                 self.input_type = data.get("input_type", self.input_type)
                 self.save_file = data.get("save_file", "saves/save1.json")
+                self.sfx_volume = data.get("sfx_volume", self.sfx_volume)
+                self.music_volume = data.get("music_volume", self.music_volume)
+                self.ambience_volume = data.get("ambience_volume", self.ambience_volume)
+                self.npc_volume = data.get("npc_volume", self.npc_volume)
                 if self.instance_manager !=None:
                     self.instance_manager.save_file = self.save_file
             except Exception as e:
