@@ -161,11 +161,8 @@ def handle_temperature(item, dt):
             item.temperature = temp  # ✅ save back to the item!
 
 
+# going to remove code here plez no break
 
-def handle_screen_switch(item, screen, screen_switcher):
-    if isinstance(item.next_screen, str):
-        item.next_screen = get_screen_function(item.next_screen)
-    screen_switcher.start(lambda: item.next_screen(screen))
 
 def handle_inspectable(item, gui_manager, dt):
     window = getattr(item, "window", False)

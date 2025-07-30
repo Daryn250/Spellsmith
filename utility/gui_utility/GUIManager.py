@@ -111,7 +111,8 @@ class GUIManager:
         switcher = screen.switcher
         switcher.start(
             next_screen_func=lambda: func(screen.screen, screen.instance_manager),
-            save_callback=lambda: screen.save_items(screen.instance_manager.save_file)
+            save_callback=lambda: screen.save_items(screen.instance_manager.save_file),
+            sfx_manager = screen.instance_manager.sfx_manager
         )
 
 

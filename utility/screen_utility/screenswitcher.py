@@ -2,7 +2,7 @@ import pygame
 import pygame.gfxdraw
 
 class ScreenSwitcher:
-    def __init__(self, transition_duration=1.0):
+    def __init__(self, transition_duration=0.75):
         surf = pygame.display.get_surface()
         screen_size = surf.get_width(), surf.get_height()
         self.max_radius = (screen_size[0] ** 2 + screen_size[1] ** 2) ** 0.5
@@ -22,7 +22,7 @@ class ScreenSwitcher:
         self.transition_duration = transition_duration
         self.elapsed_time = 0.0
 
-    def start(self, next_screen_func, save_callback):
+    def start(self, next_screen_func, save_callback, sfx_manager):
         surf = pygame.display.get_surface()
         screen_size = surf.get_width(), surf.get_height()
         self.center = (surf.get_width() // 2, surf.get_height() // 2)
@@ -36,6 +36,7 @@ class ScreenSwitcher:
         self.finished = False
         self.elapsed_time = 0.0
         self.transition_phase = "in"
+        sfx_manager.play_sound("gui_swooshin")
 
     def force_finish(self):
         """Forcefully finish the transition immediately."""

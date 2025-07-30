@@ -17,7 +17,7 @@ class BaseScreen:
                 draw_bag=True, draw_charmboard=False, draw_screennav = True, background=None,
                 default_items_func=None, previous_screen=None,
                 item_manager=None, override_draw = False,
-                instance_manager = None):
+                instance_manager = None, day_ambience = [], night_ambience = []):
         ...
         # screennav is the triangle in the corner that allows for easier screen navigation
         self.item_manager = item_manager if item_manager else ItemManager(virtual_size)
@@ -29,6 +29,9 @@ class BaseScreen:
         self.override_draw = override_draw
 
         self.switcher = switcher
+        # play the screen switch in sound
+        instance_manager.sfx_manager.play_sound("gui_swooshout")
+
         self.screen_name = screen_name
         self.previous_screen = previous_screen
 
@@ -44,6 +47,12 @@ class BaseScreen:
         self.gui_manager = GUIManager(self, charmboard=draw_charmboard)
         self.clock = pygame.time.Clock()
         self.debug_console = DebugConsole(self)  # <-- Initialize DebugConsole
+
+        if instance_manager.is_daytime():
+            for pth in day_ambience:
+                self.instance_manager.sfx_manager.play_ambience(pth)
+        else:
+            pass
         
 
     def load_items(self, save_path):
@@ -114,7 +123,8 @@ class BaseScreen:
                         else:
                             self.switcher.start(
                                 next_screen_func=lambda: self.previous_screen(self.screen, self.instance_manager),
-                                save_callback=lambda: self.save_items(self.instance_manager.save_file)
+                                save_callback=lambda: self.save_items(self.instance_manager.save_file),
+                                sfx_manager = self.instance_manager.sfx_manager
                             )
                     else:
                         print("⚠️ No previous screen set.")

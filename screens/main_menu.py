@@ -131,7 +131,7 @@ class MainMenuHelper:
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.buttons[0].checkForInput(virtual_mouse):  # Play
-                switcher.start(lambda: table(screen, self.instance_manager), None)
+                switcher.start(lambda: table(screen, self.instance_manager), None, self.instance_manager.sfx_manager)
             elif self.buttons[1].checkForInput(virtual_mouse):  # Settings
                 self.instance_manager.sfx_manager.play_sound("gui_button")
                 self.settings_helper.toggle()
@@ -161,7 +161,8 @@ def main_menu(screen, instance_manager):
         helper=helper,
         item_manager=None,
         draw_screennav=False,
-        instance_manager = instance_manager
+        instance_manager = instance_manager,
+        day_ambience=["ambience_ocean"]
     )
 
 

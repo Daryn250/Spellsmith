@@ -262,7 +262,8 @@ class BaseItem:
         if type(self.next_screen) == str:
             self.next_screen = get_screen_function(self.next_screen)
         screenSwitcher.start(lambda: self.next_screen(screen, baseScreen.instance_manager),
-                             save_callback=lambda: baseScreen.save_items(baseScreen.instance_manager.save_file))
+                             save_callback=lambda: baseScreen.save_items(baseScreen.instance_manager.save_file),
+                             sfx_manager = baseScreen.instance_manager.sfx_manager)
 
     def update_hover(self, mouse_pos, virtual_size, use_pos_override=True):
         """

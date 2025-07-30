@@ -16,3 +16,6 @@ class instanceManager:
         self.weather = {"type":None, "intensity":0, "time":0, "moon":0}
 
         main_menu(screen, self)
+    
+    def is_daytime(self):
+        return True # dont worry bout it rn :D

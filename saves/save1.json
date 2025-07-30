@@ -6,7 +6,7 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        748.8138987350331,
+                        748.8138985194017,
                         301.6000000000002
                     ],
                     "flags": [
@@ -27,8 +27,8 @@
                     "item_name": "map",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -5.2138210692133684e-08,
-                    "vy": 0.3,
+                    "vx": -2.9916206337379395e-193,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -41,7 +41,7 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        477.1205853535856,
+                        477.1205667992431,
                         246.49999999999994
                     ],
                     "flags": [
@@ -62,8 +62,8 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -4.48632516031505e-06,
-                    "vy": 0.3,
+                    "vx": -2.5741932339233634e-191,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -76,6 +76,138 @@
         },
         "main_menu": {
             "items": []
+        },
+        "map": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "island",
+                    "pos": [
+                        0,
+                        0
+                    ],
+                    "island_name": "boat",
+                    "flags": [
+                        "screen_change",
+                        "island",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/map/boat",
+                    "animated": true,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "origin_screen": "map",
+                    "item_name": "map_boat",
+                    "frameDuration": 100,
+                    "uuid": "84432a92-3007-426a-931a-76c52bb6e2c3",
+                    "pos_override": [
+                        259,
+                        -89
+                    ],
+                    "next_screen": "main_menu"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "island",
+                    "pos": [
+                        75,
+                        242
+                    ],
+                    "island_name": "island1",
+                    "flags": [
+                        "screen_change",
+                        "island",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/map/islands/island1.png",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "origin_screen": "map",
+                    "item_name": "island1",
+                    "uuid": "c0749044-b905-4298-8d0d-32ad77df7eda",
+                    "pos_override": [
+                        334,
+                        153
+                    ],
+                    "highlight": false,
+                    "next_screen": "main_menu"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "island",
+                    "pos": [
+                        150,
+                        -364
+                    ],
+                    "island_name": "island2",
+                    "flags": [
+                        "screen_change",
+                        "island",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/map/islands/beach_island.png",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "origin_screen": "map",
+                    "item_name": "island2",
+                    "uuid": "e856d5c9-0be3-4432-9b10-e90c7d0217b1",
+                    "pos_override": [
+                        409,
+                        -453
+                    ],
+                    "next_screen": "main_menu"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "island",
+                    "pos": [
+                        225,
+                        364
+                    ],
+                    "island_name": "island3",
+                    "flags": [
+                        "screen_change",
+                        "island",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/map/islands/mountain_island.png",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "origin_screen": "map",
+                    "item_name": "island3",
+                    "uuid": "9fa15168-f1ad-4e8b-aed0-1562371bf3f8",
+                    "pos_override": [
+                        484,
+                        275
+                    ],
+                    "highlight": false,
+                    "next_screen": "main_menu"
+                }
+            ],
+            "_screen_data": {
+                "map": {
+                    "zoom": 1,
+                    "pan": [
+                        -221,
+                        -359
+                    ]
+                }
+            }
         }
     },
     "weather": {},

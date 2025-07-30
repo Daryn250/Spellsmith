@@ -283,7 +283,7 @@ class SettingsHelper:
             self.settings.save()
             self.helper._init_buttons(self.settings.font)
             self.font = pygame.font.Font(self.settings.font, 15)
-            self.sfx_manager.update_volume(self.settings.sfx_volume, self.settings.music_volume, self.settings.ambience_volume, self.settings.npc_volume)
+            self.sfx_manager.update_volume(self.settings.sfx_volume/100, self.settings.music_volume/100, self.settings.ambience_volume/100, self.settings.npc_volume/100)
             self._refresh_ui_fonts_and_labels() # this function is breaking it
     
     def _refresh_ui_fonts_and_labels(self):
