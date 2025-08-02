@@ -1,9 +1,10 @@
 import os
 import json
+import pygame
 
 class settingsManager:
     def __init__(self):
-        self.font = "assets\\hydrophilia.iced-regular.ttf"
+        self.font = "assets\\hydrophilia.iced-regular.ttf" # default font
         self.language = "english"
         self.font_hover_size = 15
         self.gui_size = 12
@@ -17,7 +18,10 @@ class settingsManager:
         self.ambience_volume = 0.5
         self.npc_volume = 0.5
 
+        self.shader = ""
+
     def save(self):
+        
         data = {
             "font": self.font,
             "language": self.language,
@@ -29,6 +33,7 @@ class settingsManager:
             "music_volume": self.music_volume,
             "ambience_volume": self.ambience_volume,
             "npc_volume": self.npc_volume,
+            "shader": self.shader
         }
         os.makedirs(os.path.dirname(self.settings_path), exist_ok=True)
         with open(self.settings_path, "w", encoding="utf-8") as f:
@@ -53,6 +58,8 @@ class settingsManager:
                     self.instance_manager.save_file = self.save_file
             except Exception as e:
                 print(f"[settingsManager] Error loading settings: {e}")
+        if not os.path.exists(self.font):
+            self.font = "freesansbold.ttf" #pygame will change this to freesans bold, allowing the user to still exist somehow
 
     def translated_text(self, text, lowercase = True):
         # Build the path to the language file

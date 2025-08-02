@@ -6,8 +6,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        748.8138985194017,
-                        301.6000000000002
+                        660.54550040856,
+                        216.00000000000028
                     ],
                     "flags": [
                         "draggable",
@@ -27,8 +27,8 @@
                     "item_name": "map",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -2.9916206337379395e-193,
-                    "vy": 0,
+                    "vx": 0.0,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -41,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        477.1205667992431,
-                        246.49999999999994
+                        196.44830820185086,
+                        198.60000000000124
                     ],
                     "flags": [
                         "draggable",
@@ -62,8 +62,8 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -2.5741932339233634e-191,
-                    "vy": 0,
+                    "vx": -2.3968892861679977e-18,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -208,6 +208,74 @@
                     ]
                 }
             }
+        },
+        "workstation": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "furnace",
+                    "pos": [
+                        200.0,
+                        300
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/furnace.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "workstation",
+                    "item_name": "furnace",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "1e58b3fd-7313-41e4-afc9-56d80664c80b",
+                    "next_screen": "furnaceScreen"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "anvil",
+                    "pos": [
+                        400.0,
+                        300
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/anvil.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "workstation",
+                    "item_name": "anvil",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "a3c16bf3-2446-43cd-b201-23abb1fd057f",
+                    "next_screen": "anvilScreen"
+                }
+            ]
         }
     },
     "weather": {},

@@ -24,14 +24,14 @@ class MainMenuHelper:
         self.language = instance_manager.settings.language
         self.settings = instance_manager.settings
         self.font = instance_manager.settings.font
-        self.settings_helper = SettingsHelper(screen_size, self.settings, self, instance_manager.sfx_manager)
+        self.settings_helper = SettingsHelper(screen_size, self.settings, self, instance_manager)
         self._init_ocean_tiles()
         self._init_buttons()
         self.time_elapsed = 0
         
 
         # Boat animation
-        self.boat_sprite = AnimatedTile("assets/boat", frame_duration=150)  # Replace with actual path if different
+        self.boat_sprite = AnimatedTile("assets/boat", frame_duration=150, scale=(2,2))  # Replace with actual path if different
 
     def _init_ocean_tiles(self):
         sw, sh = self.screen_size
@@ -70,6 +70,7 @@ class MainMenuHelper:
             for cell in row:
                 cell["tile"].update(dt)
         self.boat_sprite.update(dt)
+        self.settings_helper.update()
 
     def draw(self, surface, virtual_size):
         background = pygame.Surface(virtual_size, pygame.SRCALPHA)
@@ -145,7 +146,7 @@ class MainMenuHelper:
 
 def main_menu(screen, instance_manager):
     switcher = ScreenSwitcher()
-    virtual_size = (480, 270)
+    virtual_size = (960, 540)
     helper = MainMenuHelper(virtual_size, instance_manager)
 
     base = BaseScreen(
@@ -164,7 +165,7 @@ def main_menu(screen, instance_manager):
         instance_manager = instance_manager,
         day_ambience=["ambience_ocean"]
     )
-
+    helper.settings_helper.baseScreen = base
 
     # override base's handle_events to include helper event handling
     def handle_events_with_buttons(virtual_mouse):

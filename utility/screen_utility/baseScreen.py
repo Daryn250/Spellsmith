@@ -2,6 +2,8 @@
 
 import pygame
 import sys
+import moderngl
+import numpy as np
 from utility.animated_sprite import AnimatedTile
 from utility.screen_utility.screenswitcher import ScreenSwitcher
 from utility.screen_utility.screenwrapper import VirtualScreen
@@ -11,6 +13,7 @@ from utility.item_utility.item_flags import * # import all item flags
 from utility.gui_utility.GUIManager import GUIManager
 from utility.item_utility.itemMaker import makeItem
 from utility.gui_utility.console import DebugConsole  # <-- Add this import
+
 
 class BaseScreen:
     def __init__(self, screen, virtual_size, screen_name, switcher, helper=None,
@@ -48,12 +51,28 @@ class BaseScreen:
         self.clock = pygame.time.Clock()
         self.debug_console = DebugConsole(self)  # <-- Initialize DebugConsole
 
+        self.ctx = instance_manager.ctx
+        self.instance_manager = instance_manager
+
+        # Reuse the one shared quad VBO
+        self.quad_vbo = instance_manager.shared_quad_vbo
+
+        # Ask your ShaderManager for the cached VAO for this VBO + shader program:
+        active = instance_manager.shader_manager.active_name
+        self.final_vao = instance_manager.shader_manager.get_vao(
+            active
+        )
+
+
         if instance_manager.is_daytime():
             for pth in day_ambience:
                 self.instance_manager.sfx_manager.play_ambience(pth)
         else:
             pass
-        
+
+
+    
+
 
     def load_items(self, save_path):
         # check if save is empty, if is then set it to have {}
@@ -77,7 +96,8 @@ class BaseScreen:
             elif hasattr(self.helper, "load_from_data"):
                 self.helper.load_from_data(screen_helper_data)
             else:
-                print(f"⚠️ Helper for {self.screen_name} has no 'restore' or 'load_from_data' method.")
+                return
+                print(f"⚠️ Helper for {self.screen_name} has no 'restore' or 'load_from_data' method.") # make unreachable to ignore the FREAKIN warning
 
 
 
@@ -107,6 +127,9 @@ class BaseScreen:
 
             if event.type == pygame.VIDEORESIZE:
                 self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                
+
+
 
             if hasattr(self.helper, "handleEvents"):
                 self.helper.handleEvents(event, virtual_mouse, self.virtual_size, self)
@@ -180,43 +203,57 @@ class BaseScreen:
 
     def draw(self, virtual_mouse):
         self.virtual_surface.fill((0, 0, 0))
+
         if self.background and hasattr(self.background, "index"):
             self.background.draw(self.virtual_surface, (0, 0), scale_to=self.virtual_size)
 
         if self.helper and hasattr(self.helper, "draw"):
             self.helper.draw(self.virtual_surface, self.virtual_size)
 
-        if self.override_draw == False:
+        if not self.override_draw:
             self.item_manager.draw_with_z_respect(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
 
         dragged = next((i for i in self.item_manager.items if getattr(i, "dragging", False)), None)
         SlotFlag.draw_overlay(self.virtual_surface, self.item_manager.items, dragged, virtual_mouse, self.virtual_size)
 
-
         self.gui_manager.drawBag = self.draw_bag
         self.gui_manager.drawCharmBoard = self.draw_charmboard
         self.gui_manager.draw_screennav = self.draw_screennav
-        if self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui:
-            pass
-        else:
+        if not (self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui):
             self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
 
         if self.helper and hasattr(self.helper, "draw_after_gui"):
             self.helper.draw_after_gui(self.virtual_surface, self.virtual_size)
 
-
         self.item_manager.draw_dragged_item(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
-        
-        self.debug_console.draw(self.virtual_surface)
 
+        self.debug_console.draw(self.virtual_surface)
         self.cursor_manager.draw(self.virtual_surface, virtual_mouse)
 
-        # Draw debug console on top
-        
 
-        self.vscreen.draw_to_screen(self.screen)
+        
+        shader_tex = self.instance_manager.shader_manager.render(self.virtual_surface)
+        if shader_tex:
+            # 1) bind default framebuffer & clear
+            self.ctx.screen.use()
+            w, h = self.screen.get_size()
+            self.ctx.viewport = (0, 0, w, h)
+            self.ctx.clear(0.0, 0.0, 0.0, 1.0)
+
+            # 2) draw the textured quad (post-processed) directly
+            shader_tex.use(location=0)
+            vao = self.instance_manager.shader_manager.get_vao(
+                self.instance_manager.shader_manager.active_name
+            )
+            vao.render(moderngl.TRIANGLE_STRIP)
+
+
+        self.vscreen.draw_to_screen(self.screen, source_surface=self.virtual_surface)
+
         self.switcher.draw(self.screen)
         pygame.display.flip()
+
+
 
 
     def run(self):

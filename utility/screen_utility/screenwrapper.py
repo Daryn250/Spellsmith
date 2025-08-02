@@ -11,11 +11,16 @@ class VirtualScreen:
         self.shake_magnitude = 0
         self.shake_offset = (0, 0)
 
+        self.output_size = virtual_size
+
     def get_surface(self):
         """Get the surface to draw your game onto."""
         return self.surface
 
-    def draw_to_screen(self, target_screen):
+    def draw_to_screen(self, target_screen, source_surface=None):
+        if source_surface is None:
+            source_surface = self.surface
+
         window_width, window_height = target_screen.get_size()
 
         # Calculate scale factor to fill screen (crop excess)
@@ -42,7 +47,8 @@ class VirtualScreen:
         temp_surface.fill((0, 0, 0))  # Black border padding for shake
 
         ox, oy = self.shake_offset
-        temp_surface.blit(self.surface, (ox, oy))
+        temp_surface.blit(source_surface, (ox, oy))
+
 
         # Scale the temp surface
         scaled_surface = pygame.transform.scale(temp_surface, (scaled_width, scaled_height))
@@ -94,3 +100,10 @@ class VirtualScreen:
         self.shake_timer = duration
         self.shake_duration = duration
         self.shake_magnitude = magnitude
+
+    def resize(self, width, height):
+        """
+        Call this when the window is resized.
+        We'll update our output_size so draw_to_screen scales correctly.
+        """
+        self.output_size = (width, height)
