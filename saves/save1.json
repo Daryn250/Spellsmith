@@ -28,7 +28,7 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -62,8 +62,8 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -2.3968892861679977e-18,
-                    "vy": 0.3,
+                    "vx": -3.845202804191781e-113,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -235,12 +235,13 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
                     "item_hit_floor": false,
                     "uuid": "1e58b3fd-7313-41e4-afc9-56d80664c80b",
+                    "highlight": false,
                     "next_screen": "furnaceScreen"
                 },
                 {
@@ -267,15 +268,48 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
                     "item_hit_floor": false,
                     "uuid": "a3c16bf3-2446-43cd-b201-23abb1fd057f",
+                    "highlight": false,
                     "next_screen": "anvilScreen"
                 }
             ]
+        },
+        "anvilScreen": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        396.0,
+                        102.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "anvil_input_1",
+                    "origin_screen": "anvilScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "808bbadb-656b-45f6-98dd-8f97a0a5c558"
+                }
+            ],
+            "_screen_data": {
+                "anvilScreen": {}
+            }
         }
     },
     "weather": {},

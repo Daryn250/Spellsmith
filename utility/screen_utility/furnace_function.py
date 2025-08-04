@@ -134,6 +134,7 @@ class FurnaceHelper:
             screen=base_screen.virtual_surface,
             gui_manager=base_screen.gui_manager,
             virtual_size=base_screen.virtual_size,
+            sfx=base_screen.instance_manager.sfx_manager,
             dt=dt,
             fuel_level=self.fuel_level,
             shake_x=shake_x,
@@ -194,8 +195,8 @@ class CoalItem(BaseItem):
         
         
 
-    def update(self, screen, gui_manager, virtual_size, dt, fuel_level, shake_x, shake_y, offset_y, eased_offset):
-        super().update(screen, gui_manager, virtual_size, dt=dt)
+    def update(self, screen, gui_manager, virtual_size, sfx, dt, fuel_level, shake_x, shake_y, offset_y, eased_offset):
+        super().update(screen, gui_manager, virtual_size, sfx_manager=sfx, dt=dt)
         self.fuel_level = fuel_level
         self.shake_x = shake_x
         self.shake_y = shake_y
