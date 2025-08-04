@@ -23,7 +23,7 @@ class BaseScreen:
                 instance_manager = None, day_ambience = [], night_ambience = []):
         ...
         # screennav is the triangle in the corner that allows for easier screen navigation
-        self.item_manager = item_manager if item_manager else ItemManager(virtual_size)
+        self.item_manager = item_manager if item_manager else ItemManager(virtual_size, instance_manager)
 
         self.screen = screen
         self.virtual_size = virtual_size
@@ -54,14 +54,7 @@ class BaseScreen:
         self.ctx = instance_manager.ctx
         self.instance_manager = instance_manager
 
-        # Reuse the one shared quad VBO
-        self.quad_vbo = instance_manager.shared_quad_vbo
 
-        # Ask your ShaderManager for the cached VAO for this VBO + shader program:
-        active = instance_manager.shader_manager.active_name
-        self.final_vao = instance_manager.shader_manager.get_vao(
-            active
-        )
 
 
         if instance_manager.is_daytime():
@@ -202,6 +195,7 @@ class BaseScreen:
         self.switcher.update(dt)
 
     def draw(self, virtual_mouse):
+        # 1) draw your game world into the virtual canvas
         self.virtual_surface.fill((0, 0, 0))
 
         if self.background and hasattr(self.background, "index"):
@@ -211,47 +205,56 @@ class BaseScreen:
             self.helper.draw(self.virtual_surface, self.virtual_size)
 
         if not self.override_draw:
-            self.item_manager.draw_with_z_respect(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
+            self.item_manager.draw_with_z_respect(
+                self.virtual_surface, self.virtual_size, self.gui_manager, 5
+            )
 
-        dragged = next((i for i in self.item_manager.items if getattr(i, "dragging", False)), None)
-        SlotFlag.draw_overlay(self.virtual_surface, self.item_manager.items, dragged, virtual_mouse, self.virtual_size)
+        dragged = next(
+            (i for i in self.item_manager.items if getattr(i, "dragging", False)),
+            None
+        )
+        SlotFlag.draw_overlay(
+            self.virtual_surface, self.item_manager.items, dragged,
+            virtual_mouse, self.virtual_size
+        )
 
         self.gui_manager.drawBag = self.draw_bag
         self.gui_manager.drawCharmBoard = self.draw_charmboard
         self.gui_manager.draw_screennav = self.draw_screennav
-        if not (self.helper and hasattr(self.helper, "hide_gui") and self.helper.hide_gui):
-            self.gui_manager.draw(self.virtual_surface, self.virtual_size, virtual_mouse, self.item_manager)
+        if not (self.helper and getattr(self.helper, "hide_gui", False)):
+            self.gui_manager.draw(
+                self.virtual_surface, self.virtual_size,
+                virtual_mouse, self.item_manager
+            )
 
         if self.helper and hasattr(self.helper, "draw_after_gui"):
             self.helper.draw_after_gui(self.virtual_surface, self.virtual_size)
 
-        self.item_manager.draw_dragged_item(self.virtual_surface, self.virtual_size, self.gui_manager, 5)
+        self.item_manager.draw_dragged_item(
+            self.virtual_surface, self.virtual_size,
+            self.gui_manager, 5
+        )
 
         self.debug_console.draw(self.virtual_surface)
         self.cursor_manager.draw(self.virtual_surface, virtual_mouse)
 
+        # 2) full-screen post-process passes
+        sm = self.instance_manager.shader_manager
+        # make sure you have set up instance_manager.global_shaders = [ ... ]
+        # in your BaseScreen.draw loop:
+        surf = self.virtual_surface
+        surf = sm.post_process(["invert", "blur"], surf)
+        self.virtual_surface = surf
 
         
-        shader_tex = self.instance_manager.shader_manager.render(self.virtual_surface)
-        if shader_tex:
-            # 1) bind default framebuffer & clear
-            self.ctx.screen.use()
-            w, h = self.screen.get_size()
-            self.ctx.viewport = (0, 0, w, h)
-            self.ctx.clear(0.0, 0.0, 0.0, 1.0)
 
-            # 2) draw the textured quad (post-processed) directly
-            shader_tex.use(location=0)
-            vao = self.instance_manager.shader_manager.get_vao(
-                self.instance_manager.shader_manager.active_name
-            )
-            vao.render(moderngl.TRIANGLE_STRIP)
-
-
+        # 3) finally, scale & blit to the real window
         self.vscreen.draw_to_screen(self.screen, source_surface=self.virtual_surface)
 
+        # 4) draw any overlay UI (screen switcher, etc.)
         self.switcher.draw(self.screen)
         pygame.display.flip()
+
 
 
 

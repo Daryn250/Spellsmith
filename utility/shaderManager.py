@@ -1,136 +1,103 @@
 # utility/shaderManager.py
 
-import numpy as np
 import pygame
 import moderngl
-from utility.gl_shader import Shader
+import numpy as np
 import time
+from pathlib import Path
 
 class ShaderManager:
-    def __init__(self, ctx, initial_size):
+    def __init__(self, ctx: moderngl.Context, initial_size: tuple[int,int]):
         self.ctx = ctx
-        self.active_name = None
-        self.shaders = {}      # name -> Shader
-        self.vaos = {}         # (name, vbo_id) -> VAO
-
-        # single shared quad VBO
+        # 1 quad VBO (x,y) + (u,v)
         verts = np.array([
-    # position    # texcoords (flip X and Y)
-    -1.0,  1.0,    1.0, 0.0,   # Top-left
-    -1.0, -1.0,    1.0, 1.0,   # Bottom-left
-     1.0,  1.0,    0.0, 0.0,   # Top-right
-     1.0, -1.0,    0.0, 1.0,   # Bottom-right
-], dtype='f4')
+            -1,  1,  0.0, 0.0,
+            -1, -1,  0.0, 1.0,
+             1,  1,  1.0, 0.0,
+             1, -1,  1.0, 1.0,
+        ], dtype='f4')
+        self.quad_vbo = ctx.buffer(verts.tobytes())
 
+        self.programs: dict[str, moderngl.Program] = {}
+        self.vaos: dict[str, moderngl.VertexArray] = {}
+        self.fbo_cache: dict[tuple[int,int], tuple] = {}
 
-        self.quad_vbo = self.ctx.buffer(verts.tobytes())
+        # pre-allocate initial FBO textures
+        self._ensure_fbo(initial_size)
 
-        # cache: size -> (in_tex, out_tex, fbo)
-        self.fbo_cache = {}
-        # allocate initial size
-        self.update_size(initial_size)
-
-    def add_shader(self, name, vert_path, frag_path):
-        with open(vert_path) as f:   vs = f.read()
-        with open(frag_path) as f:   fs = f.read()
-        self.shaders[name] = Shader(self.ctx, vs, fs)
-        if self.active_name is None:
-            self.active_name = name
-
-    def set_active(self, name):
-        if name in self.shaders:
-            self.active_name = name
+    def load(self, name: str, vert_source: str | Path, frag_source: str | Path):
+        """Compile and register a shader program from file paths or raw source strings."""
+        if isinstance(vert_source, Path) or isinstance(vert_source, str) and Path(vert_source).exists():
+            vs = Path(vert_source).read_text(encoding='utf-8')
         else:
-            print(f"[ShaderManager] no shader '{name}'")
+            vs = vert_source  # treat as raw GLSL string
 
-    def get_vao(self, name):
-        key = (name, id(self.quad_vbo))
-        if key not in self.vaos:
-            prog = self.shaders[name].program
-            self.vaos[key] = self.ctx.vertex_array(
-                prog,
-                [(self.quad_vbo, '2f 2f', 'in_vert', 'in_texcoord')],
-            )
-        return self.vaos[key]
+        if isinstance(frag_source, Path) or isinstance(frag_source, str) and Path(frag_source).exists():
+            fs = Path(frag_source).read_text(encoding='utf-8')
+        else:
+            fs = frag_source  # treat as raw GLSL string
 
-    def _alloc_textures(self, size, old):
-        print(f"making texture for size {size}")
-        if old !=None:
-            a, b, c = old
-            print(a, b, c)
+        prog = self.ctx.program(vertex_shader=vs, fragment_shader=fs)
+        self.programs[name] = prog
 
-        """Make in/out textures + fbo and stash them in fbo_cache."""
-        in_tex = self.ctx.texture(size, 4, alignment=1)
-        in_tex.filter  = (moderngl.NEAREST, moderngl.NEAREST)
-        in_tex.swizzle = 'BGRA'
-
-        out_tex = self.ctx.texture(size, 4, alignment=1)
-        out_tex.filter  = (moderngl.NEAREST, moderngl.NEAREST)
-        out_tex.swizzle = 'BGRA'
-
+    def _ensure_fbo(self, size: tuple[int,int]):
+        """Make textures+FBO for this resolution if missing."""
+        if size in self.fbo_cache:
+            return
+        w,h = size
+        in_tex  = self.ctx.texture((w,h), 4, alignment=1)
+        out_tex = self.ctx.texture((w,h), 4, alignment=1)
+        for t in (in_tex, out_tex):
+            t.filter = (moderngl.NEAREST, moderngl.NEAREST)
+            t.swizzle = 'BGRA'
         fbo = self.ctx.framebuffer(color_attachments=[out_tex])
         self.fbo_cache[size] = (in_tex, out_tex, fbo)
 
-    def update_size(self, size):
+    def _get_vao(self, name: str):
+        """Lazily create a VAO that feeds quad_vbo into in_vert/in_uv."""
+        if name not in self.vaos:
+            prog = self.programs[name]
+            # Explicitly tell moderngl how the VBO is structured: 2 floats (pos), 2 floats (uv)
+            vao = self.ctx.vertex_array(
+                prog,
+                [(self.quad_vbo, '2f 2f', 'in_vert', 'in_uv')]
+            )
+            self.vaos[name] = vao
+        return self.vaos[name]
+
+    def post_process(self, passes: list[str], scene: pygame.Surface) -> pygame.Surface:
         """
-        Ensure we have exactly one in/out‐texture + FBO for `size`:
-
-        • If we already had a different size, release it.
-        • Allocate only for the new size.
+        Run each named pass in order over `scene`, returning the final.
+        Internally uses two ping-pong FBOs sized to scene.get_size().
         """
-        old = self.fbo_cache.pop(getattr(self, 'current_size', None), None)
-        if old:
-            in_tex, out_tex, fbo = old
-            in_tex.release()
-            out_tex.release()
-            fbo.release()
-            print(f"Released? in_tex valid: {in_tex.glo}, out_tex valid: {out_tex.glo}, fbo valid: {fbo.glo}")
-            old = in_tex, out_tex, fbo
-
-
-        # Now allocate fresh for the new size
-        self._alloc_textures(size, old)
-        self.current_size = size
-
-
-    def render(self, surface):
-        """
-        1) upload surface -> in_tex
-        2) bind uniforms
-        3) draw quad into FBO
-        4) return out_tex
-        """
-        if not self.active_name:
-            return None
-
-        size = surface.get_size()
-        # If the surface size changed at runtime, re-alloc:
-        if size != getattr(self, 'current_size', None):
-            self.update_size(size)
-
-
-
-
-
+        size = scene.get_size()
+        self._ensure_fbo(size)
         in_tex, out_tex, fbo = self.fbo_cache[size]
 
-        # 1) upload pixels
-        data = pygame.image.tostring(surface, 'RGBA', False)
+        # upload initial
+        data = pygame.image.tostring(scene, 'RGBA', False)
         in_tex.write(data)
         in_tex.use(location=0)
 
-        # 2) set common uniforms
-        prog = self.shaders[self.active_name].program
-        if 'tex' in prog:
-            prog['tex'] = 0
-        if 'time' in prog:
-            prog['time'] = time.time() % 1000
+        current_tex = in_tex
+        for name in passes:
+            prog = self.programs[name]
+            # bind
+            prog['tex'].value = 0
+            if 'time' in prog:
+                prog['time'].value = time.time() % 1000
 
-        # 3) draw quad
-        fbo.use()
-        self.ctx.clear(0.0, 0.0, 0.0, 1.0)
-        self.get_vao(self.active_name).render(moderngl.TRIANGLE_STRIP)
+            # render into out_tex
+            fbo.use()
+            self.ctx.clear(0.0,0.0,0.0,1.0)
+            vao = self._get_vao(name)
+            vao.render(mode=moderngl.TRIANGLE_STRIP)
 
-        self.ctx.gc()
-        # 4) hand back
-        return out_tex
+            # swap
+            current_tex, out_tex = out_tex, current_tex
+            fbo = self.ctx.framebuffer(color_attachments=[out_tex])
+            out_tex.use(location=0)
+
+        # readback final
+        final_data = current_tex.read()
+        return pygame.image.frombuffer(final_data, size, 'RGBA')

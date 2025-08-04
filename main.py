@@ -27,7 +27,7 @@ def run_game():
     pygame.display.set_caption("SpellSmith")
 
     # Create a ModernGL context *AFTER* creating the OpenGL-enabled surface
-    ctx = moderngl.create_context()
+    ctx = moderngl.create_standalone_context()
     ctx.enable_only(moderngl.BLEND)  # Enable blending only, for transparency
 
 

@@ -28,14 +28,15 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
                     "item_hit_floor": false,
                     "uuid": "ba6c31d1-31dd-4a32-99ea-960f0d715e4b",
                     "highlight": false,
-                    "next_screen": "mapScreen"
+                    "next_screen": "mapScreen",
+                    "shaders": {}
                 },
                 {
                     "class": "BaseItem",
@@ -62,15 +63,120 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -2.3968892861679977e-18,
-                    "vy": 0.3,
+                    "vx": -5e-324,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
                     "item_hit_floor": false,
                     "uuid": "91bb99d2-da9a-4851-ab14-4394602d4d15",
                     "highlight": false,
-                    "next_screen": "workstation"
+                    "next_screen": "workstation",
+                    "shaders": {}
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        485.01512683880185,
+                        275
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 9,
+                    "liquid": "water",
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "shaders": {
+                        "warp": [
+                            "liquid_surface"
+                        ],
+                        "bloom": [
+                            "rotated_bottle"
+                        ]
+                    },
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "liquid_rotation": 0.0,
+                    "liquid_rotational_velocity": 0.0,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "31cb5ca0-8163-4d0a-9fcc-a66408be3a51",
+                    "highlight": false
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        417.0,
+                        300
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 5,
+                    "liquid": "water",
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "shaders": {
+                        "warp": [
+                            "liquid_surface"
+                        ],
+                        "bloom": [
+                            "rotated_bottle"
+                        ]
+                    },
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "liquid_rotation": 0.0,
+                    "liquid_rotational_velocity": 0.0,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "da1dc57c-c597-4f15-9afe-57d1e64de065",
+                    "highlight": false
                 }
             ]
         },

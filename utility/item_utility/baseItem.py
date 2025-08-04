@@ -37,6 +37,9 @@ class BaseItem:
         self.animated = getattr(self, "animated", False)
         self.scale = getattr(self, "scale", [1, 1])
 
+        self.shaders = getattr(self, "shaders", {})
+        self.sm = self.manager.instance_manager.shader_manager
+
         if self.animated:
             self.frameDuration = getattr(self, "frameDuration", 100)
             self.img = AnimatedTile(getattr(self, "img_path", "assets/error.png"), frame_duration=self.frameDuration)
@@ -88,7 +91,7 @@ class BaseItem:
             "liquid_anim", "cork_img", "original_mask_img", "cached_mask_surface", "cached_mask",
             "shine_img", "glow_img", "layer_surfaces", "_base_combined_surface", "_cached_image", "_cached_rotation", "_cached_scale",
             "_cached_scaled_img", "_cached_mask", "_last_cache_key", "_cached_shadow_img", "_cached_hitbox_rect", "_cached_shadow_offset",
-            "window_last_pos",
+            "window_last_pos", "sm",
         ]
         # Exclude all callables (functions/methods)
         for k, v in list(self.__dict__.items()):
@@ -277,6 +280,39 @@ class BaseItem:
             self.is_hovered = rect.collidepoint(mouse_pos)
         else:
             self.is_hovered = False
+    
+    def _run_shader_on_surface(self, raw_surf, shader_name):
+        """
+        Internal: push raw_surf through the GPU shader named shader_name
+        and return a new pygame.Surface. Falls back to raw_surf on error.
+        """
+        sm = self.sm
+        if shader_name not in sm.shaders or raw_surf is None:
+            return raw_surf
+
+        sm.set_active(shader_name)
+        try:
+            s = self.manager.instance_manager.screen.get_size()
+            tex = sm.render(raw_surf)
+            # Quickly convert back to a Surface
+            data = tex.read()
+            out = pygame.image.frombuffer(data, tex.size, "RGBA")
+            return out
+        except Exception as e:
+            print(f"[BASEITEM] Could not run shader on surface: {e}")
+            return raw_surf
+
+    def apply_shaders(self, part_name, raw_surf):
+        """
+        Look up any shaders bound to `part_name`, run them in sequence,
+        and return the final pygame.Surface.
+        """
+        surf = raw_surf
+        for shader_name, parts in self.shaders.items():
+            if part_name in parts:
+                surf = self._run_shader_on_surface(surf, shader_name)
+        return surf
+
 
 class BottleItem(BaseItem):
     def __init__(self, manager, type, pos, nbt_data={}):
@@ -303,6 +339,11 @@ class BottleItem(BaseItem):
         self.cached_mask_surface = None
         self.cached_mask = None  # pygame.mask.Mask
 
+        self.shaders = {
+            "warp": ["liquid_surface"],
+            "bloom": ["rotated_bottle"],
+        }
+
     def update_mask_cache(self, bottle_size):
         """Update cached mask surface and mask if bottle size changed"""
         if self.cached_mask_size != bottle_size:
@@ -310,8 +351,8 @@ class BottleItem(BaseItem):
             self.cached_mask_surface = pygame.transform.scale(self.original_mask_img, bottle_size)
             self.cached_mask = pygame.mask.from_surface(self.cached_mask_surface)
     
-    def update(self, screen, gui_manager, virtual_size, dt):
-        super().update(screen, gui_manager, virtual_size, dt)
+    def update(self, screen, gui_manager, virtual_size, sfx, dt):
+        super().update(screen, gui_manager, virtual_size, sfx, dt)
         if self.liquid!=None:
             self.liquid_anim.update(dt)
 
@@ -336,6 +377,7 @@ class BottleItem(BaseItem):
 
         rotated_bottle = pygame.transform.rotate(bottle_img, angle)
         bottle_rect = rotated_bottle.get_rect(center=(center_x, center_y))
+
 
         # --- Draw shadow first ---
         if "no_shadow" not in self.flags:
@@ -380,8 +422,14 @@ class BottleItem(BaseItem):
 
         # --- Render final visuals ---
         if self.liquid!=None:
-            surface.blit(masked_liquid, masked_rect.topleft)
-        surface.blit(rotated_bottle, bottle_rect.topleft)
+
+            raw = masked_liquid
+            processed_liquid = self.apply_shaders("liquid_surface", raw)
+
+            surface.blit(processed_liquid, masked_rect.topleft)
+        
+        processed_bottle = self.apply_shaders("rotated_bottle", rotated_bottle)
+        surface.blit(processed_bottle, bottle_rect.topleft)
 
         # --- Cork on top ---
         cork_img = pygame.transform.scale(self.cork_img, bottle_size)

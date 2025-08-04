@@ -6,9 +6,10 @@ from utility.item_utility.baseItem import *
 from utility.screen_utility.screenManager import *
 
 class ItemManager:
-    def __init__(self, virtual_size):
+    def __init__(self, virtual_size, instance_manager):
         self.VIRTUAL_SIZE = virtual_size
         self.items = []
+        self.instance_manager = instance_manager # use this to access instance manager from the item class
 
     def add_item(self, item):
         if not hasattr(item, "uuid"):

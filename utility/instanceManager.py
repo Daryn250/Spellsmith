@@ -21,31 +21,18 @@ class instanceManager:
         self.weather = {"type":None, "intensity":0, "time":0, "moon":0}
 
 
-        # Build your shared quad once:
-        quad_verts = np.array([
-            -1.0,  1.0, 0.0, 1.0,
-            -1.0, -1.0, 0.0, 0.0,
-             1.0,  1.0, 1.0, 1.0,
-             1.0, -1.0, 1.0, 0.0,
-        ], dtype='f4')
-        self.shared_quad_vbo = self.ctx.buffer(quad_verts.tobytes())
+
 
         # Build your shader manager once:
-        self.shader_manager = ShaderManager(ctx=self.ctx, initial_size=screen.get_size())
-        self.shader_manager.add_shader("default",
-                                       "assets/shaders/_default.vert",
-                                       "assets/shaders/default.shader")
-        self.shader_manager.add_shader("bloom",
-                                       "assets/shaders/_default.vert",
-                                       "assets/shaders/bloom.frag")
-        self.shader_manager.add_shader("warp",
-                                       "assets/shaders/_default.vert",
-                                       "assets/shaders/warp.frag")
-        self.shader_manager.set_active("bloom")
+        # after creating ctx...
+        self.shader_manager = ShaderManager(self.ctx, screen.get_size())
+        self.shader_manager.load("invert",  "assets/shaders/default.vert", "assets/shaders/invert.frag")
+        self.shader_manager.load("bright", "assets/shaders/default.vert", "assets/shaders/brighten.frag")
 
-        # Pull out the *one* pair of textures for your active shader:
-        active = self.shader_manager.active_name
-        sh = self.shader_manager.shaders[active]
+        # then in BaseScreen.draw:
+        
+        # … continue to blit to screen …
+
         # these live inside the Shader instance and are never reallocated:
         
 
