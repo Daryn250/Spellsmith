@@ -6,8 +6,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        660.54550040856,
-                        216.00000000000028
+                        701.7464529457816,
+                        264.3000000000002
                     ],
                     "flags": [
                         "draggable",
@@ -41,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        196.44830820185086,
-                        198.60000000000124
+                        199.8679055993606,
+                        205.60000000000124
                     ],
                     "flags": [
                         "draggable",
@@ -62,7 +62,7 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -3.845202804191781e-113,
+                    "vx": -7.867723639465526e-169,
                     "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -71,6 +71,323 @@
                     "uuid": "91bb99d2-da9a-4851-ab14-4394602d4d15",
                     "highlight": false,
                     "next_screen": "workstation"
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        542.6073131651901,
+                        180
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 7.385604240083707e-149,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "b619d39e-51f1-4131-b33e-44bb8545f80a",
+                    "highlight": false
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "anvil",
+                    "pos": [
+                        204.84431318094857,
+                        163
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/anvil.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "anvil",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": -9.179083829653703e-134,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "b0f93b76-876a-4b14-864d-f273f73519b2",
+                    "highlight": false,
+                    "next_screen": "anvilScreen"
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        335.94413366177565,
+                        115
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": -5.856891716606216e-140,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "621c5a2f-8727-44a2-b79b-fa25dfff66f7",
+                    "highlight": false
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        890.2562053548835,
+                        258
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 1.5159283979407258e-123,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "c672efbf-6a3b-4e37-bf24-6c2ac8820930",
+                    "highlight": false
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        291.9627899050552,
+                        227
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 5e-324,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "e05ea559-070b-43a0-a6ac-88a2a085f2df",
+                    "highlight": false
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        183.93654077142872,
+                        311
+                    ],
+                    "img_path": "assets/items/bottles/tall_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "tall_bottle",
+                    "capacity": 9,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "tall_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 4.191140146480959e-201,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        42,
+                        177
+                    ],
+                    "uuid": "40967e8b-2277-44b2-9f7a-93902a1ac71f",
+                    "highlight": false
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "anvil",
+                    "pos": [
+                        682.9458265308759,
+                        358
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/anvil.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "anvil",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 3.276135309158856e-176,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "7c2caaae-7a24-42ff-a383-86024c7c6ad0",
+                    "highlight": false,
+                    "next_screen": "anvilScreen"
+                },
+                {
+                    "class": "BottleItem",
+                    "type": "bottle",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/bottles/gold_bottle/img1.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "bottleType": "gold_bottle",
+                    "capacity": 10,
+                    "contents": 0,
+                    "liquid": null,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "default_scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "gold_bottle",
+                    "animated": false,
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "cached_mask_size": [
+                        102,
+                        192
+                    ],
+                    "uuid": "4eef2dc3-3103-4ca6-967a-18715374145e"
                 }
             ]
         },

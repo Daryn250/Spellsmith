@@ -1,11 +1,11 @@
 {
   "font": "assets\\hydrophilia.ttf",
   "language": "english",
-  "font_hover_size": 24,
+  "font_hover_size": 29,
   "gui_size": 12,
   "input_type": "mouse",
   "save_file": "saves\\save1.json",
-  "sfx_volume": 16,
+  "sfx_volume": 79,
   "music_volume": 99,
   "ambience_volume": 63,
   "npc_volume": 67,

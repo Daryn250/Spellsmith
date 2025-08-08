@@ -20,6 +20,7 @@ class DebugConsole:
         self.line_height = 18  # Reduced margin between lines
         self.autocomplete_matches = []
         self.autocomplete_index = 0
+        self.sfx = base_screen.instance_manager.sfx_manager
         self.command_usages = {
             "spawn": "spawn <item> [nbt_json]",
             "get": "get <attr_path>",
@@ -44,8 +45,13 @@ class DebugConsole:
         if not self.active:
             return
         if event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_RETURN:
-                self.run_command(self.input_text)
+                a = self.run_command(self.input_text)
+                if a == True: # did the command run correctly?
+                    self.sfx.play_sound("gui_success")
+                else:
+                    self.sfx.play_sound("gui_error")
                 self.last_command = self.input_text
                 self.input_text = ""
                 self.cursor_pos = 0
@@ -131,7 +137,10 @@ class DebugConsole:
                 if len(self.input_text) < 256 and event.unicode and event.unicode.isprintable():
                     self.input_text = self.input_text[:self.cursor_pos] + event.unicode + self.input_text[self.cursor_pos:]
                     self.cursor_pos += 1
+                    self.sfx.play_sound("gui_key_down")
                 self.autocomplete_matches = []
+        elif event.type == pygame.KEYUP:
+            self.sfx.play_sound("gui_key_up")
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if self.close_rect.collidepoint(event.pos):
                 self.toggle()
@@ -173,12 +182,15 @@ class DebugConsole:
                 from utility.item_utility.itemMaker import makeItem
                 item = makeItem(self.screen.item_manager, item_type, (200, 200), self.screen.screen_name, nbt)
                 self.add_info(f"Spawned: {item_type}")
+                return True
             except Exception as e:
                 self.add_info(f"Spawn error: {e}")
         elif cmd == "help":
             self.add_info("Commands: spawn, help, get, ls/list, run, modify, version")
+            return True
         elif cmd == "clear":
             self.info_lines = []
+            return True
         elif cmd == "get":
             # Support nested attributes, e.g. helper.fuel_level
             if len(parts) < 2:
@@ -190,6 +202,7 @@ class DebugConsole:
                 for attr in attr_path:
                     obj = getattr(obj, attr)
                 self.add_info(f"{parts[1]}: {obj}")
+                return True
             except Exception as e:
                 self.add_info(f"get error: {e}")
         elif cmd == "list" or cmd == 'ls':
@@ -200,6 +213,7 @@ class DebugConsole:
                 try:
                     for attr in attr_path:
                         target = getattr(target, attr)
+                        return True
                 except Exception as e:
                     self.add_info(f"ls error: {e}")
                     return
@@ -248,6 +262,7 @@ class DebugConsole:
                 result = obj(*args, **kwargs)
                 if result != None:
                     self.add_info(f"run result: {result}")
+                return True
             except Exception as e:
                 self.add_info(f"run error: {e}")
         elif cmd == "modify":
@@ -265,6 +280,7 @@ class DebugConsole:
                 value = ast.literal_eval(parts[2]) if parts[2] else parts[2]
                 setattr(obj, final_attr, value)
                 self.add_info(f"{parts[1]} set to {value}")
+                return True
             except Exception as e:
                 self.add_info(f"modify error: {e}")
         elif cmd == "honse":
@@ -272,13 +288,16 @@ class DebugConsole:
                 raise PermissionError("you do not have permission to access the honse.")
             except Exception as e:
                 self.add_info(f"honse error: {e}")
+                return False
         elif cmd == "version" or cmd == "vers":
             try:
                 self.add_info(f"Version: {self.screen.instance_manager.version}")
+                return True
             except Exception as e:
                 self.add_info(f"version error: {e}")
         else:
             self.add_info(f"Unknown command: {cmd}")
+            return False
 
     def add_info(self, msg):
         self.info_lines.append(str(msg))

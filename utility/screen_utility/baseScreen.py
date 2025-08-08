@@ -55,13 +55,9 @@ class BaseScreen:
         self.instance_manager = instance_manager
 
         # Reuse the one shared quad VBO
-        self.quad_vbo = instance_manager.shared_quad_vbo
+        
 
         # Ask your ShaderManager for the cached VAO for this VBO + shader program:
-        active = instance_manager.shader_manager.active_name
-        self.final_vao = instance_manager.shader_manager.get_vao(
-            active
-        )
 
 
         if instance_manager.is_daytime():
@@ -125,8 +121,7 @@ class BaseScreen:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.VIDEORESIZE:
-                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            
                 
 
 
@@ -232,20 +227,8 @@ class BaseScreen:
 
 
         
-        shader_tex = self.instance_manager.shader_manager.render(self.virtual_surface)
-        if shader_tex:
-            # 1) bind default framebuffer & clear
-            self.ctx.screen.use()
-            w, h = self.screen.get_size()
-            self.ctx.viewport = (0, 0, w, h)
-            self.ctx.clear(0.0, 0.0, 0.0, 1.0)
-
-            # 2) draw the textured quad (post-processed) directly
-            shader_tex.use(location=0)
-            vao = self.instance_manager.shader_manager.get_vao(
-                self.instance_manager.shader_manager.active_name
-            )
-            vao.render(moderngl.TRIANGLE_STRIP)
+        # call post processing here when needed
+        
 
 
         self.vscreen.draw_to_screen(self.screen, source_surface=self.virtual_surface)

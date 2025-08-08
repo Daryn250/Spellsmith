@@ -1,71 +1,37 @@
-import pygame
-import moderngl
-import numpy as np
+# sanity_pp.py
+import pygame, moderngl
+from utility.shaderManager import ShaderManager
 
-# Constants
-WINDOW_SIZE = (400, 300)
-
-# Init pygame
 pygame.init()
-screen = pygame.display.set_mode(WINDOW_SIZE, pygame.OPENGL | pygame.DOUBLEBUF)
-pygame.display.set_caption("ModernGL Invert Shader Test")
+pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 3)
+pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 3)
+pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK,
+                                pygame.GL_CONTEXT_PROFILE_CORE)
 
-# Create OpenGL context
+screen_size = (640, 480)
+pygame.display.set_mode(screen_size, pygame.OPENGL|pygame.DOUBLEBUF)
 ctx = moderngl.create_context()
 
-# Vertex and fragment shaders
-vertex_shader = """
-#version 330
-in vec2 in_vert;
-in vec2 in_texcoord;
-out vec2 v_texcoord;
-void main() {
-    gl_Position = vec4(in_vert, 0.0, 1.0);
-    v_texcoord = in_texcoord;
-}
-"""
+# load your image
+img = pygame.image.load("hmg.png").convert_alpha()
+img = pygame.transform.scale(img, screen_size)
 
-fragment_shader = """
-#version 330
-uniform sampler2D tex;
-in vec2 v_texcoord;
-out vec4 fragColor;
-void main() {
-    vec4 color = texture(tex, v_texcoord);
-    fragColor = vec4(vec3(1.0) - color.rgb, color.a);  // Invert RGB
-}
-"""
+# setup shaders
+sm = ShaderManager(ctx, initial_size=screen_size)
+sm.add_shader("invert",  "assets/shaders/_default.vert", "assets/shaders/invert.frag")
+sm.add_shader("default", "assets/shaders/_default.vert", "assets/shaders/default.frag")
 
-# Full-screen quad
-vertices = np.array([
-    -1.0,  1.0, 0.0, 1.0,
-    -1.0, -1.0, 0.0, 0.0,
-     1.0,  1.0, 1.0, 1.0,
-     1.0, -1.0, 1.0, 0.0,
-], dtype='f4')
-
-vbo = ctx.buffer(vertices.tobytes())
-prog = ctx.program(vertex_shader=vertex_shader, fragment_shader=fragment_shader)
-vao = ctx.vertex_array(prog, [(vbo, '2f 2f', 'in_vert', 'in_texcoord')])
-
-# Create a Pygame surface and draw something
-surf = pygame.Surface(WINDOW_SIZE)
-surf.fill((50, 100, 200))
-pygame.draw.circle(surf, (255, 255, 255), (200, 150), 80)
-
-# Upload to texture
-texture = ctx.texture(WINDOW_SIZE, 4, pygame.image.tostring(surf, 'RGBA'))
-texture.use()
-
-# Render loop
+clock = pygame.time.Clock()
 running = True
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
             running = False
 
-    ctx.clear(0.0, 0.0, 0.0, 1.0)
-    vao.render(moderngl.TRIANGLE_STRIP)
+    # run only the invert pass, then final passthrough
+    sm.post_process(["invert"], img)
+
     pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()

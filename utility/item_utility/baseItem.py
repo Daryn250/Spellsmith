@@ -310,8 +310,8 @@ class BottleItem(BaseItem):
             self.cached_mask_surface = pygame.transform.scale(self.original_mask_img, bottle_size)
             self.cached_mask = pygame.mask.from_surface(self.cached_mask_surface)
     
-    def update(self, screen, gui_manager, virtual_size, dt):
-        super().update(screen, gui_manager, virtual_size, dt)
+    def update(self, screen, gui_manager, virtual_size, sfx, dt):
+        super().update(screen, gui_manager, virtual_size, sfx_manager=sfx, dt=dt)
         if self.liquid!=None:
             self.liquid_anim.update(dt)
 

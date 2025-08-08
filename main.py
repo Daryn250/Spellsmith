@@ -13,7 +13,7 @@ def run_game():
     # Create the Pygame display with OpenGL enabled
     screen = pygame.display.set_mode(
         (960, 540),
-        flags=pygame.DOUBLEBUF | pygame.HWACCEL | pygame.OPENGL,
+        flags=pygame.DOUBLEBUF | pygame.OPENGL,
     )
 
     # Force an initial resize event for layout consistency
