@@ -6,8 +6,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        701.7464529457816,
-                        264.3000000000002
+                        600.2082965350284,
+                        304.3000000000002
                     ],
                     "flags": [
                         "draggable",
@@ -41,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        199.8679055993606,
-                        205.60000000000124
+                        389.21188840868683,
+                        290.6000000000013
                     ],
                     "flags": [
                         "draggable",
@@ -62,7 +62,7 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -7.867723639465526e-169,
+                    "vx": 5e-324,
                     "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -76,8 +76,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        542.6073131651901,
-                        180
+                        326.7642270755298,
+                        246
                     ],
                     "img_path": "assets/items/bottles/tall_bottle/img1.png",
                     "flags": [
@@ -101,8 +101,8 @@
                     "animated": false,
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 7.385604240083707e-149,
-                    "vy": 0,
+                    "vx": -5e-324,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -118,8 +118,8 @@
                     "class": "BaseItem",
                     "type": "anvil",
                     "pos": [
-                        204.84431318094857,
-                        163
+                        807.690658633718,
+                        195
                     ],
                     "flags": [
                         "draggable",
@@ -137,7 +137,7 @@
                     "item_name": "anvil",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -9.179083829653703e-134,
+                    "vx": 5e-324,
                     "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -151,8 +151,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        335.94413366177565,
-                        115
+                        212.94413366177568,
+                        215
                     ],
                     "img_path": "assets/items/bottles/tall_bottle/img1.png",
                     "flags": [
@@ -176,7 +176,7 @@
                     "animated": false,
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": -5.856891716606216e-140,
+                    "vx": -5e-324,
                     "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -193,8 +193,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        890.2562053548835,
-                        258
+                        732.7737949254775,
+                        291
                     ],
                     "img_path": "assets/items/bottles/tall_bottle/img1.png",
                     "flags": [
@@ -218,7 +218,7 @@
                     "animated": false,
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 1.5159283979407258e-123,
+                    "vx": -5e-324,
                     "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -235,8 +235,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        291.9627899050552,
-                        227
+                        340.71653591674374,
+                        184
                     ],
                     "img_path": "assets/items/bottles/tall_bottle/img1.png",
                     "flags": [
@@ -260,8 +260,8 @@
                     "animated": false,
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 5e-324,
-                    "vy": 0.3,
+                    "vx": 0.0,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -277,8 +277,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        183.93654077142872,
-                        311
+                        402.31300242492,
+                        265
                     ],
                     "img_path": "assets/items/bottles/tall_bottle/img1.png",
                     "flags": [
@@ -302,7 +302,7 @@
                     "animated": false,
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 4.191140146480959e-201,
+                    "vx": 0.0,
                     "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
@@ -319,8 +319,8 @@
                     "class": "BaseItem",
                     "type": "anvil",
                     "pos": [
-                        682.9458265308759,
-                        358
+                        608.9224061355335,
+                        251.5
                     ],
                     "flags": [
                         "draggable",
@@ -338,8 +338,8 @@
                     "item_name": "anvil",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 3.276135309158856e-176,
-                    "vy": 0.3,
+                    "vx": 0.0,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -352,8 +352,8 @@
                     "class": "BottleItem",
                     "type": "bottle",
                     "pos": [
-                        200.0,
-                        200
+                        424.9851159620223,
+                        187
                     ],
                     "img_path": "assets/items/bottles/gold_bottle/img1.png",
                     "flags": [
@@ -378,7 +378,7 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -387,7 +387,8 @@
                         102,
                         192
                     ],
-                    "uuid": "4eef2dc3-3103-4ca6-967a-18715374145e"
+                    "uuid": "4eef2dc3-3103-4ca6-967a-18715374145e",
+                    "highlight": false
                 }
             ]
         },
@@ -421,10 +422,11 @@
                     "frameDuration": 100,
                     "uuid": "84432a92-3007-426a-931a-76c52bb6e2c3",
                     "pos_override": [
-                        259,
-                        -89
+                        182.0,
+                        -13.0
                     ],
-                    "next_screen": "main_menu"
+                    "next_screen": "main_menu",
+                    "highlight": false
                 },
                 {
                     "class": "BaseItem",
@@ -450,8 +452,8 @@
                     "item_name": "island1",
                     "uuid": "c0749044-b905-4298-8d0d-32ad77df7eda",
                     "pos_override": [
-                        334,
-                        153
+                        257.0,
+                        229.0
                     ],
                     "highlight": false,
                     "next_screen": "main_menu"
@@ -480,10 +482,11 @@
                     "item_name": "island2",
                     "uuid": "e856d5c9-0be3-4432-9b10-e90c7d0217b1",
                     "pos_override": [
-                        409,
-                        -453
+                        332.0,
+                        -377.0
                     ],
-                    "next_screen": "main_menu"
+                    "next_screen": "main_menu",
+                    "highlight": false
                 },
                 {
                     "class": "BaseItem",
@@ -509,8 +512,8 @@
                     "item_name": "island3",
                     "uuid": "9fa15168-f1ad-4e8b-aed0-1562371bf3f8",
                     "pos_override": [
-                        484,
-                        275
+                        407.0,
+                        351.0
                     ],
                     "highlight": false,
                     "next_screen": "main_menu"
@@ -518,10 +521,10 @@
             ],
             "_screen_data": {
                 "map": {
-                    "zoom": 1,
+                    "zoom": 1.0,
                     "pan": [
-                        -221,
-                        -359
+                        -298,
+                        -283
                     ]
                 }
             }
@@ -532,8 +535,8 @@
                     "class": "BaseItem",
                     "type": "furnace",
                     "pos": [
-                        200.0,
-                        300
+                        770.517589570594,
+                        235
                     ],
                     "flags": [
                         "draggable",
@@ -551,8 +554,8 @@
                     "item_name": "furnace",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 0.0,
-                    "vy": 0,
+                    "vx": -2.2131162782592858e-38,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -565,8 +568,8 @@
                     "class": "BaseItem",
                     "type": "anvil",
                     "pos": [
-                        400.0,
-                        300
+                        179.34329460960976,
+                        416
                     ],
                     "flags": [
                         "draggable",
@@ -585,7 +588,7 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -627,6 +630,9 @@
             "_screen_data": {
                 "anvilScreen": {}
             }
+        },
+        "island": {
+            "items": []
         }
     },
     "weather": {},

@@ -2,6 +2,8 @@ from screens.main_menu import main_menu
 from utility.audio_utility.sfxManager import SoundManager
 from utility.shaderManager import ShaderManager
 import numpy as np
+
+from screens.island import island
 class instanceManager:
     def __init__(self, screen, settings, context):
         self.version = "pre-alpha 0.1.1"
@@ -32,6 +34,7 @@ class instanceManager:
         
 
         main_menu(screen, self)
+        #island(screen, self)
     
     def is_daytime(self):
         return True # dont worry bout it rn :D

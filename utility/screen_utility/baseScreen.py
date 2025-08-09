@@ -177,7 +177,8 @@ class BaseScreen:
 
     def update(self, dt, virtual_mouse):
         if self.helper:
-            self.helper.update(dt, self.item_manager, virtual_mouse, self)
+            if hasattr(self.helper, "update"):
+                self.helper.update(dt, self.item_manager, virtual_mouse, self)
 
         self.cursor_manager.update(dt, virtual_mouse)
 
