@@ -6,7 +6,7 @@ import numpy as np
 from screens.island import island
 class instanceManager:
     def __init__(self, screen, settings, context):
-        self.version = "pre-alpha 0.1.1"
+        self.version = "pre-alpha 0.1.2"
         self.screen = screen
         self.settings = settings
         self.save_file = "saves/save1.json" # change to be the location of the save file

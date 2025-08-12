@@ -27,6 +27,8 @@ class DraggableFlag:
                             DraggableFlag.last_pos = item.pos
                             item.dragging = True
                             DraggableFlag.dragging_item.item_hit_floor = True
+                            item.currentGravity = 0
+                            item.floor = item.pos[1]+30
                             for slot in item_list:
                                 if "slot" not in slot.flags:
                                     continue
