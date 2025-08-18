@@ -28,7 +28,7 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 0.0,
-                    "vy": 0.3,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -41,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        200.0,
-                        200
+                        655.9553478860664,
+                        242
                     ],
                     "flags": [
                         "draggable",
@@ -62,8 +62,8 @@
                     "item_name": "craft",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 0.0,
-                    "vy": 0.3,
+                    "vx": 5e-324,
+                    "vy": 0,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -83,6 +83,9 @@
                     "bottom_drawer1": {}
                 }
             }
+        },
+        "main_menu": {
+            "items": []
         }
     },
     "weather": {},

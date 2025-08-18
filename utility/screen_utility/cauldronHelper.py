@@ -145,7 +145,6 @@ class DrawerItem(BaseItem):
         self.open = False
         self.mouse_hovering = False
 
-        self.fill = 0 # range from 0 to 1 of current fill level of drawer
         
         self.base_pos = pos  # (x,y) in 160×90 space
         self.base_size = self.closed_img.get_size()

@@ -398,50 +398,83 @@ from utility.item_utility.item_to_info import item_to_info
 
 class InspectableFlag:
     @staticmethod
-    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings, use_update_hover=True, use_pos_override=True):
+    def handle_event(event, item_list, mouse_pos, virtual_size, gui_manager, item_manager, settings, sfx, use_update_hover=True, use_pos_override=True):
         keys = pygame.key.get_pressed()
         inspecting = keys[pygame.K_q]
         selected_item = None
-        # Optionally update hover state for all items only on mouse movement
+
+        # Update hover
         if use_update_hover and event.type == pygame.MOUSEMOTION:
             for item in item_list:
                 if hasattr(item, "update_hover"):
                     item.update_hover(mouse_pos, virtual_size, use_pos_override=use_pos_override)
-        # Only one window at a time
-        sorted_items = sorted(item_list, key=lambda item: getattr(item, 'pos', (0, 0))[1], reverse=True)
-        # Only create window if requirements are met
+
+        # Determine selected inspectable item
+        sorted_items = sorted(item_list, key=lambda item: getattr(item, 'pos', (0,0))[1], reverse=True)
         if item_manager.get_dragged() is None:
             for item in sorted_items:
                 if "inspectable" not in getattr(item, "flags", []):
                     continue
-                # Use cached hover state
                 if not getattr(item, "is_hovered", False):
                     continue
                 selected_item = item
                 break
-        # Hide all windows except the selected one
+
         for item in item_list:
-            if "inspectable" in getattr(item, "flags", []):
-                if item is selected_item:
-                    # Only create window if not already present
-                    if not hasattr(item, "window") or item.window is None:
-                        item.window = item_to_info(item, inspecting, settings.language)
-                        item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)
-                        gui_manager.windows.append(item.window)
-                    else:
-                        # Only update window position and mode if already present
-                        item.window_last_pos = (mouse_pos[0] + 20, mouse_pos[1] + 20)
-                        item.window.mode = "default" if inspecting else "reduced"
-                        # If the window has an update method, call it
-                        if hasattr(item.window, "update"):
-                            dt = getattr(event, 'dt', 0) if hasattr(event, 'dt') else 0
-                            item.window.update(dt)
-                    # Highlight only if window is in default mode
-                    item.highlight = item.window.mode == "default"
-                else:
-                    if hasattr(item, "window") and item.window in gui_manager.windows:
-                        gui_manager.windows.remove(item.window)
-                        item.window = None
+            if "inspectable" not in getattr(item, "flags", []):
+                continue
+
+            is_selected = item is selected_item
+
+            # --- Manage window ---
+            if is_selected:
+                if not hasattr(item, "window") or item.window is None:
+                    item.window = item_to_info(item, inspecting, settings.language)
+                    gui_manager.windows.append(item.window)
+
+                item.window_last_pos = (mouse_pos[0]+20, mouse_pos[1]+20)
+                item.window.mode = "default" if inspecting else "reduced"
+                if hasattr(item.window, "update"):
+                    dt = getattr(event, 'dt', 0) if hasattr(event, 'dt') else 0
+                    item.window.update(dt)
+
+                item.highlight = item.window.mode == "default"
+
+                # --- Manage hum sound ---
+                if not hasattr(item, "_inspect_hum_channel"):
+                    # Allocate a channel and start looping
+                    item._inspect_hum_channel = pygame.mixer.find_channel()
+                    if item._inspect_hum_channel:
+                        hum_sound = sfx._get_sound("gui_inspect", None)  # replace with your hum sound
+                        if hum_sound:
+                            item._inspect_hum_channel.set_volume(0.0)
+                            item._inspect_hum_channel.play(hum_sound, loops=-1, fade_ms=300)
+
+                # Fade volume
+                if hasattr(item, "_inspect_hum_channel"):
+                    chan = item._inspect_hum_channel
+                    target_vol = 0.3 if inspecting else 0.0
+                    current_vol = chan.get_volume()
+                    # Smooth fade
+                    fade_speed = 0.01
+                    new_vol = max(0.0, min(1.0, current_vol + fade_speed if target_vol > current_vol else current_vol - fade_speed))
+                    chan.set_volume(new_vol)
+                    # Stop channel completely if silent
+                    if new_vol <= 0.0 and not inspecting:
+                        chan.stop()
+                        del item._inspect_hum_channel
+
+            else:
+                # Remove window if not selected
+                if hasattr(item, "window") and item.window in gui_manager.windows:
+                    gui_manager.windows.remove(item.window)
+                    item.window = None
+                # Stop hum if exists
+                if hasattr(item, "_inspect_hum_channel"):
+                    item._inspect_hum_channel.fadeout(300)
+                    del item._inspect_hum_channel
+
+
 
 
 
