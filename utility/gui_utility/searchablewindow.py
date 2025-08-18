@@ -177,8 +177,10 @@ class SearchableWindow:
 
 
             elif event.button == 4:  # scroll up
+                self.sfx.play_sound("gui_scroll")
                 self.target_scroll_y = min(self.target_scroll_y + self.scroll_speed, 0)
             elif event.button == 5:  # scroll down
+                self.sfx.play_sound("gui_scroll")
                 max_scroll = -max(0, len(self.filtered_items()) * self.item_height - self.list_area.height)
                 self.target_scroll_y = max(self.target_scroll_y - self.scroll_speed, max_scroll)
 
@@ -270,6 +272,10 @@ class SearchableWindow:
 
 
         surface.set_clip(clip_backup)
+        
+        items_length = len(self.items)
+        capacity_text = self.font.render(f"{items_length}/{self.max_capacity}", False, (255,255,255))
+        surface.blit(capacity_text, (window_rect.x+(self.width*4/5),self.padding))
 
         total_height = len(self.filtered_items()) * self.item_height
         if total_height > self.list_area.height:

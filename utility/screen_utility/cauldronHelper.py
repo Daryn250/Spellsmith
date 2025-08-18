@@ -18,20 +18,20 @@ class cauldronHelper:
             pos=(2, 1),
             closed_img="assets/screens/cauldron/drawers/top_drawer1.png",
             open_img="assets/screens/cauldron/drawers/top_drawer2.png",
-            title = "Top Drawer",
+            title = "Ingredients Drawer",
             instance_manager= instance_manager,
             gui_manager=gui_manager,
-            allowed_types=["ingot"] # change in the future to be catalysts
+            allowed_types=["ingredients"] # change in the future to be catalysts
         )
         self.bottom_drawer = DrawerItem(
             manager=item_manager,
             pos=(3, 50),
             closed_img="assets/screens/cauldron/drawers/bottom_drawer1.png",
             open_img="assets/screens/cauldron/drawers/bottom_drawer2.png",
-            title = "Bottom Drawer",
+            title = "Catalysts Drawer",
             instance_manager= instance_manager,
             gui_manager=gui_manager,
-            allowed_types=["ore"] # change in future to be ingredients
+            allowed_types=["catalysts"] # change in future to be ingredients
         )
 
         self.items = [self.top_drawer, self.bottom_drawer]
@@ -150,11 +150,7 @@ class DrawerItem(BaseItem):
         self.base_pos = pos  # (x,y) in 160×90 space
         self.base_size = self.closed_img.get_size()
 
-        self.storage_window = SearchableWindow(title, instance_manager, manager, gui_manager, allowed_types) # manager for the item manager
-        # temp code
-        a = makeItem(manager, "iron_ingot", (200,200), "cauldronScreen")
-        self.storage_window.add_item(a.item)
-        # temp code
+        self.storage_window = SearchableWindow(title, instance_manager, manager, gui_manager, allowed_types, 25) # manager for the item manager
 
         self.all_drawers=all_drawers
 
