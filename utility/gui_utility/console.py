@@ -213,7 +213,7 @@ class DebugConsole:
                 try:
                     for attr in attr_path:
                         target = getattr(target, attr)
-                        return True
+                      
                 except Exception as e:
                     self.add_info(f"ls error: {e}")
                     return
@@ -221,6 +221,7 @@ class DebugConsole:
             # Filter out dunder methods
             attrs = [a for a in attrs if not a.startswith('__')]
             self.add_info(f"Attributes: {', '.join(attrs)}")
+            return True
         elif cmd == "run":
             # Usage: run <attr_path>([args])
             if len(parts) < 2:

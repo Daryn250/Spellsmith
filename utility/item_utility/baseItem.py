@@ -168,11 +168,6 @@ class BaseItem:
 
                 surface.blit(blurred_shadow, shadow_pos)
 
-
-
-
-
-
         if getattr(self, "highlighted", False):
             mask = pygame.mask.from_surface(rotated_img)
             outline_points = mask.outline()

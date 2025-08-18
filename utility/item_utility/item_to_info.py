@@ -27,6 +27,20 @@ window_data = {
             {"lookup_label": "fuel_level", "display_label": "Fuel Level", "data_type": "bar"}
         ],
     },
+    "top_drawer1": {
+        "title": "Ingredients Drawer",
+        "description": "Stores ingredients for potions.",
+        "data": [
+            {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "bar"}
+        ],
+    },
+    "bottom_drawer1": {
+        "title": "Catalysts Drawer",
+        "description": "Stores catalysts for potion creation.",
+        "data": [
+            {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "bar"}
+        ],
+    },
     "map_boat": {
         "title": "Your Boat",
         "description": "This is your boat.",

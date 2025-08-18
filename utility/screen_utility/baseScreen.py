@@ -54,11 +54,6 @@ class BaseScreen:
         self.ctx = instance_manager.ctx
         self.instance_manager = instance_manager
 
-        # Reuse the one shared quad VBO
-        
-
-        # Ask your ShaderManager for the cached VAO for this VBO + shader program:
-
 
         if instance_manager.is_daytime():
             for pth in day_ambience:
@@ -151,6 +146,9 @@ class BaseScreen:
                 # Toggle debug console with '/'
                 if event.key == pygame.K_SLASH:
                     self.debug_console.toggle()
+                if event.key == pygame.K_DELETE:
+                    pygame.quit()
+                    sys.exit()
 
             # Combine items and bag contents for drag handling:
             combined_items = list(self.item_manager.items)
@@ -198,7 +196,7 @@ class BaseScreen:
         self.switcher.update(dt)
 
     def draw(self, virtual_mouse):
-        self.virtual_surface.fill((0, 0, 0))
+        self.virtual_surface.fill((158, 216, 228))
 
         if self.background and hasattr(self.background, "index"):
             self.background.draw(self.virtual_surface, (0, 0), scale_to=self.virtual_size)

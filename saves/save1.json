@@ -1,0 +1,1714 @@
+{
+    "screens": {
+        "table": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "paper",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "background",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/table/paper1.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "map",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "89c7b432-34e6-4271-9261-797fbcdb83b3",
+                    "highlight": false,
+                    "next_screen": "mapScreen"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "paper",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "background",
+                        "no_shadow",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/table/paper2.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "table",
+                    "item_name": "craft",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "79394efb-e1e6-4e67-847e-908dbf1283f8",
+                    "highlight": false,
+                    "next_screen": "workstation"
+                }
+            ]
+        },
+        "cauldronScreen": {
+            "items": [
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "f652613a-688d-41cd-8745-567b08163ec8",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "3fe78267-b7fa-4844-822b-0056f20daa76"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "ed077894-31b1-41c8-bc3c-de3df24dceaa"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "5369a6de-fba5-4c7d-ab33-0f80b52481bb"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "37525002-15df-41f7-870b-6b8f50aa6db3"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "ce443bfe-4bcb-4339-9c8f-6b414b965aa0"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "76e853eb-28a4-4106-bc25-2a9fadb899c4"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "8504479e-8c19-48ae-9251-d6a7bf99f61e"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "161ad639-5c99-4eee-821b-03bbbe8e4b6d",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "b8c0b03b-f9df-441a-9963-65b2322fe8e1"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "a05a8402-50c4-40a5-b346-c4a48f0d75ba",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "1f5aa0da-e514-44a7-9f83-bc142e54e4d4"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "0a5f0d91-57e3-4e9c-b515-e0bc8271a2ed"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "a8d61981-fb7a-451f-b9f5-950add36a7c2"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "48153e20-5447-4ef1-959e-f4186bf3b510",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "101f5fe4-048c-4e0c-92c7-14e8e6d9ffdf"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "2beb1d28-8ac0-4f1e-bbd4-a374397ff75d"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "751a94db-080b-491b-a7fd-60c629fffa27"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "7669575a-be8b-475d-9fd5-7e4365717692"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "90d170d2-9b0c-459f-af17-bda0e7ead629"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "90cb070f-7ea6-4137-b769-ef044086ea7b",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "56bebb71-89a9-4754-aec3-cfd1d22fa944"
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        200.0,
+                        200
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "6c0149e5-681b-4987-8a1a-c54ff11885b6",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        852.6231269941549,
+                        192
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 3.1533661274204298e-164,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "0",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        136.54903822189297,
+                        120
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": -5e-324,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "351f45d3-7d98-4243-8532-7ef1fb54dada",
+                    "highlight": false
+                },
+                {
+                    "class": "MaterialItem",
+                    "type": "ingot",
+                    "pos": [
+                        469.0351791411876,
+                        393
+                    ],
+                    "img_path": "assets/items/materials/iron/iron2.png",
+                    "flags": [
+                        "draggable",
+                        "inspectable"
+                    ],
+                    "temperature": 0,
+                    "material": "iron",
+                    "origin_screen": "cauldronScreen",
+                    "item_name": "iron_ingot",
+                    "animated": false,
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": -9.586500227612329e-32,
+                    "vy": 0.3,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "mass": 1,
+                    "uuid": "7",
+                    "highlight": false
+                }
+            ],
+            "_screen_data": {
+                "upgrades": {},
+                "drawers": {
+                    "top_drawer1": {
+                        "0": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "f652613a-688d-41cd-8745-567b08163ec8",
+                            "highlight": false
+                        },
+                        "1": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "0"
+                        },
+                        "2": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "1"
+                        },
+                        "3": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "2"
+                        },
+                        "4": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "3",
+                            "highlight": false
+                        },
+                        "5": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "4",
+                            "highlight": false
+                        },
+                        "6": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                701.0372100949448,
+                                141
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 15.512593009921874,
+                            "rotational_velocity": 5.028116106226562,
+                            "vx": -4.5182968863366226e-39,
+                            "vy": 0.3,
+                            "currentGravity": 0,
+                            "storedGravity": 0.3,
+                            "dragging_for": 10,
+                            "item_hit_floor": true,
+                            "mass": 1,
+                            "uuid": "5",
+                            "highlight": false
+                        },
+                        "7": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                754.2713355822827,
+                                233
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 36.205058756270255,
+                            "rotational_velocity": 7.656234675260522,
+                            "vx": 4.630272138872825e-81,
+                            "vy": 0.3,
+                            "currentGravity": 0,
+                            "storedGravity": 0.3,
+                            "dragging_for": 16,
+                            "item_hit_floor": true,
+                            "mass": 1,
+                            "uuid": "6",
+                            "highlight": false
+                        },
+                        "8": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                730.1333459908876,
+                                285
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 50.65201236745214,
+                            "rotational_velocity": 3.769635339836226,
+                            "vx": -3.976634569286895e-50,
+                            "vy": 0.3,
+                            "currentGravity": 0,
+                            "storedGravity": 0.3,
+                            "dragging_for": 17,
+                            "item_hit_floor": true,
+                            "mass": 1,
+                            "uuid": "8",
+                            "highlight": false
+                        },
+                        "9": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                678.3197694558797,
+                                152
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 40.98958026767562,
+                            "rotational_velocity": 2.028511978823205,
+                            "vx": -4.0748563165e-313,
+                            "vy": 0.3,
+                            "currentGravity": 0,
+                            "storedGravity": 0.3,
+                            "dragging_for": 23,
+                            "item_hit_floor": true,
+                            "mass": 1,
+                            "uuid": "9",
+                            "highlight": false
+                        },
+                        "10": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                726.1333459908876,
+                                129
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 43.61044862469916,
+                            "rotational_velocity": 2.1915578337048496,
+                            "vx": -5e-323,
+                            "vy": 0.3,
+                            "currentGravity": 0,
+                            "storedGravity": 0.3,
+                            "dragging_for": 25,
+                            "item_hit_floor": true,
+                            "mass": 1,
+                            "uuid": "10",
+                            "highlight": false
+                        }
+                    },
+                    "bottom_drawer1": {
+                        "0": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "3fe78267-b7fa-4844-822b-0056f20daa76"
+                        },
+                        "1": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "0"
+                        },
+                        "2": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "1"
+                        },
+                        "3": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "2"
+                        },
+                        "4": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "3"
+                        },
+                        "5": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "4"
+                        },
+                        "6": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "5"
+                        },
+                        "7": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "6"
+                        },
+                        "8": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "7"
+                        },
+                        "9": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "8"
+                        },
+                        "10": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "9"
+                        },
+                        "11": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "10"
+                        },
+                        "12": {
+                            "class": "MaterialItem",
+                            "type": "ingot",
+                            "pos": [
+                                200.0,
+                                200
+                            ],
+                            "img_path": "assets/items/materials/iron/iron2.png",
+                            "flags": [
+                                "draggable",
+                                "inspectable"
+                            ],
+                            "temperature": 0,
+                            "material": "iron",
+                            "origin_screen": "cauldronScreen",
+                            "item_name": "iron_ingot",
+                            "animated": false,
+                            "scale": [
+                                1,
+                                1
+                            ],
+                            "rotation": 0.0,
+                            "rotational_velocity": 0.0,
+                            "vx": 0.0,
+                            "vy": 0.3,
+                            "currentGravity": 0.3,
+                            "storedGravity": 0.3,
+                            "dragging_for": 0,
+                            "item_hit_floor": false,
+                            "mass": 1,
+                            "uuid": "11"
+                        }
+                    }
+                }
+            }
+        },
+        "main_menu": {
+            "items": []
+        }
+    },
+    "weather": {},
+    "stats": {},
+    "bag_contents": []
+}
