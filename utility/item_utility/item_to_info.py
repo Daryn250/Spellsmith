@@ -41,6 +41,14 @@ window_data = {
             {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "bar"}
         ],
     },
+    "cauldron_sprite": {
+        "title": "Cauldron",
+        "description": "Allows the creation of potions! Needs ingredients and a catalyst.",
+        "data": [
+            {"lookup_label": "capacity", "display_label": "Capacity", "data_type": "bar"},
+            {"lookup_label": "liquid", "display_label": "Liquid", "data_type": "bar"}
+        ],
+    },
     "map_boat": {
         "title": "Your Boat",
         "description": "This is your boat.",

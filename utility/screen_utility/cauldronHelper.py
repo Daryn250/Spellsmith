@@ -21,7 +21,7 @@ class cauldronHelper:
             title = "Ingredients Drawer",
             instance_manager= instance_manager,
             gui_manager=gui_manager,
-            allowed_types=["ingredients"] # change in the future to be catalysts
+            allowed_types=["ingredient"] # change in the future to be catalysts
         )
         self.bottom_drawer = DrawerItem(
             manager=item_manager,
@@ -31,10 +31,22 @@ class cauldronHelper:
             title = "Catalysts Drawer",
             instance_manager= instance_manager,
             gui_manager=gui_manager,
-            allowed_types=["catalysts"] # change in future to be ingredients
+            allowed_types=["catalyst"] # change in future to be ingredients
+        )
+        self.cauldron = DrawerItem(
+            manager=item_manager,
+            pos=(113,29),
+            closed_img="assets/screens/cauldron/cauldron_sprite.png",
+            open_img="assets/screens/cauldron/cauldron_sprite.png",
+            title = "Cauldron",
+            instance_manager= instance_manager,
+            gui_manager=gui_manager,
+            allowed_types=["catalyst", "ingredient", "gem"],
+            capacity = 5,
+            liquids=True
         )
 
-        self.items = [self.top_drawer, self.bottom_drawer]
+        self.items = [self.top_drawer, self.bottom_drawer, self.cauldron]
         for item in self.items:
             item.all_drawers = self.items
 
@@ -73,9 +85,9 @@ class cauldronHelper:
                                 other.storage_window.open = False  # force close its window too
 
                         if drawer.open:
-                            basescreen.instance_manager.sfx_manager.play_sound("gui_drawer_close")
+                            basescreen.instance_manager.sfx_manager.play_sound(drawer.open_sound)
                         else:
-                            basescreen.instance_manager.sfx_manager.play_sound("gui_drawer_open")
+                            basescreen.instance_manager.sfx_manager.play_sound(drawer.close_sound)
                         drawer.toggle()
                         drawer.mouse_hovering = False
 
@@ -136,7 +148,7 @@ class cauldronHelper:
 from utility.gui_utility.searchablewindow import SearchableWindow
 from utility.item_utility.itemMaker import makeItem
 class DrawerItem(BaseItem):
-    def __init__(self, manager, pos, closed_img, open_img, title, instance_manager, gui_manager, allowed_types, all_drawers = None):
+    def __init__(self, manager, pos, closed_img, open_img, title, instance_manager, gui_manager, allowed_types, all_drawers = None, capacity = 25, liquids = False):
         super().__init__(manager, "drawer", pos, {"flags": ["inspectable"]})
         self.closed_img = pygame.image.load(closed_img).convert_alpha()
         self.open_img = pygame.image.load(open_img).convert_alpha()
@@ -145,11 +157,18 @@ class DrawerItem(BaseItem):
         self.open = False
         self.mouse_hovering = False
 
+        if liquids:
+            self.open_sound = "gui_cauldron_open"
+            self.close_sound = "gui_cauldron_close"
+        else:
+            self.open_sound = "gui_drawer_open"
+            self.close_sound = "gui_drawer_close"
+
         
         self.base_pos = pos  # (x,y) in 160×90 space
         self.base_size = self.closed_img.get_size()
 
-        self.storage_window = SearchableWindow(title, instance_manager, manager, gui_manager, allowed_types, 25) # manager for the item manager
+        self.storage_window = SearchableWindow(title, instance_manager, manager, gui_manager, allowed_types, capacity, liquids_allowed=liquids) # manager for the item manager
 
         self.all_drawers=all_drawers
 

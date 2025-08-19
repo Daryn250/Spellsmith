@@ -6,8 +6,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        200.0,
-                        200
+                        137.35635913353997,
+                        215
                     ],
                     "flags": [
                         "draggable",
@@ -27,8 +27,8 @@
                     "item_name": "map",
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
-                    "vx": 0.0,
-                    "vy": 0,
+                    "vx": -5e-324,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -41,8 +41,8 @@
                     "class": "BaseItem",
                     "type": "paper",
                     "pos": [
-                        655.9553478860664,
-                        242
+                        695.9330218290996,
+                        184
                     ],
                     "flags": [
                         "draggable",
@@ -63,7 +63,7 @@
                     "rotation": 0.0,
                     "rotational_velocity": 0.0,
                     "vx": 5e-324,
-                    "vy": 0,
+                    "vy": 0.3,
                     "currentGravity": 0.3,
                     "storedGravity": 0.3,
                     "dragging_for": 0,
@@ -80,12 +80,291 @@
                 "upgrades": {},
                 "drawers": {
                     "top_drawer1": {},
-                    "bottom_drawer1": {}
+                    "bottom_drawer1": {},
+                    "cauldron_sprite": {}
                 }
             }
         },
         "main_menu": {
             "items": []
+        },
+        "island": {
+            "items": []
+        },
+        "furnaceScreen": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        192.0,
+                        138.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "furnace_input_1",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "809516f7-f378-4f7f-be9e-95afd2ab0422"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        336.0,
+                        138.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "furnace_input_2",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "9cb0141a-8443-4de5-bea6-64dfd19c606b"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        480.0,
+                        138.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "furnace_input_3",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "f8fd2606-beeb-4af1-bb7f-ec3ba5edd185"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        624.0,
+                        138.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "furnace_input_4",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "7fec492f-75a5-45a0-951a-eb8495e16eb7"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        768.0,
+                        138.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "furnace_input_5",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "febf5c20-c63c-43c3-b72b-fb8bf15511d2"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        480.0,
+                        450.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "fuel_input",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "d338304d-c037-4929-ba9d-dc63c24e57d1"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        252.0,
+                        270.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "weapon_slot1",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "f8362fd1-270e-458d-96af-7ef2ba5ef074"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "slot",
+                    "pos": [
+                        720.0,
+                        270.0
+                    ],
+                    "flags": [
+                        "slot",
+                        "invisible",
+                        "no_shadow"
+                    ],
+                    "slot_accepts": [],
+                    "img_path": "assets/very_important/cat.png",
+                    "animated": false,
+                    "contains": null,
+                    "slot_name": "weapon_slot2",
+                    "origin_screen": "furnaceScreen",
+                    "item_name": "slot_node",
+                    "scale": [
+                        1,
+                        1
+                    ],
+                    "uuid": "40c532cb-3049-449d-b47b-ac054dda9473"
+                }
+            ],
+            "_screen_data": {
+                "fuel_level": 0
+            }
+        },
+        "workstation": {
+            "items": [
+                {
+                    "class": "BaseItem",
+                    "type": "furnace",
+                    "pos": [
+                        200.0,
+                        300
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/furnace.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "workstation",
+                    "item_name": "furnace",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "eb53d90d-dca6-4897-9288-347e32a8fddb",
+                    "next_screen": "furnaceScreen"
+                },
+                {
+                    "class": "BaseItem",
+                    "type": "anvil",
+                    "pos": [
+                        400.0,
+                        300
+                    ],
+                    "flags": [
+                        "draggable",
+                        "screen_change",
+                        "unbaggable",
+                        "inspectable"
+                    ],
+                    "img_path": "assets/screens/workstation/anvil.png",
+                    "animated": false,
+                    "scale": [
+                        2,
+                        2
+                    ],
+                    "origin_screen": "workstation",
+                    "item_name": "anvil",
+                    "rotation": 0.0,
+                    "rotational_velocity": 0.0,
+                    "vx": 0.0,
+                    "vy": 0,
+                    "currentGravity": 0.3,
+                    "storedGravity": 0.3,
+                    "dragging_for": 0,
+                    "item_hit_floor": false,
+                    "uuid": "48e61878-de68-43fd-90bd-ecb34ed530cf",
+                    "next_screen": "anvilScreen"
+                }
+            ]
         }
     },
     "weather": {},

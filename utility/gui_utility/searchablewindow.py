@@ -4,16 +4,33 @@ from utility.item_utility.item_flags import DraggableFlag
 from utility.item_utility.item_to_info import item_to_info
 
 class SearchableWindow:
-    def __init__(self, title, instance_manager, item_manager, gui_manager, allowed_types, max_capacity = 10, width=300, slide_speed=2):
+    def __init__(self, title, instance_manager, item_manager, gui_manager, allowed_types, max_capacity = 10, liquids_allowed = False, width=300, slide_speed=2):
         self.title = title
         self.width = width
         self.slide_speed = slide_speed
         self.instance_manager = instance_manager
         self.font = pygame.font.Font(instance_manager.settings.font, 20)
+        self.font_small = pygame.font.Font(instance_manager.settings.font, 12)
         self.sfx = instance_manager.sfx_manager
         self.allowed_types = allowed_types
         self.gui_manager = gui_manager
         self.max_capacity = max_capacity
+
+        self.liquids_allowed = liquids_allowed
+        self.liquids = { "water": 0.4, "oil": 0.3, "acid": 0.1 }
+
+        self.liquid_colors = {
+            "water":(0,30,200),
+            "oil":(0,10,10),
+            "acid":(0,255,50)
+        }
+
+        # Liquid bar animation
+        self.liquid_bar_height = 120
+        self.liquid_bar_offset = self.liquid_bar_height
+        self.liquid_bar_target_offset = self.liquid_bar_height
+        self.liquid_bar_animating = False
+        self.liquid_bar_anim_dir = 0  # 1=open, -1=close
 
         # Animation
         self.x_offset = width  # starts off-screen
@@ -65,30 +82,50 @@ class SearchableWindow:
     def toggle(self):
         if self.open:
             self.start_animation(-1)
+            self.toggle_liquid_bar(False)
         else:
             self.start_animation(1)
+            if self.liquids_allowed:
+                            self.toggle_liquid_bar(True)
+    
+    def toggle_liquid_bar(self, open=True):
+        self.liquid_bar_anim_dir = 1 if open else -1
+        self.liquid_bar_anim_time = 0
+        self.liquid_bar_anim_duration = 0.2
+        self.liquid_bar_animating = True
+        self.liquid_bar_target_offset = 0 if open else self.liquid_bar_height
+
 
     def update(self, dt):
+        # Window animation
         if self.animating:
             self.anim_time += (dt/1000)
-            t = min(self.anim_time / self.anim_duration, 1.0)  # 0–1
-
-            # cosine ease
-            eased = (1 - math.cos(t * math.pi)) / 2  
-
-            if self.anim_direction == 1:  # opening
+            t = min(self.anim_time / self.anim_duration, 1.0)
+            eased = (1 - math.cos(t * math.pi)) / 2
+            if self.anim_direction == 1:
                 self.x_offset = self.width * (1 - eased)
-            else:  # closing
+            else:
                 self.x_offset = self.width * eased
-
             if t >= 1.0:
                 self.x_offset = self.target_x_offset
                 self.animating = False
-                self.open = self.anim_direction == 1  # track open state
+                self.open = self.anim_direction == 1  
 
         # Smooth scrolling
         self.scroll_y += (self.target_scroll_y - self.scroll_y) * self.scroll_smoothness
 
+        # Liquid bar animation
+        if self.liquid_bar_animating:
+            self.liquid_bar_anim_time += dt/1000
+            t = min(self.liquid_bar_anim_time / self.liquid_bar_anim_duration, 1.0)
+            eased = (1 - math.cos(t * math.pi)) / 2
+            if self.liquid_bar_anim_dir == 1:  # opening
+                self.liquid_bar_offset = self.liquid_bar_height * (1 - eased)
+            else:  # closing
+                self.liquid_bar_offset = self.liquid_bar_height * eased
+            if t >= 1.0:
+                self.liquid_bar_offset = self.liquid_bar_target_offset
+                self.liquid_bar_animating = False
 
 
 
@@ -284,6 +321,78 @@ class SearchableWindow:
             bar_y = self.list_area.y + int(-self.scroll_y / scroll_range * (self.list_area.height - bar_height))
             bar_rect = pygame.Rect(self.list_area.right - 6, bar_y, 4, bar_height)
             pygame.draw.rect(surface, (180, 180, 180), bar_rect, border_radius=2)
+
+
+        if self.liquids_allowed and self.liquids:
+            # Bar dimensions (horizontal layout)
+            margin = 8
+            bar_h = 36
+            bar_w = window_rect.width - 60
+            bar_x = window_rect.x +  30
+            bar_y = window_rect.bottom - bar_h - (margin * 2)
+
+            # Bar background
+            container_rect = pygame.Rect(bar_x - margin, bar_y - margin, bar_w + margin*2, bar_h + margin*2)
+            pygame.draw.rect(surface, (0, 0, 0, 180), container_rect, border_radius=8)
+
+            total = sum(self.liquids.values())
+            if total > 0:
+                x_offset = bar_x
+                font = self.font_small
+                font.set_bold(True)
+                for name, amount in self.liquids.items():
+                    portion = amount / total
+                    w = int(bar_w * portion)
+                    rect = pygame.Rect(x_offset, bar_y, w, bar_h)
+
+                    # --- Render liquid texture ---
+                    liquid_folder = os.path.join("assets", "liquids", name)
+                    liquid_frames = []
+                    for file in sorted(os.listdir(liquid_folder)):
+                        if file.endswith(".png"):
+                            img = pygame.image.load(os.path.join(liquid_folder, file)).convert_alpha()
+                            liquid_frames.append(img)
+
+                    if liquid_frames and rect.width > 0:
+                        frame_index = int(pygame.time.get_ticks() / 1000) % len(liquid_frames)
+                        frame = liquid_frames[frame_index]
+
+                        # Scale 2x using nearest-neighbor (pixel art)
+                        frame = pygame.transform.scale(frame, (frame.get_width()*2, frame.get_height()*2))
+
+                        # Create a temporary surface for clipping
+                        temp_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+
+                        # Blit the scaled frame onto temp_surf (it will auto-clip if too large)
+                        temp_surf.blit(frame, (0, 0))
+
+                        # Create mask for rounded corners
+                        mask_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+                        pygame.draw.rect(mask_surf, (255,255,255,255), mask_surf.get_rect(), border_radius=8)
+                        temp_surf.blit(mask_surf, (0,0), special_flags=pygame.BLEND_RGBA_MIN)
+
+                        # Blit clipped liquid portion onto main surface
+                        surface.blit(temp_surf, rect.topleft)
+
+                    # Draw inner background for text
+                    text_surf = font.render(name, False, (255,255,255))
+                    text_bg_rect = pygame.Rect(0, 0, text_surf.get_width() + 4, text_surf.get_height() + 4)
+                    text_bg_rect.center = rect.center
+                    pygame.draw.rect(surface, (0,0,0,180), text_bg_rect, border_radius=8)
+
+                    # Draw liquid name
+                    text_x = rect.x + (rect.width - text_surf.get_width()) // 2
+                    text_y = rect.y + (rect.height - text_surf.get_height()) // 2
+                    surface.blit(text_surf, (text_x, text_y))
+
+                    x_offset += w
+
+                font.set_bold(False)
+
+
+           
+
+
 
 
     def save_data(self):
