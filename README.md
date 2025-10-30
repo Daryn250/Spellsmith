@@ -1,5 +1,13 @@
 this is version pre-alpha 0.1.2
 
+# this uses Python's Pygame. Please read the Pygame Documentation for information to install.
+
+This repository is for personal enjoyment and while the ideas and work behind most features is my own code,
+there is a percentage of academically integrity devoid processes used to create some features that I've struggled with,
+in order to learn the procedures behind pygame.
+
+
+
 rarity mapping
 common, uncommon, rare, rare+, unique, elite, legendary, mythic, fabled
 
